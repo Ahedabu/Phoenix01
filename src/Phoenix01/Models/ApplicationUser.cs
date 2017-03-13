@@ -18,7 +18,7 @@ namespace Phoenix01.Models
         public string City { get; set; }
         public string Country { get; set; }
         public string Image { get; set; }
-        public DateTime RegistrationDate { get; set; }
+        //public DateTime RegistrationDate { get; set; }
     }
 
 

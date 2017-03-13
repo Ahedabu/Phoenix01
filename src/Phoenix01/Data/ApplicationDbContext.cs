@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Phoenix01.Models;
 
+
 namespace Phoenix01.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -15,6 +16,9 @@ namespace Phoenix01.Data
         {
         }
 
+
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -22,5 +26,10 @@ namespace Phoenix01.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+
+
+
+
     }
 }

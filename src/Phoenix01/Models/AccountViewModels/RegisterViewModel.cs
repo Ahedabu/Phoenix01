@@ -23,5 +23,22 @@ namespace Phoenix01.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+
+        //Ahed
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int AreaCode { get; set; }
+        public string StreetName { get; set; }
+        public string Area { get; set; }
+        public string City { get; set; }
+        public string Country { get; set; }
+        public string Image { get; set; }
+        public DateTime RegistrationDate { get; set; }
+
+
+
+
+
     }
 }

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Phoenix01.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Phoenix01.Data;
 
 namespace Phoenix01.Controllers
 {
@@ -10,6 +14,14 @@ namespace Phoenix01.Controllers
     {
         public IActionResult Index()
         {
+            //var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            //var currentUser = manager.FindById(User.Identity.GetUserId());
+            //ViewBag.email = currentUser.UserProfileInfo.email;
+
+
+
+
+
             return View();
         }
 

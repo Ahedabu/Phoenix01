@@ -55,7 +55,7 @@ namespace Phoenix01
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,ApplicationDbContext ctx)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -83,6 +83,8 @@ namespace Phoenix01
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            ctx.Database.EnsureCreated();
         }
     }
 }

@@ -12,6 +12,7 @@ using Phoenix01.Models;
 using Phoenix01.Models.AccountViewModels;
 using Phoenix01.Services;
 
+
 namespace Phoenix01.Controllers
 {
     [Authorize]
@@ -105,6 +106,7 @@ namespace Phoenix01.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

@@ -14,15 +14,7 @@ namespace Phoenix01.Controllers
     {
         public IActionResult Index()
         {
-            //var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
-            //var currentUser = manager.FindById(User.Identity.GetUserId());
-            //ViewBag.email = currentUser.UserProfileInfo.email;
-
-
-
-
-
-            return View();
+             return View();
         }
 
         public IActionResult About()

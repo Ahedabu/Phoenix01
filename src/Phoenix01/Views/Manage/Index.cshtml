@@ -10,6 +10,13 @@
     <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
+        
+        
+        <dt>Edit Profile:</dt>
+        <dd>
+           <a asp-controller="Manage" asp-action="EditProfile" class="btn-bracketed">Edit</a>
+        </dd>
+
         <dt>Password:</dt>
         <dd>
             @if (Model.HasPassword)

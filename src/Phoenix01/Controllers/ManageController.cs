@@ -204,6 +204,19 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
+        //Ahed
+        //GET: /Manage/EditProfile
+        [HttpGet]
+        public IActionResult EditProfile()
+        {
+            return View();
+        }
+
+
+
+
+
+
         //
         // GET: /Manage/ChangePassword
         [HttpGet]

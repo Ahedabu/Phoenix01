@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using Phoenix01.Models;
 using Phoenix01.Models.ManageViewModels;
 using Phoenix01.Services;
+using Phoenix01.Models.AccountViewModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Phoenix01.Controllers
 {
@@ -211,6 +213,44 @@ namespace Phoenix01.Controllers
         {
             return View();
         }
+
+        // POST: /Manage/EditProfile
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(EditProfile model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                
+                user.FirstName = model.FirstName;
+                user.City = model.City;
+                user.LastName = model.LastName;
+                user.AreaCode = model.AreaCode;
+                user.StreetName = model.StreetName;
+                user.Country = model.Country;
+                user.Area = model.Area;
+                user.Image = model.Image;
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    // redirect
+
+                    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
+
+                }
+                
+               
+            }
+ return View(model);
+            
+
+        }
+
 
 
 

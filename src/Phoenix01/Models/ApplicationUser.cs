@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Phoenix01.Models
 {
+
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
@@ -18,7 +19,6 @@ namespace Phoenix01.Models
         public string City { get; set; }
         public string Country { get; set; }
         public string Image { get; set; }
-        public DateTime RegistrationDate { get; set; }
     }
 
 

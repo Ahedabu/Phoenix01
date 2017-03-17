@@ -1,0 +1,59 @@
+﻿@model EditUserProfileViewModel
+
+@{ 
+    ViewBag.Title = "EditUserProfile";
+}
+
+<h1>Edit profile information</h1>
+
+<form method="post" asp-antiforgery="true">
+
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <div>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" />
+        <span asp-validation-for="FirstName"></span>
+    </div>
+
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" />
+        <span asp-validation-for="LastName"></span>
+    </div>
+
+    <div>
+        <label asp-for="StreetName"></label>
+        <input asp-for="StreetName" />
+        <span asp-validation-for="StreetName"></span>
+    </div>
+
+    <div>
+        <label asp-for="AreaCode"></label>
+        <input asp-for="AreaCode" />
+        <span asp-validation-for="AreaCode"></span>
+    </div>
+
+    <div>
+        <label asp-for="City"></label>
+        <input asp-for="City" />
+        <span asp-validation-for="City"></span>
+    </div>
+
+    <div>
+        <label asp-for="Area"></label>
+        <input asp-for="Area" />
+        <span asp-validation-for="Area"></span>
+    </div>
+
+    <div>
+        <label asp-for="Country"></label>
+        <input asp-for="Country" />
+        <span asp-validation-for="Country"></span>
+    </div>
+
+    <div>
+        <input type="submit" value="Update" />
+    </div>
+
+</form>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Phoenix01.Models;
-
+using Phoenix01.Models.ManageViewModels;
 
 namespace Phoenix01.Data
 {
@@ -16,8 +16,8 @@ namespace Phoenix01.Data
         {
         }
 
-
-
+        public DbSet<Languages> Language { get; set; }
+        public DbSet<UserLanguages> UserLanguages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,10 +26,6 @@ namespace Phoenix01.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
-
-
-
-
 
     }
 }

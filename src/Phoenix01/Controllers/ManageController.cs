@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using Phoenix01.Models;
 using Phoenix01.Models.ManageViewModels;
 using Phoenix01.Services;
+using Phoenix01.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Phoenix01.Controllers
 {
@@ -85,6 +87,7 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
+       
         //
         // GET: /Manage/AddPhoneNumber
         public IActionResult AddPhoneNumber()
@@ -328,7 +331,44 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-        #region Helpers
+        [HttpGet]
+        public IActionResult EditUserProfile()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUserProfile(EditUserProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.StreetName = model.StreetName;
+                user.AreaCode = model.AreaCode;
+                user.City = model.City;
+                user.Area = model.Area;
+                user.Country = model.Country;
+                
+
+                var result = await _userManager.UpdateAsync(user);
+                //var dbresult = await _context.SaveChangesAsync();
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index), new { Message = "User profile updated!" });
+                }
+            }
+            return View(model);
+        }
+
+
+            #region Helpers
 
         private void AddErrors(IdentityResult result)
         {

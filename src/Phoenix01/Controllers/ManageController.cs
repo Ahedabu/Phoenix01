@@ -49,6 +49,7 @@ namespace Phoenix01.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.EditProfileSuccess ? "Your profile has been updated."
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -377,7 +378,7 @@ namespace Phoenix01.Controllers
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction(nameof(Index), new { Message = "User profile updated!" });
+                    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.EditProfileSuccess });
                 }
             }
             return View(model);
@@ -403,6 +404,7 @@ namespace Phoenix01.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
+            EditProfileSuccess,
             Error
         }
 

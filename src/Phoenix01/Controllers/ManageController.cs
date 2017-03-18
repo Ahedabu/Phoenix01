@@ -331,10 +331,26 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-        [HttpGet]
-        public IActionResult EditUserProfile()
+        
+        public async Task<IActionResult> EditUserProfile()
         {
-            return View();
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            return View(new EditUserProfileViewModel
+            {
+                FirstName = user.FirstName,
+                MiddleName = user.MiddleName,
+                LastName = user.LastName,
+                StreetName = user.StreetName,
+                Zip = user.Zip,
+                State = user.State,
+                City = user.City,
+                Country = user.Country,
+            });
         }
 
         [HttpPost]
@@ -349,16 +365,16 @@ namespace Phoenix01.Controllers
             if (user != null)
             {
                 user.FirstName = model.FirstName;
+                user.MiddleName = model.MiddleName;
                 user.LastName = model.LastName;
                 user.StreetName = model.StreetName;
-                user.AreaCode = model.AreaCode;
+                user.Zip = model.Zip;
                 user.City = model.City;
-                user.Area = model.Area;
+                user.State = model.State;
                 user.Country = model.Country;
                 
 
                 var result = await _userManager.UpdateAsync(user);
-                //var dbresult = await _context.SaveChangesAsync();
                 if (result.Succeeded)
                 {
                     return RedirectToAction(nameof(Index), new { Message = "User profile updated!" });

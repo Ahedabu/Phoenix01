@@ -8,6 +8,6 @@ namespace Phoenix01.Models
     public class Languages
     {
         public int ID { get; set; }
-        public string Language { get; set; }
+        public string NativeLanguage { get; set; }
     }
 }

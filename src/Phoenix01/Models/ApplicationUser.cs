@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Phoenix01.Models
 {
@@ -11,6 +12,7 @@ namespace Phoenix01.Models
     public class ApplicationUser : IdentityUser
     {
         //Ahed:Adding a new properties 
+        [StringLength(100, MinimumLength = 2)]
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
@@ -20,6 +22,8 @@ namespace Phoenix01.Models
         public string City { get; set; }
         public string Country { get; set; }
         public string Image { get; set; }
+
+        public string NativeLanguage { get; set; }
     }
 
 

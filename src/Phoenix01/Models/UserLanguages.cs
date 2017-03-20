@@ -8,7 +8,7 @@ namespace Phoenix01.Models
     public class UserLanguages
     {
         public int ID { get; set; }
-        public ApplicationUser AppUser { get; set; }
-        public Languages Language { get; set; }
+        public ApplicationUser AppLicationUser { get; set; }
+        public Languages NativeLanguage { get; set; }
     }
 }

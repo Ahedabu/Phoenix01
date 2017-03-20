@@ -23,5 +23,6 @@ namespace Phoenix01.Models.ManageViewModels
 
         public string Image { get; set; }
 
+        public string NativeLanguage { get; set; }
     }
 }

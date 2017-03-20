@@ -22,19 +22,22 @@ namespace Phoenix01.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _context;
 
         public ManageController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IEmailSender emailSender,
         ISmsSender smsSender,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory,
+        ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<ManageController>();
+            _context = context;
         }
 
         //
@@ -341,6 +344,8 @@ namespace Phoenix01.Controllers
                 return View("Error");
             }
 
+            ViewBag.Languages = (new HelperController(_context)).LanguageDropdown();
+
             return View(new EditUserProfileViewModel
             {
                 FirstName = user.FirstName,
@@ -351,6 +356,7 @@ namespace Phoenix01.Controllers
                 State = user.State,
                 City = user.City,
                 Country = user.Country,
+                NativeLanguage = user.NativeLanguage
             });
         }
 
@@ -373,6 +379,7 @@ namespace Phoenix01.Controllers
                 user.City = model.City;
                 user.State = model.State;
                 user.Country = model.Country;
+                user.NativeLanguage = model.NativeLanguage;
                 
 
                 var result = await _userManager.UpdateAsync(user);

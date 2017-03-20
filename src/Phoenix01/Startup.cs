@@ -83,7 +83,6 @@ namespace Phoenix01
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            //context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
         }
     }

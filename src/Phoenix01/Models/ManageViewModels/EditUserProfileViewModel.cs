@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace Phoenix01.Models.ManageViewModels
 {
     public class EditUserProfileViewModel
     {
+        public string RegistrationDate { get; set; }
+
         public string FirstName { get; set; }
 
         public string MiddleName { get; set; }

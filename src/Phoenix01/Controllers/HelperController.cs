@@ -23,7 +23,7 @@ namespace Phoenix01.Controllers
         {
 
             var languages = new List<SelectListItem>();
-            foreach (var lang in _context.Language)
+            foreach (var lang in _context.Languages)
             {
                 languages.Add(new SelectListItem
                 {

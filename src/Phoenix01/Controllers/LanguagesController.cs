@@ -22,7 +22,7 @@ namespace Phoenix01.Controllers
         // GET: Languages
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Language.ToListAsync());
+            return View(await _context.Languages.ToListAsync());
         }
 
         // GET: Languages/Details/5
@@ -33,7 +33,7 @@ namespace Phoenix01.Controllers
                 return NotFound();
             }
 
-            var languages = await _context.Language.SingleOrDefaultAsync(m => m.ID == id);
+            var languages = await _context.Languages.SingleOrDefaultAsync(m => m.ID == id);
             if (languages == null)
             {
                 return NotFound();
@@ -72,7 +72,7 @@ namespace Phoenix01.Controllers
                 return NotFound();
             }
 
-            var languages = await _context.Language.SingleOrDefaultAsync(m => m.ID == id);
+            var languages = await _context.Languages.SingleOrDefaultAsync(m => m.ID == id);
             if (languages == null)
             {
                 return NotFound();
@@ -123,7 +123,7 @@ namespace Phoenix01.Controllers
                 return NotFound();
             }
 
-            var languages = await _context.Language.SingleOrDefaultAsync(m => m.ID == id);
+            var languages = await _context.Languages.SingleOrDefaultAsync(m => m.ID == id);
             if (languages == null)
             {
                 return NotFound();
@@ -137,15 +137,15 @@ namespace Phoenix01.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var languages = await _context.Language.SingleOrDefaultAsync(m => m.ID == id);
-            _context.Language.Remove(languages);
+            var languages = await _context.Languages.SingleOrDefaultAsync(m => m.ID == id);
+            _context.Languages.Remove(languages);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         private bool LanguagesExists(int id)
         {
-            return _context.Language.Any(e => e.ID == id);
+            return _context.Languages.Any(e => e.ID == id);
         }
     }
 }

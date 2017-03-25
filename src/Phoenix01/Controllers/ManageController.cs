@@ -348,7 +348,7 @@ namespace Phoenix01.Controllers
 
             return View(new EditUserProfileViewModel
             {
-                RegistrationDate = user.RegistrationDate.ToString(),
+                RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
                 FirstName = user.FirstName,
                 MiddleName = user.MiddleName,
                 LastName = user.LastName,

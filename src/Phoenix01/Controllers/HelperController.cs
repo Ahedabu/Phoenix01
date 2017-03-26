@@ -27,8 +27,8 @@ namespace Phoenix01.Controllers
             {
                 languages.Add(new SelectListItem
                 {
-                    Text = lang.LanguageName,
-                    Value = lang.LanguageName
+                    Text = lang.NativeLanguage,
+                    Value = lang.NativeLanguage
                 });
             }
             return languages;

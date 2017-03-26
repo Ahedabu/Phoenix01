@@ -18,15 +18,15 @@ namespace Phoenix01.Data
                 return;
             }
 
-            var languages = new Language[]
+            var languages = new Languages[]
             {
-            new Language {LanguageName="Arabic"},
-            new Language {LanguageName="English"},
-            new Language {LanguageName="Hungarian"},
-            new Language {LanguageName="Swedish"}
+            new Languages {NativeLanguage="Arabic"},
+            new Languages {NativeLanguage="English"},
+            new Languages {NativeLanguage="Hungarian"},
+            new Languages {NativeLanguage="Swedish"}
             };
 
-            foreach (Language lang in languages)
+            foreach (Languages lang in languages)
             {
                 context.Languages.Add(lang);
             }

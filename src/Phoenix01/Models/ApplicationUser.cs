@@ -25,8 +25,6 @@ namespace Phoenix01.Models
         public string Image { get; set; }
 
         public string NativeLanguage { get; set; }
-
-        public ICollection<UserLanguage> UserLanguages { get; set; }
     }
 
 

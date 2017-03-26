@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 
 namespace Phoenix01.Models
 {
-    public class Languages
+    public class Language
     {
         public int ID { get; set; }
-        public string NativeLanguage { get; set; }
+        public string LanguageName { get; set; }
+
+        public ICollection<UserLanguage> UserLanguages { get; set; }
     }
 }

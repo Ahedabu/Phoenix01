@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 
 namespace Phoenix01.Models
 {
-    public class UserLanguages
+    public class UserLanguage
     {
         public int ID { get; set; }
-        public ApplicationUser AppLicationUser { get; set; }
-        public Languages NativeLanguage { get; set; }
+        public Guid UserID { get; set; }
+
+        public ApplicationUser User { get; set; }
+        public Language Language { get; set; }
     }
 }

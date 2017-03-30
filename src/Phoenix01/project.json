@@ -50,7 +50,8 @@
     "System.Security.Claims": "4.3.0",
     "Microsoft.AspNet.Http.Extensions": "1.0.0-rc1-final",
     "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
-    "Microsoft.AspNetCore.Http": "1.1.1"
+    "Microsoft.AspNetCore.Http": "1.1.1",
+    "Microsoft.AspNetCore.Owin": "1.1.1"
   },
 
   "tools": {

@@ -59,6 +59,9 @@ namespace Phoenix01.Controllers
             
         }
 
+
+
+        
         //
         // GET: /Manage/Index
         [HttpGet]
@@ -89,7 +92,9 @@ namespace Phoenix01.Controllers
                 Logins = await _userManager.GetLoginsAsync(user),
                 BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
             };
-            return View(model);
+
+            var model01 = new ForPictureViewModel { indexViewModel = model, applicationUser = user };
+            return View(model01);
         }
 
         //
@@ -413,6 +418,17 @@ namespace Phoenix01.Controllers
 
         #region Upload Photo
 
+        public async Task<string> UploadPhoto()
+        {
+            var user = await GetCurrentUserAsync();
+           
+            return (user.UserImage);
+
+        }
+
+
+
+
         [HttpPost]
         public async Task<IActionResult> UploadPhoto(ICollection<IFormFile> files)
         {
@@ -439,12 +455,13 @@ namespace Phoenix01.Controllers
                         { 
                             if (file.Length > 0)
                         {
-                               // file.FileName.;
-                                
-                            using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                                var pictureFile = file.FileName + User.Identity.Name + ".png";
+
+
+                            using (var fileStream = new FileStream(Path.Combine(uploads, pictureFile), FileMode.Create))
                             {
                                     
-                                    user.UserImage = uploads + "\\" + fnm;
+                                    user.UserImage = "\\images\\" + pictureFile;
                                     await _userManager.UpdateAsync(user);
                                     await file.CopyToAsync(fileStream);
                                     
@@ -467,37 +484,6 @@ namespace Phoenix01.Controllers
 
            
 
-                //foreach (var file in files)
-                //{
-                //    var user = await GetCurrentUserAsync();
-                //    var username = user.UserName;
-                //var fileName = ContentDispositionHeaderValue
-                //    .Parse(file.ContentDisposition)
-                //    .FileName
-                //    .Trim('"');// FileName returns "fileName.ext"(with double quotes) in beta 3
-                //    var fnm = username + ".png";
-
-                //   if (fileName.ToLower().EndsWith(".png") || fileName.ToLower().EndsWith(".jpg") || fileName.ToLower().EndsWith(".gif"))// Important for security if saving in webroot
-                //    {
-                //        var filePath = _appEnv.ContentRootPath +"\\images\\" + fnm;
-
-                //        var directory = new DirectoryInfo(_appEnv.ContentRootPath + "\\images\\");
-                //       if (directory.Exists == false)
-                //       {
-                //           directory.Create();
-                //       }
-
-                //        ViewBag.FilePath = filePath.ToString();
-                //        await file.SaveAsAsync(filePath);
-
-                //        return RedirectToAction("Index", new { Message = ManageMessageId.PhotoUploadSuccess });
-                //    }
-                //    else
-                //    {
-                //        return RedirectToAction("Index", new { Message = ManageMessageId.FileExtensionError });
-                //    }
-                //}
-                //return RedirectToAction("Index", new { Message = ManageMessageId.Error });// PRG
             }
             return View();
 

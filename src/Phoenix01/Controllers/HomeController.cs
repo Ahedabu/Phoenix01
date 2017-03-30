@@ -7,11 +7,21 @@ using Microsoft.AspNetCore.Identity;
 using Phoenix01.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Phoenix01.Data;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Phoenix01.Controllers
 {
     public class HomeController : Controller
     {
+
+        private IHostingEnvironment hostingEnv;
+
+        public HomeController(IHostingEnvironment env)
+        {
+            this.hostingEnv = env;
+        }
+
+
         public IActionResult Index()
         {
             //var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));

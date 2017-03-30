@@ -1,6 +1,7 @@
 ﻿{
   "userSecretsId": "aspnet-Phoenix01-eb2b9eba-9289-4699-be4e-9c4a2fcf0f62",
 
+
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.0.1",
@@ -43,7 +44,13 @@
     "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
       "version": "1.0.0-preview2-final",
       "type": "build"
-    }
+    },
+    "Microsoft.NET.Sdk": "1.0.0-alpha-20161104-2",
+    "Microsoft.AspNet.Http.Features": "1.0.0-rc1-final",
+    "System.Security.Claims": "4.3.0",
+    "Microsoft.AspNet.Http.Extensions": "1.0.0-rc1-final",
+    "Microsoft.Extensions.PlatformAbstractions": "1.1.0",
+    "Microsoft.AspNetCore.Http": "1.1.1"
   },
 
   "tools": {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Phoenix01.Models.ManageViewModels
 {
@@ -21,7 +22,9 @@ namespace Phoenix01.Models.ManageViewModels
 
         public string Country { get; set; }
 
-        public string Image { get; set; }
+
+        [Display(Name = "UserImage")]
+        public string UserImage { get; set; }
 
     }
 }

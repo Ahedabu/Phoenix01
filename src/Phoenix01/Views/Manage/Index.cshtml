@@ -1,4 +1,6 @@
 ﻿@model IndexViewModel
+@using System.Security.Claims
+
 @{
     ViewData["Title"] = "Manage your account";
 }
@@ -10,6 +12,30 @@
     <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
+        <dt>Profile Picture:</dt>
+        <dd>
+           @if (User.Identity.Name != null)
+                   {
+                       var imgUrl = Url.Content("~/images/" + User.Identity.Name + ".png");
+
+
+                       <div class="upimage">
+                    <div class="accimg">
+                        <img src= "@imgUrl" height="250" width="250" />
+                    </div>
+                    <div class="mngimg">
+                        <form asp-action="UploadPhoto" asp-controller="Manage" method="post" enctype="multipart/form-data">
+                            <div class="btn btn-default browseimg">
+                                <p>Browse...</p>
+                                <input type="file" name="files" id="files" onchange="this.form.submit();" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+        </dd>
+
+
         <dt>Profile:</dt>
         <dd>
                 <a asp-controller="Manage" asp-action="EditUserProfile" class="btn-bracketed">Edit</a>

@@ -21,6 +21,7 @@ namespace Phoenix01.Models
         public string State { get; set; }
         public string City { get; set; }
         public string Country { get; set; }
+        public string UserImage { get; set; }
         public string Image { get; set; }
         public string Story { get; set; }
 

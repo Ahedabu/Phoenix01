@@ -11,6 +11,20 @@ using Phoenix01.Models.ManageViewModels;
 using Phoenix01.Services;
 using Phoenix01.Data;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
+using System.Net.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.Net.Http.Headers;
+
+
+
+using System.Security.Claims;
+using System.Security.Principal;
+
+
 
 namespace Phoenix01.Controllers
 {
@@ -22,21 +36,32 @@ namespace Phoenix01.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        IHostingEnvironment _appEnv;
+       
+       
+
 
         public ManageController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IEmailSender emailSender,
         ISmsSender smsSender,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory,
+        IHostingEnvironment appEnv  
+        )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<ManageController>();
+            _appEnv = appEnv;
+            
         }
 
+
+
+        
         //
         // GET: /Manage/Index
         [HttpGet]
@@ -50,6 +75,8 @@ namespace Phoenix01.Controllers
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : message == ManageMessageId.EditProfileSuccess ? "Your profile has been updated."
+                : message == ManageMessageId.PhotoUploadSuccess ? "Your Photo uploaded."
+                : message == ManageMessageId.FileExtensionError ? "You have file Extension Error. Must Be .PNG or .JPG or .GIF"
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -65,7 +92,9 @@ namespace Phoenix01.Controllers
                 Logins = await _userManager.GetLoginsAsync(user),
                 BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
             };
-            return View(model);
+
+            var model01 = new ForPictureViewModel { indexViewModel = model, applicationUser = user };
+            return View(model01);
         }
 
         //
@@ -284,6 +313,8 @@ namespace Phoenix01.Controllers
                 message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
                 : message == ManageMessageId.AddLoginSuccess ? "The external login was added."
                 : message == ManageMessageId.Error ? "An error has occurred."
+                 : message == ManageMessageId.PhotoUploadSuccess ? "Your photo has been uploaded."
+                : message == ManageMessageId.FileExtensionError ? "Only jpg, png and gif file formats are allowed."
                 : "";
             var user = await GetCurrentUserAsync();
             if (user == null)
@@ -332,7 +363,7 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-        
+        // GET: /manage/EditUserProfile
         public async Task<IActionResult> EditUserProfile()
         {
             var user = await GetCurrentUserAsync();
@@ -360,6 +391,7 @@ namespace Phoenix01.Controllers
                 State = user.State,
                 City = user.City,
                 Country = user.Country,
+                UserImage = user.UserImage
                 BirthDate = birthdate,
                 UserAge = age < 0 ? "" : age.ToString()
 
@@ -367,8 +399,7 @@ namespace Phoenix01.Controllers
 
             });
         }
-
-
+        //POST: /manage/EditUserProfile
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUserProfile(EditUserProfileViewModel model)
@@ -400,8 +431,85 @@ namespace Phoenix01.Controllers
             return View(model);
         }
 
+        #region Upload Photo
 
-            #region Helpers
+        public async Task<string> UploadPhoto()
+        {
+            var user = await GetCurrentUserAsync();
+           
+            return (user.UserImage);
+
+        }
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> UploadPhoto(ICollection<IFormFile> files)
+        {
+            var user = await GetCurrentUserAsync();
+            var username = user.UserName;
+            var fnm = username + ".png";
+
+            if(User.Identity.IsAuthenticated)
+            {
+               
+
+                if (user.Id != null)
+            {
+                    var uploads = Path.Combine(_appEnv.WebRootPath, "images");
+
+                    foreach (var file in files)
+                    {
+                        var fileName = ContentDispositionHeaderValue
+                              .Parse(file.ContentDisposition)
+                              .FileName
+                              .Trim('"');// FileName returns "fileName.ext"(with double quotes) in beta 3
+
+                        if (fileName.ToLower().EndsWith(".png") || fileName.ToLower().EndsWith(".jpg") || fileName.ToLower().EndsWith(".gif"))// Important for security if saving in webroot
+                        { 
+                            if (file.Length > 0)
+                        {
+                                var pictureFile = file.FileName + User.Identity.Name + ".png";
+
+
+                            using (var fileStream = new FileStream(Path.Combine(uploads, pictureFile), FileMode.Create))
+                            {
+                                    
+                                    user.UserImage = "\\images\\" + pictureFile;
+                                    await _userManager.UpdateAsync(user);
+                                    await file.CopyToAsync(fileStream);
+                                    
+                            }
+                        }
+                            return RedirectToAction("Index", new { Message = ManageMessageId.PhotoUploadSuccess });
+                        }
+
+                        else
+                        {
+                            return RedirectToAction("Index", new { Message = ManageMessageId.FileExtensionError });
+                        }
+                      
+                    }
+
+
+                }
+
+           
+
+           
+
+            }
+            return View();
+
+        }
+
+        #endregion Upload Photo
+
+
+
+
+        #region Helpers
 
         private void AddErrors(IdentityResult result)
         {
@@ -421,6 +529,8 @@ namespace Phoenix01.Controllers
             RemoveLoginSuccess,
             RemovePhoneSuccess,
             EditProfileSuccess,
+            PhotoUploadSuccess,
+            FileExtensionError,
             Error
         }
 

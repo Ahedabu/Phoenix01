@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Phoenix01.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Phoenix01.Data;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Phoenix01.Controllers
 {

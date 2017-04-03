@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet-Phoenix01-eb2b9eba-9289-4699-be4e-9c4a2fcf0f62",
 
   "dependencies": {
@@ -43,7 +43,8 @@
     "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
       "version": "1.0.0-preview2-final",
       "type": "build"
-    }
+    },
+    "IPAddressFiltering": "2.1.4"
   },
 
   "tools": {

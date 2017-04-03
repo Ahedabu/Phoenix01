@@ -18,7 +18,7 @@ namespace Phoenix01.Data
 
         public DbSet<Languages> Language { get; set; }
         public DbSet<UserLanguages> UserLanguages { get; set; }
-
+        public DbSet<Story> Stories { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

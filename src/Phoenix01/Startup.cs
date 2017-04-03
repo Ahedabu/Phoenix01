@@ -85,6 +85,7 @@ namespace Phoenix01
             });
 
             context.Database.EnsureCreated();
+            DbInitializer.Initialize(context); 
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace Phoenix01.Models.ManageViewModels
@@ -10,6 +11,10 @@ namespace Phoenix01.Models.ManageViewModels
         public string MiddleName { get; set; }
 
         public string LastName { get; set; }
+        
+        public string BirthDate { get; set; }
+
+        public string UserAge { get; set; }
 
         public string Zip { get; set; }
 

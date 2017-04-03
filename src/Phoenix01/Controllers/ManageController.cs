@@ -336,11 +336,20 @@ namespace Phoenix01.Controllers
         public async Task<IActionResult> EditUserProfile()
         {
             var user = await GetCurrentUserAsync();
+            //
             if (user == null)
             {
                 return View("Error");
             }
 
+            var age = 0;
+            var birthdate = "";
+            if (!(user.BirthDate == null))
+            {
+                birthdate=((DateTime)user.BirthDate).ToString("yyyy-MM-dd");
+                age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
+                if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
+            }
             return View(new EditUserProfileViewModel
             {
                 FirstName = user.FirstName,
@@ -351,8 +360,14 @@ namespace Phoenix01.Controllers
                 State = user.State,
                 City = user.City,
                 Country = user.Country,
+                BirthDate = birthdate,
+                UserAge = age < 0 ? "" : age.ToString()
+
+
+
             });
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -373,6 +388,7 @@ namespace Phoenix01.Controllers
                 user.City = model.City;
                 user.State = model.State;
                 user.Country = model.Country;
+                user.BirthDate = DateTime.Parse(model.BirthDate);
                 
 
                 var result = await _userManager.UpdateAsync(user);

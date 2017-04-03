@@ -13,6 +13,8 @@ namespace Phoenix01.Models
         //Ahed:Adding a new properties 
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
+
+        public DateTime? BirthDate { get; set; }
         public string LastName { get; set; }
         public string Zip { get; set; }
         public string StreetName { get; set; }
@@ -20,6 +22,9 @@ namespace Phoenix01.Models
         public string City { get; set; }
         public string Country { get; set; }
         public string Image { get; set; }
+        public string Story { get; set; }
+
+        public virtual Story  Stories { get; set; }
     }
 
 

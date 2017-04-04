@@ -11,6 +11,7 @@ namespace Phoenix01.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime RegistrationDate { get; set; }
 
         [StringLength(100, MinimumLength = 2)]
@@ -23,8 +24,10 @@ namespace Phoenix01.Models
         public string City { get; set; }
         public string Country { get; set; }
         public string Image { get; set; }
-
         public string NativeLanguage { get; set; }
+
+        // nav. prop.
+        public List<ApplicationUserLanguage> LanguageLinks { get; set; }
     }
 
 

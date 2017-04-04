@@ -85,7 +85,21 @@
     <div class="form-group">
         <label asp-for="NativeLanguage" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <select asp-for="NativeLanguage" class="form-control" asp-items="ViewBag.Languages"></select>
+            <select asp-for="NativeLanguage" class="form-control" asp-items="Model.LanguagesDropDown"></select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="OtherLanguages" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <textarea asp-for="OtherLanguages" class="form-control" disabled></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AddLanguage" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="AddLanguage" class="form-control" asp-items="Model.LanguagesDropDown"></select>
         </div>
     </div>
 

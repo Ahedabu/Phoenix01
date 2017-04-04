@@ -13,20 +13,20 @@ namespace Phoenix01.Data
             context.Database.EnsureCreated();
 
             // look for Users
-            if (context.Users.Any())
+            if (context.Languages.Any())
             {
                 return;
             }
 
-            var languages = new Languages[]
+            var languages = new Language[]
             {
-            new Languages {NativeLanguage="Arabic"},
-            new Languages {NativeLanguage="English"},
-            new Languages {NativeLanguage="Hungarian"},
-            new Languages {NativeLanguage="Swedish"}
+            new Language {Name="Arabic"},
+            new Language {Name="English"},
+            new Language {Name="Hungarian"},
+            new Language {Name="Swedish"}
             };
 
-            foreach (Languages lang in languages)
+            foreach (Language lang in languages)
             {
                 context.Languages.Add(lang);
             }

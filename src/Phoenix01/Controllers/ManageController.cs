@@ -11,6 +11,7 @@ using Phoenix01.Models.ManageViewModels;
 using Phoenix01.Services;
 using Phoenix01.Data;
 using Microsoft.EntityFrameworkCore;
+using Phoenix01.CustomExtensions;
 
 namespace Phoenix01.Controllers
 {
@@ -91,7 +92,6 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-       
         //
         // GET: /Manage/AddPhoneNumber
         public IActionResult AddPhoneNumber()
@@ -335,7 +335,7 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-        
+
         public async Task<IActionResult> EditUserProfile()
         {
             var user = await GetCurrentUserAsync();
@@ -344,10 +344,20 @@ namespace Phoenix01.Controllers
                 return View("Error");
             }
 
-            ViewBag.Languages = (new HelperController(_context)).LanguageDropdown();
+            var otherLang = _context.UserLanguages.ToList();
+            var langList = new List<string>();
+            foreach(var lang in otherLang)
+            {
+                if(lang.ApplicationUser == user)
+                {
+                    langList.Add(lang.ToString());
+                }
+            }
 
             return View(new EditUserProfileViewModel
             {
+
+
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
                 FirstName = user.FirstName,
                 MiddleName = user.MiddleName,
@@ -357,8 +367,14 @@ namespace Phoenix01.Controllers
                 State = user.State,
                 City = user.City,
                 Country = user.Country,
-                NativeLanguage = user.NativeLanguage
-            });
+                NativeLanguage = user.NativeLanguage,
+                LanguagesDropDown = _context.Languages.ToSelectListItems(),
+                //OtherLanguages = _context.
+
+
+        });
+
+
         }
 
         [HttpPost]
@@ -381,11 +397,46 @@ namespace Phoenix01.Controllers
                 user.State = model.State;
                 user.Country = model.Country;
                 user.NativeLanguage = model.NativeLanguage;
-                
+
+                var query =
+                    from ul in _context.UserLanguages
+                    where ul.ApplicationUserId == user.Id
+                    orderby ul.Language.Name
+                    select ul;
+
+                foreach (Language lang in _context.Languages)
+                {
+                    if (lang.Name.Equals(model.AddLanguage))
+                    {
+                        ApplicationUserLanguage newUserLanguage = new ApplicationUserLanguage
+                        {
+                            ApplicationUser = user,
+                            Language = lang
+                        };
+                                    
+                        if (!query.Contains(newUserLanguage))
+                        {
+                            user.LanguageLinks = new List<ApplicationUserLanguage> { newUserLanguage };
+                        }
+                        //else
+                        //{
+                        //    if (!query.Contains(newUserLanguage))
+                        //    {
+                        //        user.LanguageLinks.Add(new UserLanguage
+                        //        {
+                        //            ApplicationUser = user,
+                        //            Language = lang
+                        //        });
+                        //    }
+                        //}
+                    }
+                }
+
 
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
+                    await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index), new { Message = ManageMessageId.EditProfileSuccess });
                 }
             }
@@ -393,7 +444,7 @@ namespace Phoenix01.Controllers
         }
 
 
-            #region Helpers
+        #region Helpers
 
         private void AddErrors(IdentityResult result)
         {
@@ -422,5 +473,6 @@ namespace Phoenix01.Controllers
         }
 
         #endregion
+
     }
 }

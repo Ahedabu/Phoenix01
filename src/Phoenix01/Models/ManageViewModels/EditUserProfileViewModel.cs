@@ -30,7 +30,7 @@ namespace Phoenix01.Models.ManageViewModels
 
         public string NativeLanguage { get; set; }
 
-        public List<string> OtherLanguages { get; set; }
+        public string OtherLanguages { get; set; }
 
         public string AddLanguage { get; set;}
 

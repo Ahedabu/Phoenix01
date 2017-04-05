@@ -7,7 +7,7 @@ namespace Phoenix01.Models
 {
     public class Language
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
 
         // nav. prop.

@@ -33,7 +33,7 @@ namespace Phoenix01.Controllers
                 return NotFound();
             }
 
-            var languages = await _context.Languages.SingleOrDefaultAsync(m => m.ID == id);
+            var languages = await _context.Languages.SingleOrDefaultAsync(m => m.Id == id);
             if (languages == null)
             {
                 return NotFound();
@@ -72,7 +72,7 @@ namespace Phoenix01.Controllers
                 return NotFound();
             }
 
-            var languages = await _context.Languages.SingleOrDefaultAsync(m => m.ID == id);
+            var languages = await _context.Languages.SingleOrDefaultAsync(m => m.Id == id);
             if (languages == null)
             {
                 return NotFound();
@@ -87,7 +87,7 @@ namespace Phoenix01.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Language")] Language languages)
         {
-            if (id != languages.ID)
+            if (id != languages.Id)
             {
                 return NotFound();
             }
@@ -101,7 +101,7 @@ namespace Phoenix01.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LanguagesExists(languages.ID))
+                    if (!LanguagesExists(languages.Id))
                     {
                         return NotFound();
                     }
@@ -123,7 +123,7 @@ namespace Phoenix01.Controllers
                 return NotFound();
             }
 
-            var languages = await _context.Languages.SingleOrDefaultAsync(m => m.ID == id);
+            var languages = await _context.Languages.SingleOrDefaultAsync(m => m.Id == id);
             if (languages == null)
             {
                 return NotFound();
@@ -137,7 +137,7 @@ namespace Phoenix01.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var languages = await _context.Languages.SingleOrDefaultAsync(m => m.ID == id);
+            var languages = await _context.Languages.SingleOrDefaultAsync(m => m.Id == id);
             _context.Languages.Remove(languages);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -145,7 +145,7 @@ namespace Phoenix01.Controllers
 
         private bool LanguagesExists(int id)
         {
-            return _context.Languages.Any(e => e.ID == id);
+            return _context.Languages.Any(e => e.Id == id);
         }
     }
 }

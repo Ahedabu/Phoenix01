@@ -18,6 +18,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.Net.Http.Headers;
+using Phoenix01.CustomExtensions;
 
 
 
@@ -36,10 +37,8 @@ namespace Phoenix01.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
-        IHostingEnvironment _appEnv;
-       
-       
-
+        private readonly IHostingEnvironment _appEnv;
+        private readonly ApplicationDbContext _context;
 
         public ManageController(
         UserManager<ApplicationUser> userManager,
@@ -47,8 +46,8 @@ namespace Phoenix01.Controllers
         IEmailSender emailSender,
         ISmsSender smsSender,
         ILoggerFactory loggerFactory,
-        IHostingEnvironment appEnv  
-        )
+        IHostingEnvironment appEnv,  
+        ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -56,7 +55,7 @@ namespace Phoenix01.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<ManageController>();
             _appEnv = appEnv;
-            
+            _context = context;
         }
 
 
@@ -117,7 +116,6 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-       
         //
         // GET: /Manage/AddPhoneNumber
         public IActionResult AddPhoneNumber()
@@ -363,7 +361,7 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-        // GET: /manage/EditUserProfile
+        // GET: /Manage/EditUserProfile
         public async Task<IActionResult> EditUserProfile()
         {
             var user = await GetCurrentUserAsync();
@@ -372,8 +370,19 @@ namespace Phoenix01.Controllers
                 return View("Error");
             }
 
+            var otherLang = _context.Languages
+                .Where(lang => lang.UserLinks.Any(u => u.ApplicationUserId == user.Id))
+                .ToList();
+
+            var langList = "";
+            foreach (var lang in otherLang)
+            {
+                langList += lang.Name + "\n";
+            }
+
             return View(new EditUserProfileViewModel
             {
+                RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
                 FirstName = user.FirstName,
                 MiddleName = user.MiddleName,
                 LastName = user.LastName,
@@ -382,10 +391,15 @@ namespace Phoenix01.Controllers
                 State = user.State,
                 City = user.City,
                 Country = user.Country,
-                UserImage = user.UserImage
+                UserImage = user.UserImage,
+                NativeLanguage = user.NativeLanguage,
+                LanguagesDropDown = _context.Languages.ToSelectListItems(),
+                OtherLanguages = langList
+
+
             });
         }
-        //POST: /manage/EditUserProfile
+        //POST: /Manage/EditUserProfile
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUserProfile(EditUserProfileViewModel model)
@@ -394,7 +408,9 @@ namespace Phoenix01.Controllers
             {
                 return View(model);
             }
+
             var user = await GetCurrentUserAsync();
+
             if (user != null)
             {
                 user.FirstName = model.FirstName;
@@ -405,14 +421,26 @@ namespace Phoenix01.Controllers
                 user.City = model.City;
                 user.State = model.State;
                 user.Country = model.Country;
-                
+                user.NativeLanguage = model.NativeLanguage;
 
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
+                var lang = _context.Languages
+                    .Where(la => la.Name == model.AddLanguage)
+                    .SingleOrDefault();
+
+                if (!(lang == null))
                 {
-                    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.EditProfileSuccess });
+                    var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang.Id };
+                    _context.ApplicationUserLanguages.Add(appUserLang);
                 }
             }
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.EditProfileSuccess });
+            }
+
             return View(model);
         }
 
@@ -494,6 +522,8 @@ namespace Phoenix01.Controllers
 
 
 
+
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
@@ -525,5 +555,6 @@ namespace Phoenix01.Controllers
         }
 
         #endregion
+
     }
 }

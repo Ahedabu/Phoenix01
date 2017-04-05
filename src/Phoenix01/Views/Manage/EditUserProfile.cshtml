@@ -6,8 +6,20 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-controller="Manage" asp-action="EditUserProfile" method="post" class="form-horizontal" asp-antiforgery="true">
-    <h4>Edit Profile Form</h4>
+<h1>
+<img src="@Model.UserImage" style="width:160px;height:160px; background: #FFFFFF;
+    margin: auto;
+    -moz-border-radius: 60px;
+    border-radius: 100px;
+    padding: 6px;
+    box-shadow: 0px 0px 20px #888;" />
+
+</h1>
+
+<form asp-controller="Manage" asp-action="EditUserProfile" method="post" class="form-horizontal" asp-antiforgery="true" enctype="multipart/form-data">
+
+
+    
     <hr />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -81,6 +93,8 @@
             <span asp-validation-for="Country"></span>
         </div>
     </div>
+
+    
 
     <div class="form-group">
         <label asp-for="NativeLanguage" class="col-md-2 control-label"></label>

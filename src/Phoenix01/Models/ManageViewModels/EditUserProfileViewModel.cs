@@ -26,7 +26,9 @@ namespace Phoenix01.Models.ManageViewModels
 
         public string Country { get; set; }
 
-        public string Image { get; set; }
+
+        [Display(Name = "UserImage")]
+        public string UserImage { get; set; }
 
         public string NativeLanguage { get; set; }
 

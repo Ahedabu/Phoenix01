@@ -391,7 +391,7 @@ namespace Phoenix01.Controllers
                 State = user.State,
                 City = user.City,
                 Country = user.Country,
-                UserImage = user.UserImage
+                UserImage = user.UserImage,
                 NativeLanguage = user.NativeLanguage,
                 LanguagesDropDown = _context.Languages.ToSelectListItems(),
                 OtherLanguages = langList

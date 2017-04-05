@@ -344,14 +344,14 @@ namespace Phoenix01.Controllers
                 return View("Error");
             }
 
-            var otherLang = _context.UserLanguages.ToList();
-            var langList = new List<string>();
-            foreach(var lang in otherLang)
+            var otherLang = _context.Languages
+                .Where(lang => lang.UserLinks.Any(u => u.ApplicationUserId == user.Id))
+                .ToList();
+
+            var langList = "";
+            foreach (var lang in otherLang)
             {
-                if(lang.ApplicationUser == user)
-                {
-                    langList.Add(lang.ToString());
-                }
+                langList += lang.Name + "\n";
             }
 
             return View(new EditUserProfileViewModel
@@ -369,10 +369,10 @@ namespace Phoenix01.Controllers
                 Country = user.Country,
                 NativeLanguage = user.NativeLanguage,
                 LanguagesDropDown = _context.Languages.ToSelectListItems(),
-                //OtherLanguages = _context.
+                OtherLanguages = langList
 
 
-        });
+            });
 
 
         }
@@ -385,7 +385,9 @@ namespace Phoenix01.Controllers
             {
                 return View(model);
             }
+
             var user = await GetCurrentUserAsync();
+
             if (user != null)
             {
                 user.FirstName = model.FirstName;
@@ -398,50 +400,27 @@ namespace Phoenix01.Controllers
                 user.Country = model.Country;
                 user.NativeLanguage = model.NativeLanguage;
 
-                var query =
-                    from ul in _context.UserLanguages
-                    where ul.ApplicationUserId == user.Id
-                    orderby ul.Language.Name
-                    select ul;
+                var lang = _context.Languages
+                    .Where(la => la.Name == model.AddLanguage)
+                    .SingleOrDefault();
 
-                foreach (Language lang in _context.Languages)
-                {
-                    if (lang.Name.Equals(model.AddLanguage))
-                    {
-                        ApplicationUserLanguage newUserLanguage = new ApplicationUserLanguage
-                        {
-                            ApplicationUser = user,
-                            Language = lang
-                        };
-                                    
-                        if (!query.Contains(newUserLanguage))
-                        {
-                            user.LanguageLinks = new List<ApplicationUserLanguage> { newUserLanguage };
-                        }
-                        //else
-                        //{
-                        //    if (!query.Contains(newUserLanguage))
-                        //    {
-                        //        user.LanguageLinks.Add(new UserLanguage
-                        //        {
-                        //            ApplicationUser = user,
-                        //            Language = lang
-                        //        });
-                        //    }
-                        //}
-                    }
-                }
+                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang.Id };
+                _context.ApplicationUserLanguages.Add(appUserLang);
 
-
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.EditProfileSuccess });
-                }
+                _context.SaveChanges();
             }
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.EditProfileSuccess });
+            }
+
             return View(model);
         }
+
+
 
 
         #region Helpers

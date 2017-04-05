@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Phoenix01.Models.ManageViewModels
 {
-    public class EditUserProfileViewModel
+    public class UserProfileViewModel
     {
         public string RegistrationDate { get; set; }
 

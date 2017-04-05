@@ -380,7 +380,7 @@ namespace Phoenix01.Controllers
                 langList += lang.Name + "\n";
             }
 
-            return View(new EditUserProfileViewModel
+            return View(new UserProfileViewModel
             {
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
                 FirstName = user.FirstName,
@@ -402,7 +402,7 @@ namespace Phoenix01.Controllers
         //POST: /Manage/EditUserProfile
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditUserProfile(EditUserProfileViewModel model)
+        public async Task<IActionResult> EditUserProfile(UserProfileViewModel model)
         {
             if (!ModelState.IsValid)
             {

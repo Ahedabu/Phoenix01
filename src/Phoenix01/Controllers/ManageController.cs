@@ -356,8 +356,6 @@ namespace Phoenix01.Controllers
 
             return View(new EditUserProfileViewModel
             {
-
-
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
                 FirstName = user.FirstName,
                 MiddleName = user.MiddleName,
@@ -373,8 +371,6 @@ namespace Phoenix01.Controllers
 
 
             });
-
-
         }
 
         [HttpPost]
@@ -404,10 +400,11 @@ namespace Phoenix01.Controllers
                     .Where(la => la.Name == model.AddLanguage)
                     .SingleOrDefault();
 
-                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang.Id };
-                _context.ApplicationUserLanguages.Add(appUserLang);
-
-                _context.SaveChanges();
+                if (!(lang == null))
+                {
+                    var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang.Id };
+                    _context.ApplicationUserLanguages.Add(appUserLang);
+                }
             }
 
             var result = await _userManager.UpdateAsync(user);

@@ -54,7 +54,7 @@
     "Microsoft.AspNetCore.Owin": "1.1.1"
     },
     "IPAddressFiltering": "2.1.4"
-  },
+  
 
   "tools": {
     "BundlerMinifier.Core": "2.0.238",

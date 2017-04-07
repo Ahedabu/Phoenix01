@@ -18,6 +18,11 @@ namespace Phoenix01.Data
 
         public DbSet<Languages> Language { get; set; }
         public DbSet<UserLanguages> UserLanguages { get; set; }
+        public DbSet<Hobby> Hobby { get; set; }
+        public DbSet <ApplicationUserHobby> ApplicationUserHobby { get; set; }
+
+
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -25,7 +30,11 @@ namespace Phoenix01.Data
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
+            builder.Entity<ApplicationUserHobby>()
+                .HasKey(h => new { h.ApplicationUserId, h.HobbyId });
+
         }
+
 
     }
 }

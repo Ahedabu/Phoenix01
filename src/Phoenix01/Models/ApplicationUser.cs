@@ -20,6 +20,10 @@ namespace Phoenix01.Models
         public string City { get; set; }
         public string Country { get; set; }
         public string UserImage { get; set; }
+
+
+        public List<ApplicationUserHobby> ApplicationUserHobby { get; set; }
+
     }
 
 

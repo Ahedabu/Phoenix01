@@ -12,7 +12,7 @@ namespace Phoenix01.Models
       
         public int HobbyId { get; set; }
         public string HobbyName { get; set; }
-     [NotMapped]
+        [NotMapped]
         public bool checkboxAnswer { get; set; }
         public List<ApplicationUserHobby> ApplicationUserHobby { get; set; }
     }

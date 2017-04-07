@@ -16,7 +16,7 @@ namespace Phoenix01.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public HobbyController(UserManager<ApplicationUser> userManager , ApplicationDbContext context)
+        public HobbyController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _context = context;
@@ -38,19 +38,29 @@ namespace Phoenix01.Controllers
             var user = await GetCurrentUserAsync();
 
             var countChecked = 0; var countUnchecked = 0;
-            for ( int i = 0; i <objHobby.Count(); i ++ )
+            for (int i = 0; i < objHobby.Count(); i++)
             {
+                var context = _context.ApplicationUserHobby;
                 if (objHobby[i].checkboxAnswer == true)
                 {
+                    
                     var appUserHobby = new ApplicationUserHobby { ApplicationUserId = user.Id, HobbyId = objHobby[i].HobbyId };
-                    _context.ApplicationUserHobby.Add(appUserHobby);
+                    if (!context.ToList().Contains(appUserHobby))
+                    {
+                        context.Add(appUserHobby);
+                    }
+
                     countChecked = countChecked + 1;
 
                 }
                 else
                 {
-                    var appUserHobby = _context.ApplicationUserHobby.FirstOrDefault(h => h.HobbyId == objHobby[i].HobbyId);
-                    _context.ApplicationUserHobby.Remove(appUserHobby);
+                    var appUserHobby = _context.ApplicationUserHobby.SingleOrDefault(h => h.HobbyId == objHobby[i].HobbyId);
+                    if (context.ToList().Contains(appUserHobby))
+                    {
+                        context.Remove(appUserHobby);
+                    }
+                    
 
                     countUnchecked = countUnchecked + 1;
                 }

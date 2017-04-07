@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,6 +9,8 @@ namespace Phoenix01.Models.ManageViewModels
 {
     public class EditUserProfileViewModel
     {
+        public string RegistrationDate { get; set; }
+
         public string FirstName { get; set; }
 
         public string MiddleName { get; set; }
@@ -31,5 +35,12 @@ namespace Phoenix01.Models.ManageViewModels
         [Display(Name = "UserImage")]
         public string UserImage { get; set; }
 
+        public string NativeLanguage { get; set; }
+
+        public string OtherLanguages { get; set; }
+
+        public string AddLanguage { get; set;}
+
+        public IEnumerable<SelectListItem> LanguagesDropDown { get; set; }
     }
 }

@@ -83,9 +83,8 @@ namespace Phoenix01
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            context.Database.EnsureCreated();
-            DbInitializer.Initialize(context); 
+            //context.Database.EnsureDeleted();
+            DbInitializer.Initialize(context);
         }
     }
 }

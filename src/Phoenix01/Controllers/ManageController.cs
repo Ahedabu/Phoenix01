@@ -389,7 +389,7 @@ namespace Phoenix01.Controllers
                 age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
                 if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
             }
-            return View(new EditUserProfileViewModel
+            return View(new UserProfileViewModel
             {
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
                 FirstName = user.FirstName,
@@ -403,8 +403,7 @@ namespace Phoenix01.Controllers
                 UserImage = user.UserImage,
                 NativeLanguage = user.NativeLanguage,
                 LanguagesDropDown = _context.Languages.ToSelectListItems(),
-                OtherLanguages = langList
-                UserImage = user.UserImage,
+                OtherLanguages = langList,
                 BirthDate = birthdate,
                 UserAge = age < 0 ? "" : age.ToString()
 
@@ -415,7 +414,7 @@ namespace Phoenix01.Controllers
         //POST: /Manage/EditUserProfile
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditUserProfile(EditUserProfileViewModel model)
+        public async Task<IActionResult> EditUserProfile(UserProfileViewModel model)
         {
             if (!ModelState.IsValid)
             {

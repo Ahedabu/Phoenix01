@@ -30,23 +30,7 @@ namespace Phoenix01.Data
             {
                 context.Languages.Add(lang);
             }
-            context.SaveChanges();
-        }
-    }
-}
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Phoenix01.Models;
 
-namespace Phoenix01.Data
-{
-    public class DbInitializer
-    {
-        public static void Initialize(ApplicationDbContext context)
-        {
             context.Database.EnsureCreated();
 
             // Look for any STORY.
@@ -66,7 +50,7 @@ namespace Phoenix01.Data
                 context.Stories.Add(s);
             }
             context.SaveChanges();
+
         }
     }
-    
 }

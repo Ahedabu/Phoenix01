@@ -11,6 +11,9 @@ namespace Phoenix01.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser() {
+            Stories = new List<Story>();
+        }
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime RegistrationDate { get; set; }
 
@@ -33,6 +36,6 @@ namespace Phoenix01.Models
         public string Image { get; set; }
         public string Story { get; set; }
 
-        public virtual Story  Stories { get; set; }
+        public List<Story> Stories  { get; set; }
     }
 }

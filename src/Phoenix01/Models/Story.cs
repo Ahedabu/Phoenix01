@@ -12,7 +12,8 @@ namespace Phoenix01.Models
         public string Title { get; set; }
         public string StoryBody { get; set; }
         //public string Category { get; set; }
-        public virtual ICollection<ApplicationUser> AspNetUsers { get; set; }
-        
+        //public virtual ICollection<ApplicationUser> AspNetUsers { get; set; }
+        public string ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

@@ -11,17 +11,31 @@ namespace Phoenix01.CustomExtensions
 {
     public static class LanguageExtension
     {
-        public static IEnumerable<SelectListItem> ToSelectListItems(this IEnumerable<Language> languages/*, int selectedId */)
+        public static IEnumerable<SelectListItem> ToSelectLanguageListItems(this IEnumerable<Language> languages, IEnumerable<ApplicationUserLanguage> applicationUserLanguage, ApplicationUser user)
         {
-            var languageList = languages.OrderBy(lang => lang.Name)
-                .Select(lang =>
-                new SelectListItem
+            var languageList = languages
+                .OrderBy(lang => lang.Name)
+                .Where(lang => !applicationUserLanguage.Any(au => au.LanguageId == lang.Id && au.ApplicationUserId == user.Id))
+                .Select(la => new SelectListItem
                 {
-                    //Selected = (lang.ID == selectedId),
-                    Text = lang.Name,
-                    Value = lang.Name
+                    Text = la.Name,
+                    Value = la.Name
                 });
 
+
+            return languageList;
+        }
+
+        public static IEnumerable<SelectListItem> ToPresentLanguageListItems(this IEnumerable<Language> languages, IEnumerable<ApplicationUserLanguage> applicationUserLanguage, ApplicationUser user)
+        {
+            var languageList = languages
+                .OrderBy(lang => lang.Name)
+                .Where(lang => applicationUserLanguage.Any(au => au.LanguageId == lang.Id && au.ApplicationUserId == user.Id))
+                .Select(la => new SelectListItem
+                {
+                    Text = la.Name,
+                    Value = la.Name
+                });
             return languageList;
         }
     }

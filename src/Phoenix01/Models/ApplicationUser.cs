@@ -27,6 +27,6 @@ namespace Phoenix01.Models
         public string NativeLanguage { get; set; }
 
         // nav. prop.
-        public List<ApplicationUserLanguage> LanguageLinks { get; set; }
+        public List<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
     }
 }

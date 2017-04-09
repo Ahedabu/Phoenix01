@@ -393,7 +393,7 @@ namespace Phoenix01.Controllers
                 Country = user.Country,
                 UserImage = user.UserImage,
                 NativeLanguage = user.NativeLanguage,
-                LanguagesDropDown = _context.Languages.ToSelectListItems(),
+                LanguagesDropDown = _context.Languages.ToSelectLanguageListItems(_context.ApplicationUserLanguages, user),
                 OtherLanguages = langList
 
 

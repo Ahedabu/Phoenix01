@@ -26,7 +26,7 @@ namespace Phoenix01.CustomExtensions
             return languageList;
         }
 
-        public static IEnumerable<SelectListItem> ToPresentLanguageListItems(this IEnumerable<Language> languages, IEnumerable<ApplicationUserLanguage> applicationUserLanguage, ApplicationUser user)
+        public static IEnumerable<SelectListItem> ToRemoveLanguageListItems(this IEnumerable<Language> languages, IEnumerable<ApplicationUserLanguage> applicationUserLanguage, ApplicationUser user)
         {
             var languageList = languages
                 .OrderBy(lang => lang.Name)
@@ -36,6 +36,16 @@ namespace Phoenix01.CustomExtensions
                     Text = la.Name,
                     Value = la.Name
                 });
+
+
+            return languageList;
+        }
+
+        public static List<Language> ToPresentLanguageListItems(this IEnumerable<Language> languages, IEnumerable<ApplicationUserLanguage> applicationUserLanguage, ApplicationUser user)
+        {
+            var languageList = languages
+                .OrderBy(lang => lang.Name)
+                .Where(lang => applicationUserLanguage.Any(au => au.LanguageId == lang.Id && au.ApplicationUserId == user.Id)).ToList();
             return languageList;
         }
     }

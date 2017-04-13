@@ -13,16 +13,7 @@ namespace Phoenix01.Controllers
 {
     public class HomeController : Controller
     {
-
-        private IHostingEnvironment hostingEnv;
-
-        public HomeController(IHostingEnvironment env)
-        {
-            this.hostingEnv = env;
-        }
-
-
-        public IActionResult Index()
+        public IActionResult Index()//wellcome
         {
             //var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
             //var currentUser = manager.FindById(User.Identity.GetUserId());
@@ -34,6 +25,15 @@ namespace Phoenix01.Controllers
 
             return View();
         }
+
+        //home page layout.
+        public IActionResult Story()
+        {
+            ViewData["Message"] = "................Stories...............";
+            return View();
+        }
+
+
 
         public IActionResult About()
         {

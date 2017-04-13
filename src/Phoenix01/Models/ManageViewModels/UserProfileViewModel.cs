@@ -15,6 +15,10 @@ namespace Phoenix01.Models.ManageViewModels
         public string MiddleName { get; set; }
 
         public string LastName { get; set; }
+        
+        public string BirthDate { get; set; }
+
+        public string UserAge { get; set; }
 
         public string Zip { get; set; }
 
@@ -29,11 +33,7 @@ namespace Phoenix01.Models.ManageViewModels
 
         [Display(Name = "UserImage")]
         public string UserImage { get; set; }
-
-        //public string NativeLanguage { get; set; }
-
-        //public bool MotherTounge { get; set; }
-
+        
         public string RemoveUserLanguage { get; set; }
 
         public string AddUserLanguage { get; set; }

@@ -39,23 +39,23 @@
 
         <dt>Profile:</dt>
         <dd>
-            <a asp-controller="Manage" asp-action="EditUserProfile" class="btn-bracketed">Edit</a>
+                <a asp-controller="Manage" asp-action="EditUserProfile" class="btn btn-bracketed">Edit</a>
         </dd>
         <dt>Password:</dt>
         <dd>
             @if (Model.indexViewModel.HasPassword)
             {
-                <a asp-controller="Manage" asp-action="ChangePassword" class="btn-bracketed">Change</a>
+                <a asp-controller="Manage" asp-action="ChangePassword" class="btn btn-bracketed">Change</a>
             }
             else
             {
-                <a asp-controller="Manage" asp-action="SetPassword" class="btn-bracketed">Create</a>
+                <a asp-controller="Manage" asp-action="SetPassword" class="btn btn-bracketed">Create</a>
             }
         </dd>
         <dt>External Logins:</dt>
         <dd>
 
-            @Model.indexViewModel.Logins.Count <a asp-controller="Manage" asp-action="ManageLogins" class="btn-bracketed">Manage</a>
+            @Model.indexViewModel.Logins.Count <a asp-controller="Manage" asp-action="ManageLogins" class="btn btn-bracketed">Manage</a>
         </dd>
         <dt>Phone Number:</dt>
         <dd>

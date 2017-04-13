@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using Phoenix01.Models;
 using Phoenix01.Models.AccountViewModels;
 using Phoenix01.Services;
-
+using Microsoft.AspNetCore.Hosting.Server;
 
 namespace Phoenix01.Controllers
 {
@@ -42,10 +42,10 @@ namespace Phoenix01.Controllers
         // GET: /Account/Login
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login(LoginViewModel model, string returnUrl )
         {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            RedirectToAction("Index");
+            return View(model);
         }
 
         //
@@ -53,7 +53,7 @@ namespace Phoenix01.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(string returnUrl, LoginViewModel model)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
@@ -81,6 +81,8 @@ namespace Phoenix01.Controllers
                     return View(model);
                 }
             }
+
+            RedirectToAction("Index");
 
             // If we got this far, something failed, redisplay form
             return View(model);

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using Phoenix01.CustomExtensions;
+using System;
 
 namespace Phoenix01.Controllers
 {
@@ -351,7 +352,7 @@ namespace Phoenix01.Controllers
         // GET: /Manage/UserProfil
         public async Task<IActionResult> UserProfile(ManageMessageId? message = null)
         {
-            ViewData["StatusMessage"] = 
+            ViewData["StatusMessage"] =
                 message == ManageMessageId.EditProfileSuccess ? "Your profile has been updated."
                 : "";
 
@@ -396,7 +397,7 @@ namespace Phoenix01.Controllers
         // GET: /Manage/EditUserProfile
         public async Task<IActionResult> EditUserProfile()
         {
-           
+
 
             var user = await GetCurrentUserAsync();
             if (user == null)
@@ -406,9 +407,9 @@ namespace Phoenix01.Controllers
 
             var age = 0;
             var birthdate = "";
-            if (!(user.BirthDate == null))
+            if (user.BirthDate != null)
             {
-                birthdate=((DateTime)user.BirthDate).ToString("yyyy-MM-dd");
+                birthdate = ((DateTime)user.BirthDate).ToString("yyyy-MM-dd");
                 age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
                 if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
             }
@@ -427,9 +428,9 @@ namespace Phoenix01.Controllers
                 ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
                 LanguagesDropDown = _context.Languages.ToSelectLanguageListItems(_context.ApplicationUserLanguages, user),
                 LanguagesRemoveDropDown = _context.Languages.ToRemoveLanguageListItems(_context.ApplicationUserLanguages, user),
-                
+
                 BirthDate = birthdate,
-                UserAge = age < 0 ? "" : age.ToString()
+                UserAge = age.ToString()
 
 
 
@@ -478,9 +479,10 @@ namespace Phoenix01.Controllers
                     _context.ApplicationUserLanguages.Remove(appUserLang);
                 }
             }
-            
-                user.BirthDate = DateTime.Parse(model.BirthDate);
-                
+
+            if(model.BirthDate!=null && model.BirthDate!="")
+            user.BirthDate = DateTime.Parse(model.BirthDate);
+
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)

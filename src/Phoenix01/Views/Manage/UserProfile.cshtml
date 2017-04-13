@@ -4,7 +4,8 @@
     ViewData["Title"] = "User Profile";
 }
 
-<h2>UserProfile</h2>
+<h2>@ViewData["Title"]</h2>
+<p class="text-success">@ViewData["StatusMessage"]</p>
 
 <div>
     <img src="@Model.UserImage" class="img-circle"
@@ -89,5 +90,5 @@
 </div>
 <div>
     <a asp-action="EditUserProfile">Edit</a> | 
-    <a asp-action="Home/Index">Home</a>
+    <a asp-controller="Home" asp-action="Index">Home</a>
 </div>

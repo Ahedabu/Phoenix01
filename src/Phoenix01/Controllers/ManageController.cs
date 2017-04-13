@@ -349,8 +349,12 @@ namespace Phoenix01.Controllers
         }
 
         // GET: /Manage/UserProfil
-        public async Task<IActionResult> UserProfile()
+        public async Task<IActionResult> UserProfile(ManageMessageId? message = null)
         {
+            ViewData["StatusMessage"] = 
+                message == ManageMessageId.EditProfileSuccess ? "Your profile has been updated."
+                : "";
+
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
@@ -391,6 +395,8 @@ namespace Phoenix01.Controllers
         // GET: /Manage/EditUserProfile
         public async Task<IActionResult> EditUserProfile()
         {
+           
+
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
@@ -464,7 +470,7 @@ namespace Phoenix01.Controllers
             if (result.Succeeded)
             {
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.EditProfileSuccess });
+                return RedirectToAction(nameof(UserProfile), new { Message = ManageMessageId.EditProfileSuccess });
             }
 
             return View(model);

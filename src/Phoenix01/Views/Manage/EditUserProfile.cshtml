@@ -6,31 +6,6 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<dt>Profile Picture:</dt>
-<dd>
-    @if (User.Identity.Name != null)
-    {
-
-        <div class="upimage">
-            <div class="accimg">
-                <img src="@Model.user.UserImage" style="max-width:200px; height:auto;" />
-
-
-            </div>
-            <div class="mngimg">
-                <form asp-action="UploadPhoto" asp-controller="Manage" method="post" enctype="multipart/form-data">
-                    <div class="btn btn-default browsing">
-                        <p>Browse...</p>
-                        <input type="file" name="files" id="files" onchange="this.form.submit();" />
-                    </div>
-                </form>
-            </div>
-        </div>
-    }
-</dd>
-
-
-
 <form asp-controller="Manage" asp-action="EditUserProfile" method="post" class="form-horizontal" asp-antiforgery="true" enctype="multipart/form-data">
 
     <h4>Edit Profile Form</h4>
@@ -118,6 +93,11 @@
     </div>
 
 </form>
+
+<div>
+    <a asp-action="UserProfile">Back</a> |
+    <a asp-controller="Home" asp-action="Index">Home</a>
+</div>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

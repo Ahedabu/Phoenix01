@@ -18,6 +18,9 @@ namespace Phoenix01.Data
 
         public DbSet<Languages> Language { get; set; }
         public DbSet<UserLanguages> UserLanguages { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<State> States { get; set; }
+        public DbSet<City> Cities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

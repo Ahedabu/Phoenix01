@@ -1,0 +1,22 @@
+﻿@model Phoenix01.Models.DropViewModel
+
+<form asp-action="City" asp-controller="DropDown" data-ajax="true" data-ajax-method="POST" data-ajax-mode="replace" data-ajax-update="#partialsCity" id="stateForm">
+    <div class="form-group">
+        <label asp-for="StateName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="StateName" asp-items="@Model.States" class="form-control" onchange="stateForm()">
+                <option selected="selected">Select State</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+<input type="text" asp-for="CountryName" class="form-control" hidden value="@Model.CountryName" />
+
+<div id="partialsCity"></div>
+
+<script>
+    function stateForm() {
+        $('#stateForm').submit();
+    }
+</script>

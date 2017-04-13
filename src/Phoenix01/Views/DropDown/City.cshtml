@@ -1,0 +1,13 @@
+﻿@model DropViewModel
+
+<div class="form-horizontal">
+    <div class="form-group">
+        <label asp-for="CityName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="CityName" asp-items="@Model.Cities" class="form-control">
+                <option selected="selected">Select City</option>
+            </select>
+        </div>
+        <input type="text" asp-for="StateName" class="form-control" hidden value="@Model.StateName" />
+    </div>
+</div>

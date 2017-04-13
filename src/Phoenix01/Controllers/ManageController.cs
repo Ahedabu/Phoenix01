@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -10,22 +9,11 @@ using Phoenix01.Models;
 using Phoenix01.Models.ManageViewModels;
 using Phoenix01.Services;
 using Phoenix01.Data;
-using Microsoft.EntityFrameworkCore;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
-using System.Net.Http;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.Net.Http.Headers;
 using Phoenix01.CustomExtensions;
-
-
-
-using System.Security.Claims;
-using System.Security.Principal;
-
-
 
 namespace Phoenix01.Controllers
 {
@@ -46,7 +34,7 @@ namespace Phoenix01.Controllers
         IEmailSender emailSender,
         ISmsSender smsSender,
         ILoggerFactory loggerFactory,
-        IHostingEnvironment appEnv,  
+        IHostingEnvironment appEnv,
         ApplicationDbContext context)
         {
             _userManager = userManager;
@@ -60,7 +48,6 @@ namespace Phoenix01.Controllers
 
 
 
-        
         //
         // GET: /Manage/Index
         [HttpGet]
@@ -361,9 +348,30 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-        // GET: /Manage/EditUserProfile
-        public async Task<IActionResult> EditUserProfile()
+        // GET: /Manage/UserProfil
+        public async Task<IActionResult> UserProfile(ManageMessageId? message = null)
         {
+            ViewData["StatusMessage"] = 
+                message == ManageMessageId.EditProfileSuccess ? "Your profile has been updated."
+                : "";
+
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return View("Error");
+            }
+            var model = await EditUserProfile();
+            return View();
+        }
+
+        // POST: /Manage/UserLanguages
+        public async Task<IActionResult> EditUserLanguages(UserProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var user = await GetCurrentUserAsync();
             //
             if (user == null)
@@ -371,14 +379,29 @@ namespace Phoenix01.Controllers
                 return View("Error");
             }
 
-            var otherLang = _context.Languages
-                .Where(lang => lang.UserLinks.Any(u => u.ApplicationUserId == user.Id))
-                .ToList();
+            var lang = _context.Languages
+                    .Where(la => la.Name == model.RemoveUserLanguage)
+                    .SingleOrDefault();
 
-            var langList = "";
-            foreach (var lang in otherLang)
+            if (!(lang == null))
             {
-                langList += lang.Name + "\n";
+                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang.Id };
+                _context.ApplicationUserLanguages.Remove(appUserLang);
+            }
+
+
+            return await EditUserProfile();
+        }
+
+        // GET: /Manage/EditUserProfile
+        public async Task<IActionResult> EditUserProfile()
+        {
+           
+
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return View("Error");
             }
 
             var age = 0;
@@ -401,9 +424,10 @@ namespace Phoenix01.Controllers
                 City = user.City,
                 Country = user.Country,
                 UserImage = user.UserImage,
-                NativeLanguage = user.NativeLanguage,
-                LanguagesDropDown = _context.Languages.ToSelectListItems(),
-                OtherLanguages = langList,
+                ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
+                LanguagesDropDown = _context.Languages.ToSelectLanguageListItems(_context.ApplicationUserLanguages, user),
+                LanguagesRemoveDropDown = _context.Languages.ToRemoveLanguageListItems(_context.ApplicationUserLanguages, user),
+                
                 BirthDate = birthdate,
                 UserAge = age < 0 ? "" : age.ToString()
 
@@ -433,10 +457,9 @@ namespace Phoenix01.Controllers
                 user.City = model.City;
                 user.State = model.State;
                 user.Country = model.Country;
-                user.NativeLanguage = model.NativeLanguage;
 
                 var lang = _context.Languages
-                    .Where(la => la.Name == model.AddLanguage)
+                    .Where(la => la.Name == model.AddUserLanguage)
                     .SingleOrDefault();
 
                 if (!(lang == null))
@@ -444,7 +467,18 @@ namespace Phoenix01.Controllers
                     var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang.Id };
                     _context.ApplicationUserLanguages.Add(appUserLang);
                 }
+
+                var lang2 = _context.Languages
+                    .Where(la => la.Name == model.RemoveUserLanguage)
+                    .SingleOrDefault();
+
+                if (!(lang2 == null))
+                {
+                    var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang2.Id };
+                    _context.ApplicationUserLanguages.Remove(appUserLang);
+                }
             }
+            
                 user.BirthDate = DateTime.Parse(model.BirthDate);
                 
 
@@ -452,7 +486,7 @@ namespace Phoenix01.Controllers
             if (result.Succeeded)
             {
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.EditProfileSuccess });
+                return RedirectToAction(nameof(UserProfile), new { Message = ManageMessageId.EditProfileSuccess });
             }
 
             return View(model);
@@ -463,12 +497,8 @@ namespace Phoenix01.Controllers
         public async Task<string> UploadPhoto()
         {
             var user = await GetCurrentUserAsync();
-           
             return (user.UserImage);
-
         }
-
-
 
 
         [HttpPost]
@@ -478,12 +508,10 @@ namespace Phoenix01.Controllers
             var username = user.UserName;
             var fnm = username + ".png";
 
-            if(User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated)
             {
-               
-
                 if (user.Id != null)
-            {
+                {
                     var uploads = Path.Combine(_appEnv.WebRootPath, "images");
 
                     foreach (var file in files)
@@ -494,41 +522,29 @@ namespace Phoenix01.Controllers
                               .Trim('"');// FileName returns "fileName.ext"(with double quotes) in beta 3
 
                         if (fileName.ToLower().EndsWith(".png") || fileName.ToLower().EndsWith(".jpg") || fileName.ToLower().EndsWith(".gif"))// Important for security if saving in webroot
-                        { 
-                            if (file.Length > 0)
                         {
+                            if (file.Length > 0)
+                            {
                                 var pictureFile = file.FileName + User.Identity.Name + ".png";
 
-
-                            using (var fileStream = new FileStream(Path.Combine(uploads, pictureFile), FileMode.Create))
-                            {
-                                    
+                                using (var fileStream = new FileStream(Path.Combine(uploads, pictureFile), FileMode.Create))
+                                {
                                     user.UserImage = "\\images\\" + pictureFile;
                                     await _userManager.UpdateAsync(user);
                                     await file.CopyToAsync(fileStream);
-                                    
+
+                                }
                             }
-                        }
                             return RedirectToAction("Index", new { Message = ManageMessageId.PhotoUploadSuccess });
                         }
-
                         else
                         {
                             return RedirectToAction("Index", new { Message = ManageMessageId.FileExtensionError });
                         }
-                      
                     }
-
-
                 }
-
-           
-
-           
-
             }
             return View();
-
         }
 
         #endregion Upload Photo

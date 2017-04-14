@@ -86,6 +86,16 @@
                 @lang.Name
             </dd>
         }
+        <dt>
+            @Html.DisplayNameFor(model => model.ChosenHobbies)
+        </dt>
+        @foreach(var hobby in Model.ChosenHobbies)
+        {
+            <dd>
+                @hobby.HobbyName
+            </dd>
+
+        }
     </dl>
 </div>
 <div>

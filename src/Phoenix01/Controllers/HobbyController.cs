@@ -27,7 +27,7 @@ namespace Phoenix01.Controllers
         public IActionResult Index()
         {
             List<Hobby> hobbylist = new List<Hobby>();
-            hobbylist = _context.Hobby.ToList();
+            hobbylist = _context.Hobbies.ToList();
 
             return View(hobbylist);
         }
@@ -35,32 +35,30 @@ namespace Phoenix01.Controllers
         [HttpPost]
         public async Task<ActionResult> Index(List<Hobby> objHobby)
         {
+
             var user = await GetCurrentUserAsync();
 
             var countChecked = 0; var countUnchecked = 0;
             for (int i = 0; i < objHobby.Count(); i++)
             {
-                var context = _context.ApplicationUserHobby;
-                if (objHobby[i].checkboxAnswer == true)
+
+                var appUserHobby = new ApplicationUserHobby { ApplicationUserId = user.Id, HobbyId = objHobby[i].HobbyId };
+                if (objHobby[i].CheckboxAnswer == true)
                 {
-                    
-                    var appUserHobby = new ApplicationUserHobby { ApplicationUserId = user.Id, HobbyId = objHobby[i].HobbyId };
-                    if (!context.ToList().Contains(appUserHobby))
-                    {
-                        context.Add(appUserHobby);
-                    }
+
+                    _context.Add(appUserHobby);
 
                     countChecked = countChecked + 1;
 
                 }
                 else
                 {
-                    var appUserHobby = _context.ApplicationUserHobby.SingleOrDefault(h => h.HobbyId == objHobby[i].HobbyId);
-                    if (context.ToList().Contains(appUserHobby))
+                    //var appUserHobby = _context.ApplicationUserHobby.SingleOrDefault(h => h.HobbyId == objHobby[i].HobbyId);
+                    if (_context.ApplicationUserHobby.Contains(appUserHobby))
                     {
-                        context.Remove(appUserHobby);
+                        _context.Remove(appUserHobby);
                     }
-                    
+
 
                     countUnchecked = countUnchecked + 1;
                 }

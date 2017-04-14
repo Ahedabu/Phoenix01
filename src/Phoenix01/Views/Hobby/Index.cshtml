@@ -8,7 +8,7 @@
                 @{ 
                     for (int i = 0; i < Model.Count(); i++)
                     {
-                        <input asp-for="@Model[i].checkboxAnswer" type="checkbox" />
+                        <input asp-for="@Model[i].CheckboxAnswer" type="checkbox" />
                         <label asp-for="@Model[i].HobbyId">@Model[i].HobbyName</label>
                         <input asp-for="@Model[i].HobbyId" type="hidden" />
                         <input asp-for="@Model[i].HobbyName" type="hidden" />
@@ -20,7 +20,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                    <input id="Submit" type="submit" value="Submit" />
+                    <input id="Submit" type="submit" value="Submit" />  
              </div>
             </div>
         </div>

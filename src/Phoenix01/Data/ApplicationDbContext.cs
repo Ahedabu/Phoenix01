@@ -11,8 +11,7 @@ namespace Phoenix01.Data
         {
         }
 
-        public DbSet<Languages> Language { get; set; }
-        public DbSet<Hobby> Hobby { get; set; }
+        public DbSet<Hobby> Hobbies { get; set; }
         public DbSet <ApplicationUserHobby> ApplicationUserHobby { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }

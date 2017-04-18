@@ -21,11 +21,10 @@ using Microsoft.Net.Http.Headers;
 using Phoenix01.CustomExtensions;
 
 
-
 using System.Security.Claims;
 using System.Security.Principal;
-
-
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Phoenix01.Models.AccountViewModels;
 
 namespace Phoenix01.Controllers
 {
@@ -380,6 +379,8 @@ namespace Phoenix01.Controllers
                 langList += lang.Name + "\n";
             }
 
+
+
             return View(new EditUserProfileViewModel
             {
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
@@ -421,6 +422,9 @@ namespace Phoenix01.Controllers
                 user.City = model.City;
                 user.State = model.State;
                 user.Country = model.Country;
+
+
+
                 user.NativeLanguage = model.NativeLanguage;
 
                 var lang = _context.Languages
@@ -495,12 +499,12 @@ namespace Phoenix01.Controllers
                                     
                             }
                         }
-                            return RedirectToAction("Index", new { Message = ManageMessageId.PhotoUploadSuccess });
+                            return RedirectToAction("EditUserProfile", new { Message = ManageMessageId.PhotoUploadSuccess });
                         }
 
                         else
                         {
-                            return RedirectToAction("Index", new { Message = ManageMessageId.FileExtensionError });
+                            return RedirectToAction("EditUserProfile", new { Message = ManageMessageId.FileExtensionError });
                         }
                       
                     }
@@ -519,6 +523,9 @@ namespace Phoenix01.Controllers
 
         #endregion Upload Photo
 
+
+
+      
 
 
 

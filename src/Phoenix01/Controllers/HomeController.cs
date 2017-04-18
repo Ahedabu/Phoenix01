@@ -8,6 +8,8 @@ using Phoenix01.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Phoenix01.Data;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace Phoenix01.Controllers
 {
@@ -27,6 +29,8 @@ namespace Phoenix01.Controllers
              return View();
         }
 
+     
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -45,5 +49,11 @@ namespace Phoenix01.Controllers
         {
             return View();
         }
+
+       
+
+
+
+
     }
 }

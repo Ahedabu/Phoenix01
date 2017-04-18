@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Phoenix01.Models;
+using Phoenix01.Models.AccountViewModels;
 
 namespace Phoenix01.Data
 {
@@ -9,10 +11,12 @@ namespace Phoenix01.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
 
         public DbSet<Language> Languages { get; set; }
         public DbSet<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
+       
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,5 +38,10 @@ namespace Phoenix01.Data
             //        .WithMany(t => t.UserLinks)
             //        .HasForeignKey(pt => pt.LanguageId);
         }
+
+
+     
+        }
+  
     }
-}
+

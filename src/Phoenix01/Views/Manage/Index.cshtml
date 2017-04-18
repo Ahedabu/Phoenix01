@@ -13,28 +13,8 @@
     <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>Profile Picture:</dt>
-        <dd>
-           @if (User.Identity.Name != null)
-                   {
-                      
-                            <div class="upimage">
-                    <div class="accimg">
-                        <img src="@Model.applicationUser.UserImage" style="width:200px; height:200px;"/>
-                       
-
-                    </div>
-                    <div class="mngimg">
-                        <form asp-action="UploadPhoto" asp-controller="Manage" method="post" enctype="multipart/form-data">
-                            <div class="btn btn-default browsing">
-                                <p>Browse...</p>
-                                <input type="file" name="files" id="files" onchange="this.form.submit();" />
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            }
-        </dd>
+      
+      
 
 
         <dt>Profile:</dt>

@@ -1,4 +1,6 @@
 ﻿@model EditUserProfileViewModel
+@using Phoenix01.Models.ManageViewModels;
+
 
 @{
     ViewData["Title"] = "Edit Profile Details";
@@ -15,6 +17,22 @@
     box-shadow: 0px 0px 20px #888;" />
 
 </h1>
+<dt>Profile Picture:</dt>
+<dd>
+    @if (User.Identity.Name != null)
+    {
+
+        <div class="upimage">
+               <div class="mngimg">
+                <form asp-action="UploadPhoto" asp-controller="Manage" method="post" enctype="multipart/form-data">
+                    <div class="btn btn-default browsing">
+                        <input type="file" name="files" id="files" onchange="this.form.submit();" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+</dd>
 
 <form asp-controller="Manage" asp-action="EditUserProfile" method="post" class="form-horizontal" asp-antiforgery="true" enctype="multipart/form-data">
 
@@ -70,7 +88,14 @@
         </div>
     </div>
 
-    <div class="form-group">
+
+
+
+
+
+
+
+    @*<div class="form-group">
         <label asp-for="City" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <input asp-for="City" class="form-control" />
@@ -84,15 +109,14 @@
             <input asp-for="State" class="form-control" />
             <span asp-validation-for="State"></span>
         </div>
-    </div>
-
-    <div class="form-group">
+    </div>*@
+        @*<div class="form-group">
         <label asp-for="Country" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <input asp-for="Country" class="form-control" />
             <span asp-validation-for="Country"></span>
         </div>
-    </div>
+    </div>*@
 
     
 

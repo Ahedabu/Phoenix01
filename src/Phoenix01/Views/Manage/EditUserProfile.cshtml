@@ -1,4 +1,4 @@
-﻿@model EditUserProfileViewModel
+﻿@model UserProfileViewModel
 @using Phoenix01.Models.ManageViewModels;
 
 
@@ -9,21 +9,19 @@
 <h2>@ViewData["Title"]</h2>
 
 <h1>
-<img src="@Model.UserImage" style="width:160px;height:160px; background: #FFFFFF;
+    <img src="@Model.UserImage" style="max-width:160px;height:auto; background: #FFFFFF;
     margin: auto;
     -moz-border-radius: 60px;
     border-radius: 100px;
     padding: 6px;
     box-shadow: 0px 0px 20px #888;" />
-
 </h1>
 <dt>Profile Picture:</dt>
 <dd>
     @if (User.Identity.Name != null)
     {
-
         <div class="upimage">
-               <div class="mngimg">
+            <div class="mngimg">
                 <form asp-action="UploadPhoto" asp-controller="Manage" method="post" enctype="multipart/form-data">
                     <div class="btn btn-default browsing">
                         <input type="file" name="files" id="files" onchange="this.form.submit();" />
@@ -33,8 +31,7 @@
         </div>
     }
 </dd>
-
-    <h4>Edit Profile Form</h4>
+<form asp-controller="Manage" asp-action="EditUserProfile" method="post" class="form-horizontal" asp-antiforgery="true" enctype="multipart/form-data">
 
 
 
@@ -73,31 +70,12 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="BirthDate" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="BirthDate" class="form-control" />
-            <span asp-validation-for="BirthDate"></span>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="UserAge" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="UserAge" class="form-control" disabled/>
-            <span asp-validation-for="UserAge"></span>
-        </div>
-    </div>
-
-
-    <div class="form-group">
         <label asp-for="StreetName" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <input asp-for="StreetName" class="form-control" />
             <span asp-validation-for="StreetName"></span>
         </div>
     </div>
-
-
 
     <div class="form-group">
         <label asp-for="Zip" class="col-md-2 control-label"></label>
@@ -114,29 +92,40 @@
 
 
 
-    @*<div class="form-group">
-        <label asp-for="City" class="col-md-2 control-label"></label>
+  <div class="form-group">
+            <label asp-for="City" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="State" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="State" class="form-control" />
+                <span asp-validation-for="State"></span>
+            </div>
+        </div>
+    <div class="form-group">
+            <label asp-for="Country" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Country" class="form-control" />
+                <span asp-validation-for="Country"></span>
+            </div>
+        </div>
+
+
+
+    
+
+    <div class="form-group">
+        <label asp-for="AddUserLanguage" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="City" class="form-control" />
-            <span asp-validation-for="City"></span>
+            <select asp-for="AddUserLanguage" class="form-control" asp-items="Model.LanguagesDropDown"><option>Select</option></select>
         </div>
     </div>
 
-    <div class="form-group">
-        <label asp-for="State" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="State" class="form-control" />
-            <span asp-validation-for="State"></span>
-        </div>
-    </div>*@
-        @*<div class="form-group">
-        <label asp-for="Country" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Country" class="form-control" />
-            <span asp-validation-for="Country"></span>
-        </div>
-    </div>
-    @Html.Partial("EditUserLanguages")
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <button type="submit" class="btn btn-default">Update</button>
@@ -144,11 +133,6 @@
     </div>
 
 </form>
-
-<div>
-    <a asp-action="UserProfile">Back</a> |
-    <a asp-controller="Home" asp-action="Index">Home</a>
-</div>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

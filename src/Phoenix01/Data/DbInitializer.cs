@@ -49,6 +49,25 @@ namespace Phoenix01.Data
             {
                 context.Stories.Add(s);
             }
+
+            if (context.Hobbies.Any())
+            {
+                return;
+            }
+
+            var hobbies = new Hobby[]
+            {
+                new Hobby { HobbyName = "Food"},
+                new Hobby { HobbyName = "Sport"},
+                new Hobby { HobbyName = "Music"},
+                new Hobby { HobbyName = "Film"},
+                new Hobby { HobbyName = "Litterature"}
+            };
+            foreach (Hobby h in hobbies)
+            {
+                context.Hobbies.Add(h);
+            }
+
             context.SaveChanges();
 
         }

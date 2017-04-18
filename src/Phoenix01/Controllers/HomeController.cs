@@ -15,18 +15,16 @@ namespace Phoenix01.Controllers
 {
     public class HomeController : Controller
     {
-
-        private IHostingEnvironment hostingEnv;
-
-        public HomeController(IHostingEnvironment env)
-        {
-            this.hostingEnv = env;
-        }
-
-
-        public IActionResult Index()
+        public IActionResult Index()//wellcome
         {
              return View();
+        }
+
+        //home page layout.
+        public IActionResult Story()
+        {
+            ViewData["Message"] = "................Stories...............";
+            return View();
         }
 
      

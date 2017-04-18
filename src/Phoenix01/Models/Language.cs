@@ -9,8 +9,8 @@ namespace Phoenix01.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
+        public bool MotherTounge { get; set; }
         // nav. prop.
-        public List<ApplicationUserLanguage> UserLinks { get; set; }
+        public List<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
     }
 }

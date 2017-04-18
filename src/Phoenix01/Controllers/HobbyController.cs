@@ -25,12 +25,21 @@ namespace Phoenix01.Controllers
 
         [HttpGet]
         // GET: /<controller>/
-        public IActionResult Index()
+        public ActionResult Index()
         {
-            List<Hobby> hobbylist = new List<Hobby>();
-            hobbylist = _context.Hobbies.AsNoTracking().ToList();
 
-            return View(hobbylist);
+            List<Hobby> hobbyCheckBoxList = new List<Hobby>();
+            //var applicationUserHobby = _context.ApplicationUserHobby.AsNoTracking();
+
+            hobbyCheckBoxList = _context.Hobbies.AsNoTracking().ToList();
+
+
+            //var hobbyList = _context.Hobbies
+            //    .OrderBy(ho => ho.HobbyName)
+            //    .Where(ho => applicationUserHobby.Any(ah => ah.HobbyId == ho.HobbyId && ah.ApplicationUserId == user.Id)).ToList();
+           
+
+            return View(hobbyCheckBoxList);
         }
 
         [HttpPost]
@@ -39,7 +48,7 @@ namespace Phoenix01.Controllers
 
             var user = await GetCurrentUserAsync();
 
-            var countChecked = 0; var countUnchecked = 0;
+            //var countChecked = 0; var countUnchecked = 0;
             for (int i = 0; i < objHobby.Count(); i++)
             {
 
@@ -49,7 +58,7 @@ namespace Phoenix01.Controllers
 
                     _context.Add(appUserHobby);
 
-                    countChecked = countChecked + 1;
+                    //countChecked = countChecked + 1;
 
                 }
                 else
@@ -61,7 +70,7 @@ namespace Phoenix01.Controllers
                     }
 
 
-                    countUnchecked = countUnchecked + 1;
+                    //countUnchecked = countUnchecked + 1;
                 }
             }
 

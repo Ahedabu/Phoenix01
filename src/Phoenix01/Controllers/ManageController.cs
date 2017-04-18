@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using Phoenix01.CustomExtensions;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace Phoenix01.Controllers
 {
@@ -405,6 +406,17 @@ namespace Phoenix01.Controllers
                 return View("Error");
             }
 
+            List<Hobby> hobbyCheckBoxList = new List<Hobby>();
+            var applicationUserHobby = _context.ApplicationUserHobby.AsNoTracking();
+
+            hobbyCheckBoxList = _context.Hobbies.AsNoTracking().ToList();
+
+
+            var hobbyList = _context.Hobbies
+                .OrderBy(ho => ho.HobbyName)
+                .Where(ho => applicationUserHobby.Any(ah => ah.HobbyId == ho.HobbyId && ah.ApplicationUserId == user.Id)).AsNoTracking().ToList();
+
+
             var age = 0;
             var birthdate = "";
             if (user.BirthDate != null)
@@ -428,7 +440,7 @@ namespace Phoenix01.Controllers
                 ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
                 LanguagesDropDown = _context.Languages.ToSelectLanguageListItems(_context.ApplicationUserLanguages, user),
                 LanguagesRemoveDropDown = _context.Languages.ToRemoveLanguageListItems(_context.ApplicationUserLanguages, user),
-
+                ChosenHobbies = hobbyList,
                 BirthDate = birthdate,
                 UserAge = age.ToString()
 

@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace Phoenix01.CustomExtensions
 {
@@ -48,16 +47,6 @@ namespace Phoenix01.CustomExtensions
                 .OrderBy(lang => lang.Name)
                 .Where(lang => applicationUserLanguage.Any(au => au.LanguageId == lang.Id && au.ApplicationUserId == user.Id)).ToList();
             return languageList;
-        }
-        public static List<Hobby> ToHobbyList(this IEnumerable<Hobby> hobbies, IEnumerable<ApplicationUserHobby> applicationUserhobby, ApplicationUser user)
-        {
-            var userHobbyList = hobbies
-                .OrderBy(h => h.Name)
-                .Where(h => applicationUserhobby.Any(ah => ah.HobbyId == h.Id && ah.ApplicationUserId == user.Id))
-                .AsNoTracking()
-                .ToList();
-
-            return userHobbyList;
         }
     }
 }

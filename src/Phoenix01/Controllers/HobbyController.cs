@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Phoenix01.Data;
 using Phoenix01.Models;
 using Microsoft.AspNetCore.Identity;
-using Phoenix01.CustomExtensions;
-using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,7 +22,6 @@ namespace Phoenix01.Controllers
             _context = context;
         }
 
-
         [HttpGet]
         // GET: /<controller>/
         public IActionResult Index()
@@ -40,43 +37,38 @@ namespace Phoenix01.Controllers
         {
 
             var user = await GetCurrentUserAsync();
-            var userHobbyList = _context.ApplicationUserHobby.ToList();
 
             var countChecked = 0; var countUnchecked = 0;
             for (int i = 0; i < objHobby.Count(); i++)
             {
 
-                var appUserHobby = new ApplicationUserHobby
+                var appUserHobby = new ApplicationUserHobby { ApplicationUserId = user.Id, HobbyId = objHobby[i].HobbyId };
+                if (objHobby[i].CheckboxAnswer == true)
                 {
-                    ApplicationUserId = user.Id,
-                    HobbyId = objHobby[i].HobbyId
-                };
 
-                if (objHobby[i].CheckboxAnswer == true && !userHobbyList.Contains(appUserHobby))
-                {
-                    _context.ApplicationUserHobby.Add(appUserHobby);
+                    _context.Add(appUserHobby);
 
                     countChecked = countChecked + 1;
-                    await _context.SaveChangesAsync();
+
                 }
                 else
                 {
-                    //appUserHobby = _context.ApplicationUserHobby.SingleOrDefault(h => h.HobbyId == objHobby[i].HobbyId);
-                    if (appUserHobby != null)
+                    //var appUserHobby = _context.ApplicationUserHobby.SingleOrDefault(h => h.HobbyId == objHobby[i].HobbyId);
+                    if (_context.ApplicationUserHobby.Contains(appUserHobby))
+                    {
                         _context.Remove(appUserHobby);
-                    await _context.SaveChangesAsync();
-
+                    }
 
 
                     countUnchecked = countUnchecked + 1;
                 }
             }
 
-            //var result = await _userManager.UpdateAsync(user);
-            //if (result.Succeeded)
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                await _context.SaveChangesAsync();
+            }
 
             return View(objHobby);
 

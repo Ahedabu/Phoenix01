@@ -57,11 +57,11 @@ namespace Phoenix01.Data
 
             var hobbies = new Hobby[]
             {
-                new Hobby { HobbyName = "Food"},
-                new Hobby { HobbyName = "Sport"},
-                new Hobby { HobbyName = "Music"},
-                new Hobby { HobbyName = "Film"},
-                new Hobby { HobbyName = "Litterature"}
+                new Hobby { Name = "Food"},
+                new Hobby { Name = "Sport"},
+                new Hobby { Name = "Music"},
+                new Hobby { Name = "Film"},
+                new Hobby { Name = "Litterature"}
             };
             foreach (Hobby h in hobbies)
             {

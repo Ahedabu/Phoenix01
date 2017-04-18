@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using Phoenix01.CustomExtensions;
 using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Phoenix01.Controllers
 {
@@ -413,7 +414,8 @@ namespace Phoenix01.Controllers
                 age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
                 if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
             }
-            return View(new UserProfileViewModel
+
+            UserProfileViewModel model = new UserProfileViewModel
             {
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
                 FirstName = user.FirstName,
@@ -430,12 +432,29 @@ namespace Phoenix01.Controllers
                 LanguagesRemoveDropDown = _context.Languages.ToRemoveLanguageListItems(_context.ApplicationUserLanguages, user),
 
                 BirthDate = birthdate,
-                UserAge = age.ToString()
+                UserAge = age.ToString(),
+            };
 
+            var appUserHobbies = _context.ApplicationUserHobby.Where(uh => uh.ApplicationUserId == user.Id).ToList();
+            var allHobbies = _context.Hobbies.OrderBy(h => h.Name).ToList();
 
+            var checkBoxListItems = new List<CheckBoxListItem>();
+            foreach (var hobby in allHobbies)
+            {
+                checkBoxListItems.Add(new CheckBoxListItem()
+                {
+                    Id = hobby.Id,
+                    Display = hobby.Name,
+                    //We should have already-selected genres be checked
+                    IsChecked = appUserHobbies.Where(x => x.HobbyId == hobby.Id).Any()
+                });
+            }
+            model.Hobbies = checkBoxListItems;
 
-            });
+            return View(model);
         }
+
+
         //POST: /Manage/EditUserProfile
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -478,17 +497,32 @@ namespace Phoenix01.Controllers
                     var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang2.Id };
                     _context.ApplicationUserLanguages.Remove(appUserLang);
                 }
+
+                var selectedHobbies = model.Hobbies.Where(x => x.IsChecked).Select(x => x.Id).ToList();
+
+                //MovieManager.Add(model.Title, model.ReleaseDate, model.RunningTimeMinutes, selectedGenres);
+
+                foreach (var hobbyId in selectedHobbies)
+                {
+                    var hobby = _context.Hobbies.FirstOrDefault(h => h.Id == hobbyId);
+
+
+                }
+
             }
 
-            if(model.BirthDate!=null && model.BirthDate!="")
-            user.BirthDate = DateTime.Parse(model.BirthDate);
+            if (model.BirthDate != null && model.BirthDate != "")
+                user.BirthDate = DateTime.Parse(model.BirthDate);
 
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(UserProfile), new { Message = ManageMessageId.EditProfileSuccess });
+                return RedirectToAction(nameof(UserProfile), new
+                {
+                    Message = ManageMessageId.EditProfileSuccess
+                });
             }
 
             return View(model);

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Phoenix01.Data;
 using Phoenix01.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,7 +28,7 @@ namespace Phoenix01.Controllers
         public IActionResult Index()
         {
             List<Hobby> hobbylist = new List<Hobby>();
-            hobbylist = _context.Hobbies.ToList();
+            hobbylist = _context.Hobbies.AsNoTracking().ToList();
 
             return View(hobbylist);
         }
@@ -43,7 +44,7 @@ namespace Phoenix01.Controllers
             {
 
                 var appUserHobby = new ApplicationUserHobby { ApplicationUserId = user.Id, HobbyId = objHobby[i].HobbyId };
-                if (objHobby[i].CheckboxAnswer == true)
+                if (objHobby[i].CheckboxAnswer == true && !_context.ApplicationUserHobby.Any(uh=>uh.HobbyId == objHobby[i].HobbyId))
                 {
 
                     _context.Add(appUserHobby);
@@ -54,7 +55,7 @@ namespace Phoenix01.Controllers
                 else
                 {
                     //var appUserHobby = _context.ApplicationUserHobby.SingleOrDefault(h => h.HobbyId == objHobby[i].HobbyId);
-                    if (_context.ApplicationUserHobby.Contains(appUserHobby))
+                    if (_context.ApplicationUserHobby.Any(uh => uh.HobbyId == objHobby[i].HobbyId))
                     {
                         _context.Remove(appUserHobby);
                     }

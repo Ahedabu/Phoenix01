@@ -58,15 +58,16 @@ namespace Phoenix01.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ApplicationUserId,ID,StoryBody,Title")] Story story)
+        public async Task<IActionResult> Create([Bind("ID,StoryBody,Title")] Story story,string userID)
         {
             var user = await GetCurrentUserAsync();
             if (User.Identity.IsAuthenticated)
       
            {
-                _context.Add(story);
-                await _context.SaveChangesAsync();
 
+                var appUserStories = new Story { ApplicationUserId = user.Id, ID = story.ID,StoryBody=story.StoryBody,Title =story.Title };
+                _context.Add(appUserStories);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
 
             }

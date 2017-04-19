@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Phoenix01.Data;
 using Phoenix01.Models;
+using Phoenix01.Models.AccountViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace Phoenix01.Controllers
 {
     public class StoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public StoriesController(ApplicationDbContext context)
+        public StoriesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
 
         // GET: Stories
@@ -53,16 +58,38 @@ namespace Phoenix01.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StoryBody,Title")] Story story)
+        public async Task<IActionResult> Create([Bind("ApplicationUserId,ID,StoryBody,Title")] Story story)
         {
-            if (ModelState.IsValid)
-            {
+            var user = await GetCurrentUserAsync();
+            if (User.Identity.IsAuthenticated)
+      
+           {
                 _context.Add(story);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction("Index");
+
             }
+
+            //if (ModelState.IsValid)
+            //{
+                    //_context.Add(story);
+                   //await _context.SaveChangesAsync();
+
+                //return RedirectToAction("Index");
+            //}
             return View(story);
         }
+
+
+
+
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
+        }
+
+
 
         // GET: Stories/Edit/5
         public async Task<IActionResult> Edit(int? id)

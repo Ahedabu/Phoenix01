@@ -48,3 +48,9 @@ textarea {
     display: none
   }
 }
+
+/* Hide/No file choosen  */
+    input[type=file]{ 
+        color:transparent;
+        position: relative;
+    }

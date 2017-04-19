@@ -401,9 +401,12 @@ namespace Phoenix01.Controllers
         }
 
         // GET: /Manage/EditUserProfile
-        public async Task<IActionResult> EditUserProfile()
+        public async Task<IActionResult> EditUserProfile(ManageMessageId? message = null)
         {
-
+            ViewData["StatusMessage"] =
+                message == ManageMessageId.PhotoUploadSuccess ? "Your Photo uploaded."
+                : message == ManageMessageId.FileExtensionError ? "You have file Extension Error. Must Be .PNG or .JPG or .GIF"
+                : "";
 
             var user = await GetCurrentUserAsync();
             if (user == null)
@@ -442,6 +445,8 @@ namespace Phoenix01.Controllers
 
             });
         }
+
+
         //POST: /Manage/EditUserProfile
         [HttpPost]
         [ValidateAntiForgeryToken]

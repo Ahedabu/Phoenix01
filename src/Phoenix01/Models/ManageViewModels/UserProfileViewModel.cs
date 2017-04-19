@@ -15,7 +15,10 @@ namespace Phoenix01.Models.ManageViewModels
         public string MiddleName { get; set; }
 
         public string LastName { get; set; }
-        
+
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public string BirthDate { get; set; }
 
         public string UserAge { get; set; }

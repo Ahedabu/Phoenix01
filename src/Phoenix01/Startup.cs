@@ -72,7 +72,7 @@ namespace Phoenix01
             }
 
             app.UseStaticFiles();
-
+      
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
@@ -84,7 +84,7 @@ namespace Phoenix01
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
             //context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
+            DbInitializer.Initialize(context);
         }
     }
 }

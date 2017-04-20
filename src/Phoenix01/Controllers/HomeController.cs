@@ -7,23 +7,27 @@ using Microsoft.AspNetCore.Identity;
 using Phoenix01.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Phoenix01.Data;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace Phoenix01.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index()//wellcome
         {
-            //var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
-            //var currentUser = manager.FindById(User.Identity.GetUserId());
-            //ViewBag.email = currentUser.UserProfileInfo.email;
+             return View();
+        }
 
-
-
-
-
+        //home page layout.
+        public IActionResult Story()
+        {
+            ViewData["Message"] = "................Stories...............";
             return View();
         }
+
+     
 
         public IActionResult About()
         {
@@ -43,5 +47,11 @@ namespace Phoenix01.Controllers
         {
             return View();
         }
+
+       
+
+
+
+
     }
 }

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -33,6 +34,8 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="Stories" asp-action="Index">Stories</a></li>
+                    <li><a asp-area="" asp-controller="Manage" asp-action="UserProfile">Profile</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

@@ -53,7 +53,7 @@ namespace Phoenix01.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StoryBody,Title")] Story story)
+        public async Task<IActionResult> Create([Bind("ID,StoryBody,Title,Category")] Story story)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace Phoenix01.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,StoryBody,Title")] Story story)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,StoryBody,Title,Category")] Story story)
         {
             if (id != story.ID)
             {

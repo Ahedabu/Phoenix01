@@ -22,6 +22,14 @@
         </div>
 
         <div class="form-group">
+            <label asp-for="Category" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Category" class="form-control" />
+                <span asp-validation-for="Category" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="form-group">
             <label asp-for="StoryBody" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <textarea rows ="5" asp-for="StoryBody" class="form-control"></textarea>

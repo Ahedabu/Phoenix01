@@ -44,7 +44,7 @@ namespace Phoenix01.Controllers
         [AllowAnonymous]
         public IActionResult Login(LoginViewModel model, string returnUrl )
         {
-            RedirectToAction("Index");
+            RedirectToAction( "http://localhost:60230/Stories");
             return View(model);
         }
 
@@ -64,7 +64,8 @@ namespace Phoenix01.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
+                     //redirection to the stories bage after log in check condetions.
+                    return RedirectToAction(nameof(StoriesController.Index), "Stories");
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -82,13 +83,13 @@ namespace Phoenix01.Controllers
                 }
             }
 
-            RedirectToAction("Index");
+          
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return View(returnUrl);
         }
 
-        //
+        //*******************************************************************************************************************************
         // GET: /Account/Register
         [HttpGet]
         [AllowAnonymous]
@@ -439,6 +440,8 @@ namespace Phoenix01.Controllers
                 return View(model);
             }
         }
+
+
 
         #region Helpers
 

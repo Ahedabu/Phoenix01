@@ -8,6 +8,12 @@ namespace Phoenix01.Models.ManageViewModels
 {
     public class UserProfileViewModel
     {
+        public UserProfileViewModel()
+        {
+            SelectedHobbies = new List<CheckBoxListItem>();
+        }
+        public string Id { get; set; }
+
         public string RegistrationDate { get; set; }
 
         public string FirstName { get; set; }
@@ -15,7 +21,10 @@ namespace Phoenix01.Models.ManageViewModels
         public string MiddleName { get; set; }
 
         public string LastName { get; set; }
-        
+
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public string BirthDate { get; set; }
 
         public string UserAge { get; set; }
@@ -37,6 +46,10 @@ namespace Phoenix01.Models.ManageViewModels
         public string RemoveUserLanguage { get; set; }
 
         public string AddUserLanguage { get; set; }
+
+        public List<CheckBoxListItem> SelectedHobbies { get; set; }
+
+        public List<Hobby> ChosenHobbies { get; set; }
 
         public List<Language> ChosenLanguages { get; set; }
 

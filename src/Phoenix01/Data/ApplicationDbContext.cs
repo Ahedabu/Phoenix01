@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Phoenix01.Models;
+using Phoenix01.Models.AccountViewModels;
 
 namespace Phoenix01.Data
 {
@@ -9,11 +11,15 @@ namespace Phoenix01.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
 
+        public DbSet<Hobby> Hobbies { get; set; }
+        public DbSet <ApplicationUserHobby> ApplicationUserHobbies { get; set; }
         public DbSet<Language> Languages { get; set; }
-        public DbSet<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
         public DbSet<Story> Stories { get; set; }
+        public DbSet<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -33,6 +39,14 @@ namespace Phoenix01.Data
             //        .HasOne(pt => pt.Language)
             //        .WithMany(t => t.UserLinks)
             //        .HasForeignKey(pt => pt.LanguageId);
+            builder.Entity<ApplicationUserHobby>()
+                .HasKey(h => new { h.ApplicationUserId, h.HobbyId });
+
         }
+
+
+     
+        }
+  
     }
-}
+

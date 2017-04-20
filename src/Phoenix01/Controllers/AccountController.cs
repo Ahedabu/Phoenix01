@@ -131,6 +131,48 @@ namespace Phoenix01.Controllers
             return View(model);
         }
 
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> EditProfile(EditProfile model, string returnUrl = null)
+
+        //{
+
+        //    var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+        //    var result = await _userManager.CreateAsync(user, model.Password);
+        //    if (result.Succeeded)
+        //    {
+
+
+
+        //        return RedirectToLocal(returnUrl);
+        //    }
+
+        //    return View(model);
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //
         // POST: /Account/LogOff
         [HttpPost]

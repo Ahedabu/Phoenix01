@@ -1,17 +1,39 @@
 ﻿@model UserProfileViewModel
+@using Phoenix01.Models.ManageViewModels;
+
 
 @{
     ViewData["Title"] = "Edit Profile Details";
 }
 
 <h2>@ViewData["Title"]</h2>
+<p class="text-success">@ViewData["StatusMessage"]</p>
+
+<h1>
+    <img src="@Model.UserImage" style="max-width:160px;height:auto; background: #FFFFFF;
+    margin: auto;
+    -moz-border-radius: 60px;
+    border-radius: 100px;
+    padding: 6px;
+    box-shadow: 0px 0px 20px #888;" />
+</h1>
+<dt>Profile Picture:</dt>
+<dd>
+    @if (User.Identity.Name != null)
+    {
+        <div class="upimage">
+            <div class="mngimg">
+                <form asp-action="UploadPhoto" asp-controller="Manage" method="post" enctype="multipart/form-data">
+                    <div class="btn btn-default browsing">
+                        <input type="file" name="files" id="files" onchange="this.form.submit();" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+</dd>
 
 <form asp-controller="Manage" asp-action="EditUserProfile" method="post" class="form-horizontal" asp-antiforgery="true" enctype="multipart/form-data">
-
-    <h4>Edit Profile Form</h4>
-
-
-
     <hr />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -57,11 +79,10 @@
     <div class="form-group">
         <label asp-for="UserAge" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="UserAge" class="form-control" disabled/>
+            <input asp-for="UserAge" class="form-control" disabled />
             <span asp-validation-for="UserAge"></span>
         </div>
     </div>
-
 
     <div class="form-group">
         <label asp-for="StreetName" class="col-md-2 control-label"></label>
@@ -70,8 +91,6 @@
             <span asp-validation-for="StreetName"></span>
         </div>
     </div>
-
-
 
     <div class="form-group">
         <label asp-for="Zip" class="col-md-2 control-label"></label>
@@ -104,7 +123,17 @@
             <span asp-validation-for="Country"></span>
         </div>
     </div>
+
     @Html.Partial("EditUserLanguages")
+
+    <div class="form-group">
+        <label asp-for="ChosenHobbies" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            @Html.EditorFor(x => x.SelectedHobbies)
+        </div>
+        @Html.HiddenFor(x => x.Id)
+    </div>
+
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <button type="submit" class="btn btn-default">Update</button>
@@ -112,11 +141,6 @@
     </div>
 
 </form>
-
-<div>
-    <a asp-action="UserProfile">Back</a> |
-    <a asp-controller="Home" asp-action="Index">Home</a>
-</div>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

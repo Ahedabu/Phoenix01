@@ -4,7 +4,7 @@
     ViewData["Title"] = "User Profile";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2>@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
 
 <div>
@@ -47,6 +47,12 @@
             @Html.DisplayFor(model => model.LastName)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.UserAge)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserAge)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Zip)
         </dt>
         <dd>
@@ -86,8 +92,20 @@
                 @lang.Name
             </dd>
         }
+        <dt>
+            @Html.DisplayNameFor(model => model.ChosenHobbies)
+        </dt>
+        @foreach(var hobby in Model.ChosenHobbies)
+        {
+            <dd>
+                @hobby.Name
+            </dd>
+
+        }
+        
     </dl>
 </div>
+<br/>
 <div>
     <a asp-action="EditUserProfile">Edit</a> | 
     <a asp-controller="Home" asp-action="Index">Home</a>

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Phoenix01.Models;
+using Phoenix01.Models.AccountViewModels;
 
 namespace Phoenix01.Data
 {
@@ -9,6 +11,7 @@ namespace Phoenix01.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
 
         public DbSet<Hobby> Hobbies { get; set; }
@@ -40,5 +43,10 @@ namespace Phoenix01.Data
                 .HasKey(h => new { h.ApplicationUserId, h.HobbyId });
 
         }
+
+
+     
+        }
+  
     }
-}
+

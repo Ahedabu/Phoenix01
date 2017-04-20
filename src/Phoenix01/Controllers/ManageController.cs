@@ -17,6 +17,12 @@ using Phoenix01.CustomExtensions;
 using System;
 using Microsoft.EntityFrameworkCore;
 
+
+using System.Security.Claims;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Phoenix01.Models.AccountViewModels;
+
 namespace Phoenix01.Controllers
 {
     [Authorize]
@@ -396,9 +402,12 @@ namespace Phoenix01.Controllers
         }
 
         // GET: /Manage/EditUserProfile
-        public async Task<IActionResult> EditUserProfile()
+        public async Task<IActionResult> EditUserProfile(ManageMessageId? message = null)
         {
-
+            ViewData["StatusMessage"] =
+                message == ManageMessageId.PhotoUploadSuccess ? "Your Photo uploaded."
+                : message == ManageMessageId.FileExtensionError ? "You have file Extension Error. Must Be .PNG or .JPG or .GIF"
+                : "";
 
             var user = await GetCurrentUserAsync();
             if (user == null)
@@ -469,6 +478,8 @@ namespace Phoenix01.Controllers
 
             return View(model);
         }
+
+
         //POST: /Manage/EditUserProfile
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -578,14 +589,14 @@ namespace Phoenix01.Controllers
                                     user.UserImage = "\\images\\" + pictureFile;
                                     await _userManager.UpdateAsync(user);
                                     await file.CopyToAsync(fileStream);
-
-                                }
+                                    
                             }
-                            return RedirectToAction("Index", new { Message = ManageMessageId.PhotoUploadSuccess });
+                        }
+                            return RedirectToAction("EditUserProfile", new { Message = ManageMessageId.PhotoUploadSuccess });
                         }
                         else
                         {
-                            return RedirectToAction("Index", new { Message = ManageMessageId.FileExtensionError });
+                            return RedirectToAction("EditUserProfile", new { Message = ManageMessageId.FileExtensionError });
                         }
                     }
                 }
@@ -595,6 +606,9 @@ namespace Phoenix01.Controllers
 
         #endregion Upload Photo
 
+
+
+      
 
 
 

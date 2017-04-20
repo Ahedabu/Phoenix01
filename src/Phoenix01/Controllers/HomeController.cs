@@ -8,6 +8,8 @@ using Phoenix01.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Phoenix01.Data;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 namespace Phoenix01.Controllers
 {
@@ -15,15 +17,7 @@ namespace Phoenix01.Controllers
     {
         public IActionResult Index()//wellcome
         {
-            //var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
-            //var currentUser = manager.FindById(User.Identity.GetUserId());
-            //ViewBag.email = currentUser.UserProfileInfo.email;
-
-
-
-
-
-            return View();
+             return View();
         }
 
         //home page layout.
@@ -33,7 +27,7 @@ namespace Phoenix01.Controllers
             return View();
         }
 
-
+     
 
         public IActionResult About()
         {
@@ -53,5 +47,11 @@ namespace Phoenix01.Controllers
         {
             return View();
         }
+
+       
+
+
+
+
     }
 }

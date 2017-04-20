@@ -407,14 +407,14 @@ namespace Phoenix01.Controllers
             }
 
             List<Hobby> hobbyCheckBoxList = new List<Hobby>();
-            var applicationUserHobby = _context.ApplicationUserHobby.AsNoTracking();
+            var applicationUserHobby = _context.ApplicationUserHobbies.AsNoTracking();
 
             hobbyCheckBoxList = _context.Hobbies.AsNoTracking().ToList();
 
 
             var hobbyList = _context.Hobbies
-                .OrderBy(ho => ho.HobbyName)
-                .Where(ho => applicationUserHobby.Any(ah => ah.HobbyId == ho.HobbyId && ah.ApplicationUserId == user.Id)).AsNoTracking().ToList();
+                .OrderBy(ho => ho.Name)
+                .Where(ho => applicationUserHobby.Any(ah => ah.HobbyId == ho.Id && ah.ApplicationUserId == user.Id)).AsNoTracking().ToList();
 
 
             var age = 0;

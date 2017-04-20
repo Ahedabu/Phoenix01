@@ -9,11 +9,9 @@ namespace Phoenix01.Models
 {
     public class Hobby
     {
-      
-        public int HobbyId { get; set; }
-        public string HobbyName { get; set; }
-        [NotMapped]
-        public bool CheckboxAnswer { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        
         public List<ApplicationUserHobby> ApplicationUserHobby { get; set; }
     }
 }

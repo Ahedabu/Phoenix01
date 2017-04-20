@@ -11,6 +11,5 @@ namespace Phoenix01.Models
         public int HobbyId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public Hobby Hobby { get; set; }
-
     }
 }

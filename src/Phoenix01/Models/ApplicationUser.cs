@@ -13,7 +13,9 @@ namespace Phoenix01.Models
     {
         public ApplicationUser() {
             Stories = new List<Story>();
+            ApplicationUserHobbies = new List<ApplicationUserHobby>();
         }
+
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime RegistrationDate { get; set; }
 
@@ -32,7 +34,7 @@ namespace Phoenix01.Models
 
         // nav. prop.
         public List<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
-        public List<ApplicationUserHobby> ApplicationUserHobby { get; set; }
+        public List<ApplicationUserHobby> ApplicationUserHobbies { get; set; }
 
         public string Image { get; set; }
         public string Story { get; set; }

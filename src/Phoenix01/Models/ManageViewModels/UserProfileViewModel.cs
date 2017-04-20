@@ -8,6 +8,12 @@ namespace Phoenix01.Models.ManageViewModels
 {
     public class UserProfileViewModel
     {
+        public UserProfileViewModel()
+        {
+            SelectedHobbies = new List<CheckBoxListItem>();
+        }
+        public string Id { get; set; }
+
         public string RegistrationDate { get; set; }
 
         public string FirstName { get; set; }

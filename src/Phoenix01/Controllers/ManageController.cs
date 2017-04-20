@@ -406,15 +406,15 @@ namespace Phoenix01.Controllers
                 return View("Error");
             }
 
-            List<Hobby> hobbyCheckBoxList = new List<Hobby>();
-            var applicationUserHobby = _context.ApplicationUserHobbies.AsNoTracking();
+            //List<Hobby> hobbyCheckBoxList = new List<Hobby>();
+            //var applicationUserHobby = _context.ApplicationUserHobbies.AsNoTracking();
 
-            hobbyCheckBoxList = _context.Hobbies.AsNoTracking().ToList();
+            //hobbyCheckBoxList = _context.Hobbies.AsNoTracking().ToList();
 
 
             var hobbyList = _context.Hobbies
                 .OrderBy(ho => ho.Name)
-                .Where(ho => applicationUserHobby.Any(ah => ah.HobbyId == ho.Id && ah.ApplicationUserId == user.Id)).AsNoTracking().ToList();
+                .Where(ho => _context.ApplicationUserHobbies.Any(ah => ah.HobbyId == ho.Id && ah.ApplicationUserId == user.Id)).AsNoTracking().ToList();
 
 
             var age = 0;
@@ -425,8 +425,10 @@ namespace Phoenix01.Controllers
                 age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
                 if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
             }
-            return View(new UserProfileViewModel
+
+            var model = new UserProfileViewModel
             {
+                Id = user.Id,
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
                 FirstName = user.FirstName,
                 MiddleName = user.MiddleName,
@@ -443,10 +445,29 @@ namespace Phoenix01.Controllers
                 ChosenHobbies = hobbyList,
                 BirthDate = birthdate,
                 UserAge = age.ToString()
+            };
 
+            var allHobbies = _context.Hobbies.OrderBy(h => h.Name).ToList();
+            var userHobbies = _context.Hobbies
+                .Where(h => _context.ApplicationUserHobbies.Any(uh => uh.HobbyId == h.Id && uh.ApplicationUserId == user.Id))
+                .ToList();
 
+            var checkBoxListItems = new List<CheckBoxListItem>();
 
-            });
+            foreach (var hobby in allHobbies)
+            {
+                checkBoxListItems.Add(new CheckBoxListItem()
+                {
+                    Id = hobby.Id,
+                    Display = hobby.Name,
+                    //We should have already-selected genres be checked
+                    IsChecked = userHobbies.Where(x => x.Id == hobby.Id).Any()
+                });
+            }
+
+            model.SelectedHobbies = checkBoxListItems;
+
+            return View(model);
         }
         //POST: /Manage/EditUserProfile
         [HttpPost]
@@ -491,8 +512,19 @@ namespace Phoenix01.Controllers
                     _context.ApplicationUserLanguages.Remove(appUserLang);
                 }
             }
+            var selectedHobbies = model.SelectedHobbies.Where(x => x.IsChecked).Select(x => x.Id).ToList();
 
-            if(model.BirthDate!=null && model.BirthDate!="")
+            _context.ApplicationUserHobbies.RemoveRange(_context.ApplicationUserHobbies.Where(a => a.ApplicationUserId == user.Id));
+            await _context.SaveChangesAsync();
+
+            foreach (var hobbyId in selectedHobbies)
+            {
+                var hobby = _context.Hobbies.FirstOrDefault(h => h.Id == hobbyId);
+                _context.ApplicationUserHobbies.Add(new ApplicationUserHobby { ApplicationUserId = user.Id, HobbyId = hobby.Id });
+            }
+
+
+            if (model.BirthDate!=null && model.BirthDate!="")
             user.BirthDate = DateTime.Parse(model.BirthDate);
 
 

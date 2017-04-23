@@ -21,11 +21,9 @@
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                @Html.DisplayNameFor(model => model.ApplicationUser.UserName)
             </th>
-            <th>
-                <img src="" max-width ="30px" height="auto" />
-            </th>
+          
             <th></th>
         </tr>
     </thead>
@@ -39,11 +37,11 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserName)
+                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
             </td>
             <td>
                 
-                <img src="@(item.UserImage)" alt="Sample Image" style="max-width:50px;height:auto;"/>
+                <img src="@(item.ApplicationUser.UserImage)" alt="Sample Image" style="max-width:50px;height:auto;"/>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

@@ -28,7 +28,8 @@ namespace Phoenix01.Controllers
         // GET: Stories
         public async Task<IActionResult> Index()
         {
-           return View(await _context.Stories.ToListAsync());
+
+           return View(await _context.Stories.Include(s => s.ApplicationUser).ToListAsync());
         }
 
         // GET: Stories/Details/5
@@ -59,14 +60,14 @@ namespace Phoenix01.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StoryBody,ApplicationUserId,UserName,UserImage,Title")] Story story)
+        public async Task<IActionResult> Create([Bind("ID,StoryBody,ApplicationUserId,Title")] Story story)
         {
             var user = await GetCurrentUserAsync();
             if (User.Identity.IsAuthenticated)
       
            {
 
-                var appUserStories = new Story { ApplicationUserId = user.Id, ID = story.ID,StoryBody=story.StoryBody,Title =story.Title,UserName = user.UserName , UserImage = user.UserImage };
+                var appUserStories = new Story { ApplicationUserId = user.Id, ID = story.ID,StoryBody=story.StoryBody,Title =story.Title };
                 _context.Add(appUserStories);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");

@@ -20,7 +20,7 @@ namespace Phoenix01.Models
         public DateTime RegistrationDate { get; set; }
 
         [StringLength(100, MinimumLength = 2)]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } 
         public string MiddleName { get; set; }
 
         public DateTime? BirthDate { get; set; }

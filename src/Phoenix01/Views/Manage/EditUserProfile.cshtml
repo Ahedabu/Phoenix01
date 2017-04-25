@@ -126,6 +126,17 @@
 
     @Html.Partial("EditUserLanguages")
 
+    @Html.DropDownListFor(s => s.LanguagesDropDown, Model.LanguagesDropDown);
+
+    <div class="form-group">
+        <label asp-for="ChosenLanguages" class="col-md-2 control-label"></label>
+        <div id="editablePane"class="col-md-10">
+               @Html.TextBoxFor(s => s.Width, new { @class = "myEditable", disabled = "disabled" })
+            @Html.TextBoxFor(s => s.Height, new { @class = "myEditable", disabled = "disabled" })
+        </div>
+
+    </div>
+
     <div class="form-group">
         <label asp-for="ChosenHobbies" class="col-md-2 control-label"></label>
         <div class="col-md-10">
@@ -145,3 +156,33 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
+
+<script type="text/javascript">
+    $(function () {
+
+        $("#AddUserLanguage").change(function () {
+
+            var t = $(this).val();
+
+            if (t !== "") {
+                $.post("@Url.Action("GetDefault", "Manage")?val=" + t, function (res) {
+                    if (res.Success === "true") {
+
+                        //enable the text boxes and set the value
+
+                        $("#Width").prop('disabled', false).val(Data.Width);
+                        $("#Height").prop('disabled', false).val(Data.Height);
+
+                    } else {
+                        alert("Error getting data!");
+                    }
+                });
+            } else {
+                //Let's clear the values and disable :)
+                $("input.editableItems").val('').prop('disabled', true);
+            }
+
+        });
+    });
+
+</script>

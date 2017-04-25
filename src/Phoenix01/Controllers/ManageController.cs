@@ -402,13 +402,10 @@ namespace Phoenix01.Controllers
         }
 
         // GET: /Manage/EditUserProfile
-        public async Task<IActionResult> EditUserProfile(ManageMessageId? message = null)
+        public async Task<IActionResult> EditUserProfile()
         {
-            ViewData["StatusMessage"] =
-                message == ManageMessageId.PhotoUploadSuccess ? "Your Photo uploaded."
-                : message == ManageMessageId.FileExtensionError ? "You have file Extension Error. Must Be .PNG or .JPG or .GIF"
-                : "";
-
+            
+            
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
@@ -436,6 +433,7 @@ namespace Phoenix01.Controllers
             }
 
             var model = new UserProfileViewModel
+
             {
                 Id = user.Id,
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
@@ -453,7 +451,7 @@ namespace Phoenix01.Controllers
                 LanguagesRemoveDropDown = _context.Languages.ToRemoveLanguageListItems(_context.ApplicationUserLanguages, user),
                 ChosenHobbies = hobbyList,
                 BirthDate = birthdate,
-                UserAge = age.ToString()
+                UserAge =  age.ToString()
             };
 
             var allHobbies = _context.Hobbies.OrderBy(h => h.Name).ToList();
@@ -483,12 +481,17 @@ namespace Phoenix01.Controllers
         //POST: /Manage/EditUserProfile
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditUserProfile(UserProfileViewModel model)
+        public async Task<IActionResult> EditUserProfile(UserProfileViewModel model, ManageMessageId? message = null)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
+            ViewData["StatusMessage"] =
+                message == ManageMessageId.PhotoUploadSuccess ? "Your Photo uploaded."
+                : message == ManageMessageId.FileExtensionError ? "You have file Extension Error. Must Be .PNG or .JPG or .GIF"
+                : "";
 
             var user = await GetCurrentUserAsync();
 
@@ -543,7 +546,7 @@ namespace Phoenix01.Controllers
             if (result.Succeeded)
             {
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(UserProfile), new { Message = ManageMessageId.EditProfileSuccess });
+                return RedirectToAction(nameof(EditUserProfile), new { Message = ManageMessageId.EditProfileSuccess });
             }
 
             return View(model);
@@ -642,6 +645,32 @@ namespace Phoenix01.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);
+        }
+
+        [HttpGet]
+        public ActionResult AjaxCreate()
+        {
+            var vm = new AjaxViewModel();
+            //Hard coded for demo. You may replace with data form db.
+            vm.Widgets = new List<SelectListItem>
+            {
+                new SelectListItem {Value = "1", Text = "Weather"},
+                new SelectListItem {Value = "2", Text = "Messages"}
+            };
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult GetDefault(int? val)
+        {
+            if (val != null)
+            {
+                //Values are hard coded for demo. you may replae with values 
+                // coming from your db/service based on the passed in value ( val.Value)
+
+                return Json(new { Success = "true", Data = new { Width = 234, Height = 345 } });
+            }
+            return Json(new { Success = "false" });
         }
 
         #endregion

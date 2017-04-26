@@ -37,6 +37,7 @@ namespace Phoenix01.Data
             //        .WithMany(t => t.UserLinks)
             //        .HasForeignKey(pt => pt.LanguageId);
         }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
 
      

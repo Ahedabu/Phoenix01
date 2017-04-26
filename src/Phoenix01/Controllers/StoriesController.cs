@@ -67,7 +67,7 @@ namespace Phoenix01.Controllers
       
            {
 
-                var appUserStories = new Story { ApplicationUserId = user.Id, ID = story.ID,StoryBody=story.StoryBody,Title =story.Title };
+                var appUserStories = new Story { ApplicationUserId = user.Id,ID = story.ID,StoryBody=story.StoryBody,Title =story.Title};
                 _context.Add(appUserStories);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");

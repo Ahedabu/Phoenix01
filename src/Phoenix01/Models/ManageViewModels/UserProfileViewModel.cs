@@ -21,7 +21,7 @@ namespace Phoenix01.Models.ManageViewModels
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public string BirthDate { get; set; }
 
-        public string UserAge { get; set; }
+        public int UserAge { get; set; }
 
         public string Zip { get; set; }
 
@@ -33,6 +33,7 @@ namespace Phoenix01.Models.ManageViewModels
 
         public string Country { get; set; }
 
+        public string  Email { get; set; }
 
         [Display(Name = "UserImage")]
         public string UserImage { get; set; }

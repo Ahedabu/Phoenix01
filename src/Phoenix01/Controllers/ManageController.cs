@@ -439,7 +439,7 @@ namespace Phoenix01.Controllers
                 LanguagesRemoveDropDown = _context.Languages.ToRemoveLanguageListItems(_context.ApplicationUserLanguages, user),
 
                 BirthDate = birthdate,
-                UserAge = age.ToString()
+                UserAge = age
 
 
 

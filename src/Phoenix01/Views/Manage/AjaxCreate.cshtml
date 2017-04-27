@@ -1,43 +1,42 @@
 ﻿@model AjaxViewModel
 
-<script src="~/lib/jquery/dist/jquery.js"></script>
-<script>
+@section scripts
+{
+    <script>
 
-    $(function () {
+        $(function () {
 
-      $("#SelectedWidget").change(function() {
+            $("#SelectedWidget").change(function () {
 
-            var t = $(this).val();
+                var t = $(this).val();
 
-            if (t !== "") {
-                $.post("@Url.Action("Manage", "GetDefault")?val=" + t, function(res) {
-                    if (res.Success === "true")
-                    {
+                if (t !== "") {
+                    $.post("@Url.Action("GetDefault", "Manage")?val=" + t, "", function (res) {
+                        if (res.Success === "true") {
 
-                      //enable the text boxes and set the value
+                            //enable the text boxes and set the value
 
-                        $("#Width").prop('disabled', false).val(res.Data.Width);
-                        $("#Height").prop('disabled', false).val(res.Data.Height);
+                            $("#Width").prop('disabled', false).val(res.Data.Width);
+                            $("#Height").prop('disabled', false).val(res.Data.Height);
 
-                    } else {
-                        alert("Error getting data!");
-                    }
-                });
-            } else {
-                //Let's clear the values and disable :)
-                $("input.editableItems").val('').prop('disabled', true);
-            }
+                        } else {
+                            alert("Error getting data!");
+                        }
+                    });
+                } else {
+                    //Let's clear the values and disable :)
+                    $("input.editableItems").val('').prop('disabled', true);
+                }
 
+            });
         });
- });
 
-</script>
-
-
+    </script>
+}
 
 @using (Html.BeginForm())
 {
-    @Html.DropDownListFor(s => s.SelectedWidget, Model.Widgets);
+    @Html.DropDownListFor(s => s.SelectedWidget, Model.Widgets, "Select");
 
     <div id="editablePane">
         @Html.TextBoxFor(s => s.Width, new { @class = "myEditable", disabled = "disabled" })

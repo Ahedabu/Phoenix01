@@ -1,9 +1,20 @@
 ﻿@model AjaxViewModel
 
-@section scripts
+
+
+@using (Html.BeginForm())
+{
+    @Html.DropDownListFor(s => s.SelectedWidget, Model.Widgets, "Select");
+
+    <div id="editablePane">
+        @Html.TextBoxFor(s => s.Width, new { @class = "myEditable", disabled = "disabled" })
+        @Html.TextBoxFor(s => s.Height, new { @class = "myEditable", disabled = "disabled" })
+    </div>
+}
+
+@section Scripts
 {
     <script>
-
         $(function () {
 
             $("#SelectedWidget").change(function () {
@@ -12,12 +23,13 @@
 
                 if (t !== "") {
                     $.post("@Url.Action("GetDefault", "Manage")?val=" + t, "", function (res) {
+                        //alert("Returned Json values: " + typeof(res));
                         if (res.Success === "true") {
 
                             //enable the text boxes and set the value
 
-                            $("#Width").prop('disabled', false).val(res.Data.Width);
-                            $("#Height").prop('disabled', false).val(res.Data.Height);
+                            $("#Width").prop('disabled', false).val(res.Width);
+                            $("#Height").prop('disabled', false).val(res.Height);
 
                         } else {
                             alert("Error getting data!");
@@ -30,16 +42,5 @@
 
             });
         });
-
     </script>
-}
-
-@using (Html.BeginForm())
-{
-    @Html.DropDownListFor(s => s.SelectedWidget, Model.Widgets, "Select");
-
-    <div id="editablePane">
-        @Html.TextBoxFor(s => s.Width, new { @class = "myEditable", disabled = "disabled" })
-        @Html.TextBoxFor(s => s.Height, new { @class = "myEditable", disabled = "disabled" })
-    </div>
 }

@@ -668,7 +668,11 @@ namespace Phoenix01.Controllers
                 //Values are hard coded for demo. you may replae with values 
                 // coming from your db/service based on the passed in value ( val.Value)
 
-                return Json(new { Success = "true", Data = new { Width = 234, Height = 345 } });
+                var measures = new Dictionary<string, string>();
+                measures.Add("Success", "true");
+                measures.Add("Width", "234");
+                measures.Add("Height", "345");
+                return Json(measures);
             }
             return Json(new { Success = "false" });
         }

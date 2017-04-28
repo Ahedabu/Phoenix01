@@ -22,7 +22,6 @@ namespace Phoenix01.CustomExtensions
                     Value = la.Id.ToString()
                 });
 
-
             return languageList;
         }
 
@@ -34,7 +33,7 @@ namespace Phoenix01.CustomExtensions
                 .Select(la => new SelectListItem
                 {
                     Text = la.Name,
-                    Value = la.Name
+                    Value = la.Id.ToString()
                 });
 
 

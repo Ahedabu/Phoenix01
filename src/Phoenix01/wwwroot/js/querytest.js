@@ -4,6 +4,6 @@
 
 
 
-$(document).ready(function () {
+$(function () {
     $('div.hidden').fadeIn().removeClass('hidden');
 });

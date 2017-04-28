@@ -126,7 +126,7 @@
 
     @Html.Partial("EditUserLanguages")
 
-    @Html.DropDownListFor(s => s.LanguagesDropDown, Model.LanguagesDropDown);
+    @Html.DropDownListFor(s => s.LanguagesDropDown, Model.LanguagesDropDown, "Select");
 
     <div class="form-group">
         <label asp-for="ChosenLanguages" class="col-md-2 control-label"></label>
@@ -158,34 +158,33 @@
 <link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />
 <script src="~/js/querytest.js"></script>
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-}
 
-<script type="text/javascript">
-    $(function () {
+<script>
+        $(function () {
 
-        $("#AddUserLanguage").change(function () {
+            $("#LanguagesDropDown").change(function () {
 
-            var t = $(this).val();
+                var t = $(this).val();
 
-            if (t !== "") {
-                $.post("@Url.Action("GetDefault", "Manage")?val=" + t, function (res) {
-                    if (res.Success === "true") {
+                if (t !== "") {
+                    $.post("@Url.Action("GetDefault", "Manage")?val=" + t, "", function (res) {
+                        if (res.Success === "true") {
 
-                        //enable the text boxes and set the value
+                            //enable the text boxes and set the value
 
-                        $("#Width").prop('disabled', false).val(Data.Width);
-                        $("#Height").prop('disabled', false).val(Data.Height);
+                            $("#Width").prop('disabled', false).val(res.Width);
+                            $("#Height").prop('disabled', false).val(res.Height);
 
-                    } else {
-                        alert("Error getting data!");
-                    }
-                });
-            } else {
-                //Let's clear the values and disable :)
-                $("input.editableItems").val('').prop('disabled', true);
-            }
+                        } else {
+                            alert("Error getting data!");
+                        }
+                    });
+                } else {
+                    //Let's clear the values and disable :)
+                    $("input.editableItems").val('').prop('disabled', true);
+                }
 
+            });
         });
-    });
-
 </script>
+}

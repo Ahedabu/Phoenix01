@@ -1,7 +1,6 @@
 ﻿@model UserProfileViewModel
 @using Phoenix01.Models.ManageViewModels;
 
-
 @{
     ViewData["Title"] = "Edit Profile Details";
 }
@@ -124,19 +123,10 @@
         </div>
     </div>
 
-    @Html.Partial("EditUserLanguages")
-
-    @Html.DropDownListFor(s => s.LanguagesDropDown, Model.LanguagesDropDown, "Select");
-
-    <div class="form-group">
-        <label asp-for="ChosenLanguages" class="col-md-2 control-label"></label>
-        <div id="editablePane"class="col-md-10">
-               @Html.TextBoxFor(s => s.Width, new { @class = "myEditable", disabled = "disabled" })
-            @Html.TextBoxFor(s => s.Height, new { @class = "myEditable", disabled = "disabled" })
-        </div>
-
+    <div id="partial">
+        @Html.Partial("EditUserLanguages")
     </div>
-
+   
     <div class="form-group">
         <label asp-for="ChosenHobbies" class="col-md-2 control-label"></label>
         <div class="col-md-10">
@@ -154,37 +144,9 @@
 </form>
 
 @section Scripts {
-<script src="~/lib/jquery-ui/jquery-ui.js"></script>
-<link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />
-<script src="~/js/querytest.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.js"></script>
+    <link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />
+    <script src="~/js/querytest.js"></script>
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-<script>
-        $(function () {
-
-            $("#LanguagesDropDown").change(function () {
-
-                var t = $(this).val();
-
-                if (t !== "") {
-                    $.post("@Url.Action("GetDefault", "Manage")?val=" + t, "", function (res) {
-                        if (res.Success === "true") {
-
-                            //enable the text boxes and set the value
-
-                            $("#Width").prop('disabled', false).val(res.Width);
-                            $("#Height").prop('disabled', false).val(res.Height);
-
-                        } else {
-                            alert("Error getting data!");
-                        }
-                    });
-                } else {
-                    //Let's clear the values and disable :)
-                    $("input.editableItems").val('').prop('disabled', true);
-                }
-
-            });
-        });
-</script>
-}
+    }

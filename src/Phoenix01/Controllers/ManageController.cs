@@ -391,7 +391,7 @@ namespace Phoenix01.Controllers
                     .Where(la => la.Name == model.RemoveUserLanguage)
                     .SingleOrDefault();
 
-            if (!(lang == null))
+            if (lang != null)
             {
                 var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang.Id };
                 _context.ApplicationUserLanguages.Remove(appUserLang);
@@ -404,19 +404,13 @@ namespace Phoenix01.Controllers
         // GET: /Manage/EditUserProfile
         public async Task<IActionResult> EditUserProfile()
         {
-            
-            
+
+
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
                 return View("Error");
             }
-
-            //List<Hobby> hobbyCheckBoxList = new List<Hobby>();
-            //var applicationUserHobby = _context.ApplicationUserHobbies.AsNoTracking();
-
-            //hobbyCheckBoxList = _context.Hobbies.AsNoTracking().ToList();
-
 
             var hobbyList = _context.Hobbies
                 .OrderBy(ho => ho.Name)
@@ -446,9 +440,7 @@ namespace Phoenix01.Controllers
                 City = user.City,
                 Country = user.Country,
                 UserImage = user.UserImage,
-                ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
-                LanguagesDropDown = _context.Languages.ToSelectLanguageListItems(_context.ApplicationUserLanguages, user),
-                LanguagesRemoveDropDown = _context.Languages.ToRemoveLanguageListItems(_context.ApplicationUserLanguages, user),
+                LanguagesDropDown = _context.Languages.ToLanguageListItems(user),
                 ChosenHobbies = hobbyList,
                 BirthDate = birthdate,
                 UserAge =  age.ToString()
@@ -505,27 +497,8 @@ namespace Phoenix01.Controllers
                 user.City = model.City;
                 user.State = model.State;
                 user.Country = model.Country;
-
-                var lang = _context.Languages
-                    .Where(la => la.Name == model.AddUserLanguage)
-                    .SingleOrDefault();
-
-                if (!(lang == null))
-                {
-                    var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang.Id };
-                    _context.ApplicationUserLanguages.Add(appUserLang);
-                }
-
-                var lang2 = _context.Languages
-                    .Where(la => la.Name == model.RemoveUserLanguage)
-                    .SingleOrDefault();
-
-                if (!(lang2 == null))
-                {
-                    var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang2.Id };
-                    _context.ApplicationUserLanguages.Remove(appUserLang);
-                }
             }
+
             var selectedHobbies = model.SelectedHobbies.Where(x => x.IsChecked).Select(x => x.Id).ToList();
 
             _context.ApplicationUserHobbies.RemoveRange(_context.ApplicationUserHobbies.Where(a => a.ApplicationUserId == user.Id));
@@ -647,32 +620,56 @@ namespace Phoenix01.Controllers
             return _userManager.GetUserAsync(HttpContext.User);
         }
 
-        [HttpGet]
-        public ActionResult AjaxCreate()
+        [HttpPost]
+        public async Task<ActionResult> AddLang(string lang)
         {
-            var vm = new AjaxViewModel();
-            //Hard coded for demo. You may replace with data form db.
-            vm.Widgets = new List<SelectListItem>
+            var user = await GetCurrentUserAsync();
+
+            if (lang != null)
             {
-                new SelectListItem {Value = "1", Text = "Weather"},
-                new SelectListItem {Value = "2", Text = "Messages"}
-            };
-            return View(vm);
+                    var language = _context.Languages
+                   .Where(la => la.Name == lang)
+                   .SingleOrDefault();
+
+                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = language.Id };
+                _context.ApplicationUserLanguages.Add(appUserLang);
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _context.SaveChangesAsync();
+                }
+
+                var res = new Dictionary<string, string>();
+                res.Add("Success", "true");
+                return Json(res);
+            }
+            return Json(new { Success = "false" });
         }
 
         [HttpPost]
-        public ActionResult GetDefault(int? val)
-        {
-            if (val != null)
-            {
-                //Values are hard coded for demo. you may replae with values 
-                // coming from your db/service based on the passed in value ( val.Value)
+        public async Task<ActionResult> RemoveLang(string lang)
+         {
+            var user = await GetCurrentUserAsync();
 
-                var measures = new Dictionary<string, string>();
-                measures.Add("Success", "true");
-                measures.Add("Width", "234");
-                measures.Add("Height", "345");
-                return Json(measures);
+            if (lang != null)
+            {
+                var language = _context.Languages
+                   .Where(la => la.Name == lang)
+                   .SingleOrDefault();
+
+                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = language.Id };
+                _context.ApplicationUserLanguages.Remove(appUserLang);
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _context.SaveChangesAsync();
+                }
+
+                var res = new Dictionary<string, string>();
+                res.Add("Success", "true");
+                return Json(res);
             }
             return Json(new { Success = "false" });
         }

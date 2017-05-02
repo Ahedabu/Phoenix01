@@ -7,10 +7,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Phoenix01.CustomExtensions
+namespace Phoenix01.Data.Managers
 {
-    public static class LanguageExtension
+    public static class LanguageManager
     {
+        public static IEnumerable<SelectListItem> ToLanguageListItems(this IEnumerable<Language> languages, ApplicationUser user)
+        {
+            var languageList = languages
+                .OrderBy(lang => lang.Name)
+                .Select(la => new SelectListItem
+                {
+                    Text = la.Name,
+                    Value = la.Name
+                });
+
+            return languageList;
+        }
+
         public static IEnumerable<SelectListItem> ToSelectLanguageListItems(this IEnumerable<Language> languages, IEnumerable<ApplicationUserLanguage> applicationUserLanguage, ApplicationUser user)
         {
             var languageList = languages

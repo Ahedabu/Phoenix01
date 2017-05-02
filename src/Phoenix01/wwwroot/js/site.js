@@ -34,9 +34,7 @@ $(function () {
         //var data = { RemoveUserLanguage : lang}
         if (lang !== "") {
             $.post("/Manage/RemoveLang?lang=" + lang, function (res) {
-                if (res.Success === "true") {
-
-                } else {
+                if (res.Success === "false") {
                     alert("Error getting data!");
                 }
             });

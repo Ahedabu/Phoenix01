@@ -13,7 +13,6 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
-using Phoenix01.CustomExtensions;
 using System;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +21,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Phoenix01.Models.AccountViewModels;
+using Phoenix01.Data.Managers;
 
 namespace Phoenix01.Controllers
 {
@@ -441,6 +441,7 @@ namespace Phoenix01.Controllers
                 Country = user.Country,
                 UserImage = user.UserImage,
                 LanguagesDropDown = _context.Languages.ToLanguageListItems(user),
+                ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
                 ChosenHobbies = hobbyList,
                 BirthDate = birthdate,
                 UserAge =  age.ToString()

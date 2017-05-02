@@ -355,21 +355,44 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-        // GET: /Manage/UserProfil
-        public async Task<IActionResult> UserProfile(ManageMessageId? message = null)
-        {
-            ViewData["StatusMessage"] =
-                message == ManageMessageId.EditProfileSuccess ? "Your profile has been updated."
-                : "";
+     
 
-            var user = await GetCurrentUserAsync();
-            if (user == null)
+
+        public IActionResult UserProfile(string id)
+        {
+            var user = _context.ApplicationUser.Where(u => u.Email == id).FirstOrDefault();
+            var age = 0;
+            var birthdate = "";
+            if (user.BirthDate != null)
             {
-                return View("Error");
+                birthdate = ((DateTime)user.BirthDate).ToString("yyyy-MM-dd");
+                age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
+                if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
             }
-            var model = await EditUserProfile();
-            return View();
+            return View(new UserProfileViewModel
+            {
+                RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
+                FirstName = user.FirstName,
+                MiddleName = user.MiddleName,
+                LastName = user.LastName,
+                StreetName = user.StreetName,
+                Zip = user.Zip,
+                State = user.State,
+                City = user.City,
+                Country = user.Country,
+                UserImage = user.UserImage,
+                ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
+                LanguagesDropDown = _context.Languages.ToSelectLanguageListItems(_context.ApplicationUserLanguages, user),
+                LanguagesRemoveDropDown = _context.Languages.ToRemoveLanguageListItems(_context.ApplicationUserLanguages, user),
+
+                BirthDate = birthdate,
+                UserAge = age
+
+
+
+            });
         }
+
 
         // POST: /Manage/UserLanguages
         public async Task<IActionResult> EditUserLanguages(UserProfileViewModel model)

@@ -44,6 +44,7 @@ namespace Phoenix01.Controllers
                 Country = u.Country,
                 UserImage = u.UserImage,
                 BirthDate = u.BirthDate.ToString(),
+                Email = u.Email,
                 UserAge = CalculateAge(u)
 
 
@@ -70,16 +71,18 @@ namespace Phoenix01.Controllers
         return age;
 
     }
-       
-
-       
-     
 
        
 
-       
-       
 
-      
+
+
+
+
+
+
+
+
+
     }
 }

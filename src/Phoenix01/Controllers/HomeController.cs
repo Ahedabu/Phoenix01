@@ -27,7 +27,6 @@ namespace Phoenix01.Controllers
             return View();
         }
 
-     
 
         public IActionResult About()
         {

@@ -7,22 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Phoenix01.Data;
 using Phoenix01.Models;
+using Phoenix01.Models.AccountViewModels;
+using Microsoft.AspNetCore.Identity;
+using Phoenix01.Models.ManageViewModels;
 
 namespace Phoenix01.Controllers
 {
     public class StoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public StoriesController(ApplicationDbContext context)
+        public StoriesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
 
         // GET: Stories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Stories.ToListAsync());
+
+           return View(await _context.Stories.Include(s => s.ApplicationUser).ToListAsync());
         }
 
         // GET: Stories/Details/5
@@ -53,16 +60,39 @@ namespace Phoenix01.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StoryBody,Title")] Story story)
+        public async Task<IActionResult> Create([Bind("ID,StoryBody,ApplicationUserId,Title")] Story story)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(story);
+            var user = await GetCurrentUserAsync();
+            if (User.Identity.IsAuthenticated)
+      
+           {
+
+                var appUserStories = new Story { ApplicationUserId = user.Id,ID = story.ID,StoryBody=story.StoryBody,Title =story.Title};
+                _context.Add(appUserStories);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
+
             }
+
+            //if (ModelState.IsValid)
+            //{
+                    //_context.Add(story);
+                   //await _context.SaveChangesAsync();
+
+                //return RedirectToAction("Index");
+            //}
             return View(story);
         }
+
+
+
+
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
+        }
+
+
 
         // GET: Stories/Edit/5
         public async Task<IActionResult> Edit(int? id)

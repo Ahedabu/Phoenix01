@@ -43,6 +43,7 @@ namespace Phoenix01.Data
                 .HasKey(h => new { h.ApplicationUserId, h.HobbyId });
 
         }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
 
      

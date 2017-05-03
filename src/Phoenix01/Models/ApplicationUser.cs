@@ -40,5 +40,6 @@ namespace Phoenix01.Models
         public string Story { get; set; }
 
         public List<Story> Stories  { get; set; }
+        
     }
 }

@@ -306,7 +306,7 @@ namespace Phoenix01.Controllers
                 message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
                 : message == ManageMessageId.AddLoginSuccess ? "The external login was added."
                 : message == ManageMessageId.Error ? "An error has occurred."
-                 : message == ManageMessageId.PhotoUploadSuccess ? "Your photo has been uploaded."
+                : message == ManageMessageId.PhotoUploadSuccess ? "Your photo has been uploaded."
                 : message == ManageMessageId.FileExtensionError ? "Only jpg, png and gif file formats are allowed."
                 : "";
             var user = await GetCurrentUserAsync();
@@ -356,21 +356,57 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-        // GET: /Manage/UserProfil
-        public async Task<IActionResult> UserProfile(ManageMessageId? message = null)
-        {
-            ViewData["StatusMessage"] =
-                message == ManageMessageId.EditProfileSuccess ? "Your profile has been updated."
-                : "";
+     
 
-            var user = await GetCurrentUserAsync();
-            if (user == null)
+
+        public async Task<IActionResult> UserProfile(string id = "")
+        {
+            ApplicationUser user;
+            if (id == "")
             {
-                return View("Error");
+                  user = await GetCurrentUserAsync();
+                if (user == null)
+                {
+                    return View("Error");
+                }
             }
-            var model = await EditUserProfile();
-            return View();
+
+            else
+            {
+                user = _context.ApplicationUser.Where(u => u.Email == id).FirstOrDefault();
+
+            }
+            var age = 0;
+            var birthdate = "";
+            if (user.BirthDate != null)
+            {
+                birthdate = ((DateTime)user.BirthDate).ToString("yyyy-MM-dd");
+                age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
+                if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
+            }
+
+
+            return View(new UserProfileViewModel
+            {
+                RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
+                FirstName = user.FirstName,
+                MiddleName = user.MiddleName,
+                LastName = user.LastName,
+                StreetName = user.StreetName,
+                Zip = user.Zip,
+                State = user.State,
+                City = user.City,
+                Country = user.Country,
+                UserImage = user.UserImage,
+                ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
+                LanguagesDropDown = _context.Languages.ToSelectLanguageListItems(_context.ApplicationUserLanguages, user),
+                LanguagesRemoveDropDown = _context.Languages.ToRemoveLanguageListItems(_context.ApplicationUserLanguages, user),
+
+                BirthDate = birthdate,
+                UserAge = age
+                  });
         }
+
 
         // POST: /Manage/UserLanguages
         public async Task<IActionResult> EditUserLanguages(UserProfileViewModel model)
@@ -444,8 +480,7 @@ namespace Phoenix01.Controllers
                 ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
                 ChosenHobbies = hobbyList,
                 BirthDate = birthdate,
-                UserAge =  age.ToString()
-            };
+                UserAge = age
 
             var allHobbies = _context.Hobbies.OrderBy(h => h.Name).ToList();
             var userHobbies = _context.Hobbies

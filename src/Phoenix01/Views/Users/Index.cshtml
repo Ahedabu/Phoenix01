@@ -1,0 +1,54 @@
+@model IEnumerable<Phoenix01.Models.ManageViewModels.UserProfileViewModel>
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+
+<table class="table" style="width:300px;">
+
+    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <th rowspan="5" width="50px">
+                                                                    
+                                    <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.Email">
+                                        <img src="@(item.UserImage)" alt="Sample Image" style="max-width:50px;height:auto;" />
+                                    </a>    
+                                </th>
+
+                            <td style="font-weight: bold;">
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">
+                                    @Html.DisplayFor(modelItem => item.LastName)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">Age:
+                                    @Html.DisplayFor(modelItem => item.UserAge)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Country:
+                                    @Html.DisplayFor(modelItem => item.Country)
+                                    </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Email:
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                            </tr>
+                        }
+</tbody>
+</table>

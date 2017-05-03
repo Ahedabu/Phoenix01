@@ -358,9 +358,23 @@ namespace Phoenix01.Controllers
      
 
 
-        public IActionResult UserProfile(string id)
+        public async Task<IActionResult> UserProfile(string id = "")
         {
-            var user = _context.ApplicationUser.Where(u => u.Email == id).FirstOrDefault();
+            ApplicationUser user;
+            if (id == "")
+            {
+                  user = await GetCurrentUserAsync();
+                if (user == null)
+                {
+                    return View("Error");
+                }
+            }
+
+            else
+            {
+                user = _context.ApplicationUser.Where(u => u.Email == id).FirstOrDefault();
+
+            }
             var age = 0;
             var birthdate = "";
             if (user.BirthDate != null)
@@ -369,6 +383,8 @@ namespace Phoenix01.Controllers
                 age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
                 if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
             }
+
+
             return View(new UserProfileViewModel
             {
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
@@ -387,10 +403,7 @@ namespace Phoenix01.Controllers
 
                 BirthDate = birthdate,
                 UserAge = age
-
-
-
-            });
+                  });
         }
 
 

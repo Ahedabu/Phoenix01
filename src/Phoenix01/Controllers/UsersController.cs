@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Phoenix01.Data;
 using Phoenix01.Models;
 using Phoenix01.Models.ManageViewModels;
-using Phoenix01.CustomExtensions;
 
 namespace Phoenix01.Controllers
 {

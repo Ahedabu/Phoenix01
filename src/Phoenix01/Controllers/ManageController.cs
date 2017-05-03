@@ -400,9 +400,11 @@ namespace Phoenix01.Controllers
                 UserImage = user.UserImage,
                 ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
                 LanguagesDropDown = _context.Languages.ToSelectLanguageListItems(_context.ApplicationUserLanguages, user),
-                LanguagesRemoveDropDown = _context.Languages.ToRemoveLanguageListItems(_context.ApplicationUserLanguages, user),
+                ChosenHobbies = _context.Hobbies
+                .Where(h => _context.ApplicationUserHobbies.Any(uh => uh.HobbyId == h.Id && uh.ApplicationUserId == user.Id))
+                .ToList(),
 
-                BirthDate = birthdate,
+            BirthDate = birthdate,
                 UserAge = age
                   });
         }
@@ -481,6 +483,7 @@ namespace Phoenix01.Controllers
                 ChosenHobbies = hobbyList,
                 BirthDate = birthdate,
                 UserAge = age
+            };
 
             var allHobbies = _context.Hobbies.OrderBy(h => h.Name).ToList();
             var userHobbies = _context.Hobbies

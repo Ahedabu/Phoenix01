@@ -28,8 +28,8 @@ namespace Phoenix01.Controllers
         // GET: Stories
         public async Task<IActionResult> Index()
         {
-
-           return View(await _context.Stories.Include(s => s.ApplicationUser).ToListAsync());
+            var model = await _context.Stories.Include(s => s.ApplicationUser).ToListAsync();
+            return View(model);
         }
 
         // GET: Stories/Details/5

@@ -28,8 +28,22 @@ namespace Phoenix01.Controllers
         // GET: Stories
         public async Task<IActionResult> Index()
         {
+            var user = await GetCurrentUserAsync();
 
-           return View(await _context.Stories.Include(s => s.ApplicationUser).ToListAsync());
+            var model = await _context.Stories
+                .Include(s => s.ApplicationUser)
+                .Select(u =>
+                new StoriesViewModel
+                {
+                    ID = u.ID,
+                    Title = u.Title,
+                    StoryBody = u.StoryBody,
+                    StoryUser = u.ApplicationUser,
+                    LoggedInUser = user
+                }).ToListAsync();
+
+            
+            return View(model);
         }
 
         // GET: Stories/Details/5
@@ -67,7 +81,7 @@ namespace Phoenix01.Controllers
       
            {
 
-                var appUserStories = new Story { ApplicationUserId = user.Id, ID = story.ID,StoryBody=story.StoryBody,Title =story.Title };
+                var appUserStories = new Story { ApplicationUserId = user.Id,Category=story.Category, ID = story.ID,StoryBody=story.StoryBody,Title =story.Title };
                 _context.Add(appUserStories);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");

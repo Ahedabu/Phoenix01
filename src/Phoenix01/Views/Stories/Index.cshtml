@@ -1,4 +1,4 @@
-@model  IEnumerable<Phoenix01.Models.Story>
+@model  IEnumerable<Phoenix01.Models.ManageViewModels.StoriesViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -12,42 +12,39 @@
     <a asp-action="Create">Create New</a>
 </p>
 
+@*@item.LoggedInUser.UserName*@
+<table class="table">
 
-@*@*<table class="table">
-    @*<thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationUser.UserName)
-            </th>
-          
-            <th></th>
-        </tr>
-    </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StoryBody)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-            </td>
-            <td>
-                
-                <img src="@(item.ApplicationUser.UserImage)" alt="Sample Image" style="max-width:50px;height:auto;"/>
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                @Html.DisplayFor(modelItem => item.StoryUser.UserName)
+
+                <img src="@(item.StoryUser.UserImage)" alt="Sample Image" style="max-width:30px;height:auto;" />
+            </tr>
+            <tr>
+                <h2>@Html.DisplayFor(modelItem => item.Title)</h2>
+                <p><h4> @Html.DisplayFor(modelItem => item.StoryBody)</h4></p>
+            </tr>
+            <tr>
+                ******************************************
+                <a asp-action="Comment" asp-route-id="@item.ID">Comment</a> |
                 <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+                @if (item.LoggedInUser == item.StoryUser)
+                {
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                }
+            </tr>
+            <br><br><br><br>
+
+
+
+
+        }
     </tbody>
+   
 </table>
+<br />

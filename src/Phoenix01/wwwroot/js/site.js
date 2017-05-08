@@ -1,6 +1,6 @@
 ﻿// fadein function for all pages
 $(function () {
-    $('div.hidden').fadeIn().removeClass('hidden');
+    $('div.hidden').fadeIn(600).removeClass('hidden');
 });
 
 

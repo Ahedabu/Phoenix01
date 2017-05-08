@@ -478,7 +478,7 @@ namespace Phoenix01.Controllers
                 City = user.City,
                 Country = user.Country,
                 UserImage = user.UserImage,
-                LanguagesDropDown = _context.Languages.ToLanguageListItems(user),
+                LanguagesDropDown = _context.Languages.ToLanguageListItems(),
                 ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
                 ChosenHobbies = hobbyList,
                 BirthDate = birthdate,

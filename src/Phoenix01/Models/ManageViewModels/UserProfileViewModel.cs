@@ -54,7 +54,11 @@ namespace Phoenix01.Models.ManageViewModels
 
         public List<Language> ChosenLanguages { get; set; }
 
+        public IEnumerable<SelectListItem> HobbyDropDown { get; set; }
+
         public IEnumerable<SelectListItem> LanguagesDropDown { get; set; }
+
+        public IEnumerable<SelectListItem> AgeGroupDropDown { get; set; }
 
         public string AddedLanguage { get; set; }
     }

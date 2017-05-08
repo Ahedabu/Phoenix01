@@ -11,7 +11,7 @@ namespace Phoenix01.Data.Managers
 {
     public static class LanguageManager
     {
-        public static IEnumerable<SelectListItem> ToLanguageListItems(this IEnumerable<Language> languages, ApplicationUser user)
+        public static IEnumerable<SelectListItem> ToLanguageListItems(this IEnumerable<Language> languages)
         {
             var languageList = languages
                 .OrderBy(lang => lang.Name)

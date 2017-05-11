@@ -37,6 +37,20 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
+                <div class="message_form">
+
+                        <form action="CreateComment" method="post">
+
+                        <textarea rows="5" cols="70" name="message" class="form-control"></textarea><br>
+
+                        <input class="btn btn-primary btn-sm " type="submit" value="Post a Message">
+
+                    </form>
+
+                </div>
+
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
             </td>
             <td>

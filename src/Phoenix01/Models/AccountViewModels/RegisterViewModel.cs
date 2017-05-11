@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phoenix01.Models.AccountViewModels
 {
-    public class RegisterViewModel
+    public class RegisterViewModel : BaseEntity
     {
         [Required]
         [EmailAddress]

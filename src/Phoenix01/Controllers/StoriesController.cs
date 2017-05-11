@@ -10,6 +10,8 @@ using Phoenix01.Models;
 using Phoenix01.Models.AccountViewModels;
 using Microsoft.AspNetCore.Identity;
 using Phoenix01.Models.ManageViewModels;
+using static Phoenix01.Models.Comment;
+
 
 namespace Phoenix01.Controllers
 {
@@ -19,10 +21,13 @@ namespace Phoenix01.Controllers
         
         private readonly UserManager<ApplicationUser> _userManager;
 
+       
+
         public StoriesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
+           
         }
 
         // GET: Stories
@@ -31,6 +36,11 @@ namespace Phoenix01.Controllers
             var model = await _context.Stories.Include(s => s.ApplicationUser).ToListAsync();
             return View(model);
         }
+
+
+       
+
+
 
         // GET: Stories/Details/5
         public async Task<IActionResult> Details(int? id)

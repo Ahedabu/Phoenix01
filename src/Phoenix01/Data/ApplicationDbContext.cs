@@ -19,6 +19,7 @@ namespace Phoenix01.Data
         public DbSet<Language> Languages { get; set; }
         public DbSet<Story> Stories { get; set; }
         public DbSet<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -43,6 +44,7 @@ namespace Phoenix01.Data
                 .HasKey(h => new { h.ApplicationUserId, h.HobbyId });
 
         }
+
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
 

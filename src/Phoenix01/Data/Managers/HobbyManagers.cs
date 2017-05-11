@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Phoenix01.Models;
 
@@ -26,5 +27,19 @@ namespace Phoenix01.Data.Managers
             }
             context.SaveChanges();
         }
+
+        public static IEnumerable<SelectListItem> ToHobbyDropDown(this IEnumerable<Hobby> hobbies)
+        {
+            var hobbieList = hobbies
+                .OrderBy(hobby => hobby.Name)
+                .Select(hl => new SelectListItem
+                {
+                    Text = hl.Name,
+                    Value = hl.Name
+                });
+
+            return hobbieList;
+        }
+
     }
 }

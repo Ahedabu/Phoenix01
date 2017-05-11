@@ -1,9 +1,8 @@
-@model  IEnumerable<Phoenix01.Models.Story>
+@model IEnumerable<Phoenix01.Models.Story>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
 }
 
 <h2>Index</h2>
@@ -23,7 +22,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.ApplicationUser.UserName)
             </th>
-          
             <th></th>
         </tr>
     </thead>

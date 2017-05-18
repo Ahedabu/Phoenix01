@@ -1,0 +1,14 @@
+﻿@model ChatsViewModel
+
+@if (Model.ChatList != null)
+{
+    @foreach (var item in Model.ChatList)
+    {
+        @Html.DisplayFor(modelItem => item.TimeStamp)
+
+        <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.ApplicationUser.UserName">@Html.DisplayFor(modelItem => item.ApplicationUser.UserName): </a>
+
+        @Html.DisplayFor(modelItem => item.ChatMessage)
+        <br />
+    }
+}

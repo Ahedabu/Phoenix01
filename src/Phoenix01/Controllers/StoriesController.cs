@@ -17,10 +17,7 @@ namespace Phoenix01.Controllers
     public class StoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
         private readonly UserManager<ApplicationUser> _userManager;
-
-
 
         public StoriesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
@@ -32,14 +29,24 @@ namespace Phoenix01.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
-            //
             if (user == null)
             {
                 return View("Error");
             }
-            var model = await _context.Stories.Include(s => s.ApplicationUser).ToListAsync();
 
-            
+            var model = await _context.Stories
+                .Include(s => s.ApplicationUser)
+                .Select(u =>
+                new StoriesViewModel
+                {
+                    ID = u.ID,
+                    Title = u.Title,
+                    StoryBody = u.StoryBody,
+                    ApplicationUser = u.ApplicationUser,
+                    LoggedInUser = user
+                }).ToListAsync();
+
+
             return View(model);
         }
 

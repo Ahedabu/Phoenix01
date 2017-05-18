@@ -1,4 +1,4 @@
-@model IEnumerable<Phoenix01.Models.Story>
+@model IEnumerable<StoriesViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -36,7 +36,8 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                    @Html.DisplayFor(modelItem => item.ApplicationUser.FirstName)
+                    @Html.DisplayFor(modelItem => item.ApplicationUser.LastName)
                 </td>
                 <td>
                     <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.ApplicationUser.Email">
@@ -46,16 +47,15 @@
                
                     <td>
                         
-                       @if (item.ApplicationUserId == User.Identity.ToString())
+                       @if (item.ApplicationUser == item.LoggedInUser)
                          {
                             <div>
-                                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a> |
+                                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
                             </div>
                          }
                         <a asp-action="Details" asp-route-id="@item.ID">Details</a>
                     </td>
-                
             </tr>
         }
     </tbody>

@@ -23,6 +23,9 @@ namespace Phoenix01.Models
 
         public Comment Comment { get; set; }
 
+        public virtual ICollection<Comment> Comments { get; set; }
+
+
 
     }
 }

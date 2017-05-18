@@ -33,33 +33,42 @@
             <tr>
                
                 <div class="message_form">
-                                                  
-                                        @using (Html.BeginForm("Create", "Comment", FormMethod.Post))
-                    {
+                  
+                     
+                     <div style="display: block;">
+                        @if (item.Comments != null)
+                        {  <h3>@item.Comments.Where(i => i.StoryId == item.ID).Count() Commentaires</h3>
+                        @foreach (var comment in item.Comments)
+                        {
+                            @Html.DisplayFor(modelItem => comment.content)
+                            <time aria-hidden="true" style="font-size:smaller"> @Html.DisplayFor(modelItem => comment.CreatedDate) </time>
+                            @Html.DisplayFor(modelItem => item.LoggedInUser.UserName)
+                            <br>
+                        }
+                        }
+                    </div>
+
+    @using (Html.BeginForm("Create", "Comment", FormMethod.Post))
+    {
 
 
 
-                                            @Html.AntiForgeryToken()
-                                            @Html.ValidationSummary(true)
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
 
-                                            Comment newComment = new Comment() { StoryId = item.ID, ApplicationUserId = item.ApplicationUserId };
-                                            @Html.HiddenFor(model => newComment.ApplicationUserId)
-                                            @Html.HiddenFor(model => newComment.StoryId)
-                                            @Html.HiddenFor(model => newComment.id)
+        Comment newComment = new Comment() { StoryId = item.ID, ApplicationUserId = item.ApplicationUserId };
+        @Html.HiddenFor(model => newComment.ApplicationUserId)
+        @Html.HiddenFor(model => newComment.StoryId)
+        @Html.HiddenFor(model => newComment.id)
+        @Html.TextAreaFor(model => newComment.content, new { @class = "form-control", @placeholder = "Your comment", @rows = "5" })
+        @Html.ValidationMessageFor(model => newComment.content)
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
 
+        string csshasErrorComment = (ViewData.ModelState.Keys.Contains("newComment.Content") && ViewData.ModelState["newComment.Content"].Errors.Count() > 0 ? " has-error" : "");
 
-                                            @*<textarea rows="5" cols="70" asp-for="comment" class="form-control"></textarea><br>
-
-                                <input class="btn btn-primary btn-sm " type="submit" value="Post a Message">*@
-
-
-                                            @Html.TextAreaFor(model => newComment.content, new { @class = "form-control", @placeholder = "Your comment", @rows = "3" })
-                                            @Html.ValidationMessageFor(model => newComment.content)
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </div>
-
-                                        }
+    }
 
 
 </div>
@@ -67,27 +76,24 @@
             </tr>
             <tr>
                 ******************************************
-               |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+               
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a>|
                 @if (item.LoggedInUser == item.ApplicationUser)
                 {
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> 
                     <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
                 }
             </tr>
+            
             <br>
             <br>
             <br>
-            <br>
-
-
-
-
         }
     </tbody>
 
 </table>
 <br />
+
 
 
 

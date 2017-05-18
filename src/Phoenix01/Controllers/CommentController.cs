@@ -35,20 +35,20 @@ namespace Phoenix01.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
-
+            Story s = new Story();
             var model = await _context.Comments
-                .Include(s => s.applicationUser)
-                .Select(u =>
-                new StoriesViewModel
-                {
-                    
-                    Comment = u,
-                    ApplicationUser = user
-                               
-                           
-
-                }).ToListAsync();
-
+               .Include(a => a.applicationUser)
+               .Where(p => p.StoryId == s.ID)
+               .Select(u =>
+               new StoriesViewModel
+               {
+                   ID = u.StoryId,
+                   Title = u.story.Title,
+                   StoryBody = u.story.StoryBody,
+                   ApplicationUser = u.applicationUser,
+                   LoggedInUser = user,
+                   Comments = _context.Comments.Where(z => z.StoryId == s.ID).ToList()
+               }).ToListAsync();
 
             return View(model);
         }
@@ -72,32 +72,6 @@ namespace Phoenix01.Controllers
 
 
 
-        //[HttpPost]
-        //public async Task<IActionResult> Create([Bind("comment,CreatedDate,ParentId,story,ApplicationUserId")] Comment c)
-        //{
-            
-        //    var user = await GetCurrentUserAsync();
-        //    var story = await _context.Stories.SingleOrDefaultAsync(m => m.ID == c.story.ID);
-
-        //    if (c.id != 0)
-        //        c.id = 0;
-
-          
-
-        //    if (User.Identity.IsAuthenticated)
-        //        {
-
-        //            var userComments = new Comment { ApplicationUserId=user.Id, comment = c.comment, CreatedDate = DateTime.Now, ParentId = story.ID,story=story };
-        //             _context.Add(userComments);
-        //            await _context.SaveChangesAsync();
-        //            ViewBag.Allcomments = userComments;
-                  
-
-        //        }
-
-        //     return View(c);
-        //    //return RedirectToAction("index", "Stories");
-        //}
 
         [HttpPost]
         public async Task<IActionResult> Create(Comment newComment)

@@ -39,7 +39,9 @@ namespace Phoenix01.Controllers
                     Title = u.Title,
                     StoryBody = u.StoryBody,
                     ApplicationUser = u.ApplicationUser,
-                    LoggedInUser = user
+                    LoggedInUser = user,
+                    Comments = _context.Comments.Where(z => z.StoryId == u.ID).ToList()
+
                 }).ToListAsync();
 
 

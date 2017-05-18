@@ -9,6 +9,8 @@ namespace Phoenix01.Models
     {
 
         public Story story { get; set; }
+        public IEnumerable<StoriesViewModel> Stories { get; set; }
+     
         public List<Comment> comment { get; set; }
     }
 }

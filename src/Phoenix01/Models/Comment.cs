@@ -6,11 +6,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Phoenix01.Models
 {
-    public class Comment : BaseEntity 
+    public class Comment 
     {
        
        
-        public string comment { get; set; }
+        public string content { get; set; }
 
         public int id { get; set; }
 
@@ -20,8 +20,8 @@ namespace Phoenix01.Models
 
         public string ApplicationUserId { get; set; }
 
-        public int ParentId { get; set; }
-
+        public int StoryId { get; set; }
+        
         public ApplicationUser applicationUser { get; set; }
     }
 }

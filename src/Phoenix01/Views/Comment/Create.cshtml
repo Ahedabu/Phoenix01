@@ -1,0 +1,23 @@
+﻿@model Phoenix01.Models.Comment
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+    <div class="message_form">
+
+        <form asp-controller="Comment" asp-action="Create" asp-route-id="@Model.id" method="post">
+
+
+            <textarea rows="5" cols="70" asp-for="content" class="form-control"></textarea><br>
+
+            <input class="btn btn-primary btn-sm " type="submit" value="Post a Message">
+
+        </form>
+
+    </div>
+

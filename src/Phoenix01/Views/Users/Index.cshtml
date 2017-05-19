@@ -10,19 +10,19 @@
 
 <form asp-controller="Users" asp-action="Index" method="post" class="form-horizontal" asp-antiforgery="true" enctype="multipart/form-data">
     <hr />
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+   
     <div class="row row-list">
 
         <div class="col-md-3">
-            <select asp-for="FilteredLanguage" class="form-control" asp-items="Model.LanguagesDropDown"><option selected>--Select--</option></select>
+            <select asp-for="FilteredLanguage" class="form-control" asp-items="Model.LanguagesDropDown"><option selected>--Select Language--</option></select>
         </div>
 
         <div class="col-md-3">
-            <select asp-for="FilteredHobby" class="form-control" asp-items="Model.HobbyDropDown"><option selected>--Select--</option></select>
+            <select asp-for="FilteredHobby" class="form-control" asp-items="Model.HobbyDropDown"><option selected>--Select Hobby--</option></select>
         </div>
 
         <div class="col-md-3">
-            <select asp-for="FilteredAgeGroup" class="form-control" asp-items="Model.AgeGroupDropDown"><option selected>--Select--</option></select>
+            <select asp-for="FilteredAgeGroup" class="form-control" asp-items="Model.AgeGroupDropDown"><option selected>--Select Age Group--</option></select>
         </div>
 
         <div class="col-md-2">

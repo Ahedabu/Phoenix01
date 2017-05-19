@@ -60,7 +60,7 @@ namespace Phoenix01.Controllers
         {
             Agegroups? ages;
 
-            if (model.FilteredAgeGroup != "--Select--")
+            if (!model.FilteredAgeGroup.Contains("Select"))
                 ages = (Agegroups)Enum.Parse(typeof(Agegroups), model.FilteredAgeGroup);
             else
                 ages = null;

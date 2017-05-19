@@ -621,12 +621,62 @@ namespace Phoenix01.Controllers
 
         #endregion Upload Photo
 
+        #region Add/Remove Language
+        [HttpPost]
+        public async Task<ActionResult> AddLang(string lang)
+        {
+            var user = await GetCurrentUserAsync();
 
+            if (lang != null)
+            {
+                var language = _context.Languages
+               .Where(la => la.Name == lang)
+               .SingleOrDefault();
 
-      
+                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = language.Id };
+                _context.ApplicationUserLanguages.Add(appUserLang);
 
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _context.SaveChangesAsync();
+                }
 
+                var res = new Dictionary<string, string>();
+                res.Add("Success", "true");
+                return Json(res);
+            }
+            return Json(new { Success = "false" });
+        }
 
+        [HttpPost]
+        public async Task<ActionResult> RemoveLang(string lang)
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (lang != null)
+            {
+                var language = _context.Languages
+                   .Where(la => la.Name == lang)
+                   .SingleOrDefault();
+
+                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = language.Id };
+                _context.ApplicationUserLanguages.Remove(appUserLang);
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _context.SaveChangesAsync();
+                }
+
+                var res = new Dictionary<string, string>();
+                res.Add("Success", "true");
+                return Json(res);
+            }
+            return Json(new { Success = "false" });
+        }
+
+        #endregion
 
 
         #region Helpers
@@ -657,60 +707,6 @@ namespace Phoenix01.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> AddLang(string lang)
-        {
-            var user = await GetCurrentUserAsync();
-
-            if (lang != null)
-            {
-                    var language = _context.Languages
-                   .Where(la => la.Name == lang)
-                   .SingleOrDefault();
-
-                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = language.Id };
-                _context.ApplicationUserLanguages.Add(appUserLang);
-
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    await _context.SaveChangesAsync();
-                }
-
-                var res = new Dictionary<string, string>();
-                res.Add("Success", "true");
-                return Json(res);
-            }
-            return Json(new { Success = "false" });
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> RemoveLang(string lang)
-         {
-            var user = await GetCurrentUserAsync();
-
-            if (lang != null)
-            {
-                var language = _context.Languages
-                   .Where(la => la.Name == lang)
-                   .SingleOrDefault();
-
-                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = language.Id };
-                _context.ApplicationUserLanguages.Remove(appUserLang);
-
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    await _context.SaveChangesAsync();
-                }
-
-                var res = new Dictionary<string, string>();
-                res.Add("Success", "true");
-                return Json(res);
-            }
-            return Json(new { Success = "false" });
         }
 
         #endregion

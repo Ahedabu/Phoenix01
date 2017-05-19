@@ -16,8 +16,8 @@
     "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.1.1",
     "Microsoft.AspNetCore.Owin": "1.1.1",
     "Microsoft.AspNetCore.Razor.Tools": {
-      "version": "1.0.0-preview2-final",
-      "type": "build"
+      "type": "build",
+      "version": "1.0.0-preview2-final"
     },
     "Microsoft.AspNetCore.Routing": "1.1.0",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",

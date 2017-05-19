@@ -20,10 +20,10 @@ namespace Phoenix01.Models
         public DateTime RegistrationDate { get; set; }
 
         [StringLength(100, MinimumLength = 2)]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } 
         public string MiddleName { get; set; }
 
-        public DateTime? BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
         public string LastName { get; set; }
         public string Zip { get; set; }
         public string StreetName { get; set; }
@@ -40,5 +40,6 @@ namespace Phoenix01.Models
         public string Story { get; set; }
 
         public List<Story> Stories  { get; set; }
+        
     }
 }

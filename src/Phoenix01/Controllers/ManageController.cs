@@ -13,7 +13,6 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
-using Phoenix01.CustomExtensions;
 using System;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +21,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Phoenix01.Models.AccountViewModels;
+using Phoenix01.Data.Managers;
 
 namespace Phoenix01.Controllers
 {
@@ -356,21 +356,59 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-        // GET: /Manage/UserProfil
-        public async Task<IActionResult> UserProfile(ManageMessageId? message = null)
-        {
-            ViewData["StatusMessage"] =
-                message == ManageMessageId.EditProfileSuccess ? "Your profile has been updated."
-                : "";
+     
 
-            var user = await GetCurrentUserAsync();
-            if (user == null)
+
+        public async Task<IActionResult> UserProfile(string id = "")
+        {
+            ApplicationUser user;
+            if (id == "")
             {
-                return View("Error");
+                  user = await GetCurrentUserAsync();
+                if (user == null)
+                {
+                    return View("Error");
+                }
             }
-            var model = await EditUserProfile();
-            return View();
+
+            else
+            {
+                user = _context.ApplicationUser.Where(u => u.Email == id).FirstOrDefault();
+
+            }
+            var age = 0;
+            var birthdate = "";
+            if (user.BirthDate != null)
+            {
+                birthdate = ((DateTime)user.BirthDate).ToString("yyyy-MM-dd");
+                age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
+                if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
+            }
+
+
+            return View(new UserProfileViewModel
+            {
+                RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
+                FirstName = user.FirstName,
+                MiddleName = user.MiddleName,
+                LastName = user.LastName,
+                StreetName = user.StreetName,
+                Zip = user.Zip,
+                State = user.State,
+                City = user.City,
+                Country = user.Country,
+                UserImage = user.UserImage,
+                ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
+                LanguagesDropDown = _context.Languages.ToSelectLanguageListItems(_context.ApplicationUserLanguages, user),
+                ChosenHobbies = _context.Hobbies
+                .Where(h => _context.ApplicationUserHobbies.Any(uh => uh.HobbyId == h.Id && uh.ApplicationUserId == user.Id))
+                .ToList(),
+
+            BirthDate = birthdate,
+                UserAge = age
+                  });
         }
+
 
         // POST: /Manage/UserLanguages
         public async Task<IActionResult> EditUserLanguages(UserProfileViewModel model)
@@ -391,7 +429,7 @@ namespace Phoenix01.Controllers
                     .Where(la => la.Name == model.RemoveUserLanguage)
                     .SingleOrDefault();
 
-            if (!(lang == null))
+            if (lang != null)
             {
                 var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang.Id };
                 _context.ApplicationUserLanguages.Remove(appUserLang);
@@ -402,24 +440,15 @@ namespace Phoenix01.Controllers
         }
 
         // GET: /Manage/EditUserProfile
-        public async Task<IActionResult> EditUserProfile(ManageMessageId? message = null)
+        public async Task<IActionResult> EditUserProfile()
         {
-            ViewData["StatusMessage"] =
-                message == ManageMessageId.PhotoUploadSuccess ? "Your Photo uploaded."
-                : message == ManageMessageId.FileExtensionError ? "You have file Extension Error. Must Be .PNG or .JPG or .GIF"
-                : "";
+
 
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
                 return View("Error");
             }
-
-            //List<Hobby> hobbyCheckBoxList = new List<Hobby>();
-            //var applicationUserHobby = _context.ApplicationUserHobbies.AsNoTracking();
-
-            //hobbyCheckBoxList = _context.Hobbies.AsNoTracking().ToList();
-
 
             var hobbyList = _context.Hobbies
                 .OrderBy(ho => ho.Name)
@@ -436,6 +465,7 @@ namespace Phoenix01.Controllers
             }
 
             var model = new UserProfileViewModel
+
             {
                 Id = user.Id,
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
@@ -448,12 +478,11 @@ namespace Phoenix01.Controllers
                 City = user.City,
                 Country = user.Country,
                 UserImage = user.UserImage,
+                LanguagesDropDown = _context.Languages.ToLanguageListItems(),
                 ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
-                LanguagesDropDown = _context.Languages.ToSelectLanguageListItems(_context.ApplicationUserLanguages, user),
-                LanguagesRemoveDropDown = _context.Languages.ToRemoveLanguageListItems(_context.ApplicationUserLanguages, user),
                 ChosenHobbies = hobbyList,
                 BirthDate = birthdate,
-                UserAge = age.ToString()
+                UserAge = age
             };
 
             var allHobbies = _context.Hobbies.OrderBy(h => h.Name).ToList();
@@ -483,12 +512,17 @@ namespace Phoenix01.Controllers
         //POST: /Manage/EditUserProfile
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditUserProfile(UserProfileViewModel model)
+        public async Task<IActionResult> EditUserProfile(UserProfileViewModel model, ManageMessageId? message = null)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
+            ViewData["StatusMessage"] =
+                message == ManageMessageId.PhotoUploadSuccess ? "Your Photo uploaded."
+                : message == ManageMessageId.FileExtensionError ? "You have file Extension Error. Must Be .PNG or .JPG or .GIF"
+                : "";
 
             var user = await GetCurrentUserAsync();
 
@@ -502,27 +536,8 @@ namespace Phoenix01.Controllers
                 user.City = model.City;
                 user.State = model.State;
                 user.Country = model.Country;
-
-                var lang = _context.Languages
-                    .Where(la => la.Name == model.AddUserLanguage)
-                    .SingleOrDefault();
-
-                if (!(lang == null))
-                {
-                    var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang.Id };
-                    _context.ApplicationUserLanguages.Add(appUserLang);
-                }
-
-                var lang2 = _context.Languages
-                    .Where(la => la.Name == model.RemoveUserLanguage)
-                    .SingleOrDefault();
-
-                if (!(lang2 == null))
-                {
-                    var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = lang2.Id };
-                    _context.ApplicationUserLanguages.Remove(appUserLang);
-                }
             }
+
             var selectedHobbies = model.SelectedHobbies.Where(x => x.IsChecked).Select(x => x.Id).ToList();
 
             _context.ApplicationUserHobbies.RemoveRange(_context.ApplicationUserHobbies.Where(a => a.ApplicationUserId == user.Id));
@@ -543,7 +558,7 @@ namespace Phoenix01.Controllers
             if (result.Succeeded)
             {
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(UserProfile), new { Message = ManageMessageId.EditProfileSuccess });
+                return RedirectToAction(nameof(EditUserProfile), new { Message = ManageMessageId.EditProfileSuccess });
             }
 
             return View(model);
@@ -642,6 +657,60 @@ namespace Phoenix01.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddLang(string lang)
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (lang != null)
+            {
+                    var language = _context.Languages
+                   .Where(la => la.Name == lang)
+                   .SingleOrDefault();
+
+                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = language.Id };
+                _context.ApplicationUserLanguages.Add(appUserLang);
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _context.SaveChangesAsync();
+                }
+
+                var res = new Dictionary<string, string>();
+                res.Add("Success", "true");
+                return Json(res);
+            }
+            return Json(new { Success = "false" });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> RemoveLang(string lang)
+         {
+            var user = await GetCurrentUserAsync();
+
+            if (lang != null)
+            {
+                var language = _context.Languages
+                   .Where(la => la.Name == lang)
+                   .SingleOrDefault();
+
+                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = language.Id };
+                _context.ApplicationUserLanguages.Remove(appUserLang);
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _context.SaveChangesAsync();
+                }
+
+                var res = new Dictionary<string, string>();
+                res.Add("Success", "true");
+                return Json(res);
+            }
+            return Json(new { Success = "false" });
         }
 
         #endregion

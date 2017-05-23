@@ -36,7 +36,7 @@ namespace Phoenix01.Controllers
                     UserImage = u.UserImage,
                     BirthDate = u.BirthDate.ToString(),
                     Email = u.Email,
-                    UserAge = CalculateAge(u),
+                    UserAge = CalculateAge(u)
                     
 
                 }).ToList();

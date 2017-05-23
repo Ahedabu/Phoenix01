@@ -58,10 +58,14 @@ namespace Phoenix01.Controllers
                 var user = await GetCurrentUserAsync();
                 if (user != null)
                 {
-                    var chatMessage = new Chat { TimeStamp = DateTime.Now, ChatMessage = model.ChatMessage, ApplicationUser = user };
+                    if (model.ChatMessage != null)
+                    {
+                        var chatMessage = new Chat { TimeStamp = DateTime.Now, ChatMessage = model.ChatMessage, ApplicationUser = user };
 
-                    _context.Add(chatMessage);
-                    await _context.SaveChangesAsync();
+
+                        _context.Add(chatMessage);
+                        await _context.SaveChangesAsync();
+                    }
                 }
             }
             return RedirectToAction(nameof(Index));

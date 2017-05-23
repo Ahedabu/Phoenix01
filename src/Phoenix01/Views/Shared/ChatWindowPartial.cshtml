@@ -6,9 +6,13 @@
     {
         @Html.DisplayFor(modelItem => item.TimeStamp)
 
-        <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.ApplicationUser.UserName">@Html.DisplayFor(modelItem => item.ApplicationUser.UserName): </a>
 
-        @Html.DisplayFor(modelItem => item.ChatMessage)
+        <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.ApplicationUser.UserName">@Html.DisplayFor(modelItem => item.ApplicationUser.UserName):</a>
         <br />
+        <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.ApplicationUser.UserImage">
+            <img src="@(item.ApplicationUser.UserImage)" alt="User Image" style="max-width:40px;height:auto;border-radius:50%;" />
+        </a>
+        @Html.DisplayFor(modelItem => item.ChatMessage)
+        <hr />
     }
 }

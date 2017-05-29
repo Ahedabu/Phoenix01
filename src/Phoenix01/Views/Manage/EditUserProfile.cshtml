@@ -126,7 +126,7 @@
     <div id="partial">
         @Html.Partial("EditUserLanguages")
     </div>
-   
+
     <div class="form-group">
         <label asp-for="ChosenHobbies" class="col-md-2 control-label"></label>
         <div class="col-md-10">
@@ -144,9 +144,11 @@
 </form>
 
 @section Scripts {
-    <script src="~/lib/jquery-ui/jquery-ui.js"></script>
-    <link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />
-    <script src="~/js/querytest.js"></script>
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-
-    }
+    
+    @*<script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>*@
+}

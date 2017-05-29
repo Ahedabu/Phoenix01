@@ -20,19 +20,21 @@
             </div>
         <br />
             <div class="row-md-2">
-                <button type="submit" class="btn btn-default">Post</button>
+                <button type="submit" class="btn btn-default">Post / Reload</button>
             </div>
     </form>
 
 </div>
 
+@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $("#chatwindow").scrollTop($("#chatwindow")[0].scrollHeight);
+            $("#chatwindow").scrollTop($("#chatwindow")[0].scrollHeight); // scroll to the bottom of the chat window
             setInterval(function () {
-                $("#chatwindow").load('@(Url.Action("UpdateChat", "Chat", null))');
-            }, 1000);
+                $("#chatwindow").load('@(Url.Action("UpdateChat", "Chat", null))'); // update chat window after 1s
+            }, 1500);
         });
     </script>
     @*<script>

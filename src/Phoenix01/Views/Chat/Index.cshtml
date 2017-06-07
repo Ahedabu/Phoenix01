@@ -26,9 +26,11 @@
 
 </div>
 
-@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
 @section Scripts {
+
+@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
     <script>
         $(document).ready(function () {
             $("#chatwindow").scrollTop($("#chatwindow")[0].scrollHeight); // scroll to the bottom of the chat window
@@ -37,27 +39,4 @@
             }, 1500);
         });
     </script>
-    @*<script>
-            $(document).ready(function () {
-                var objDiv = document.getElementById("chatwindow");
-                objDiv.scrollTop = objDiv.scrollHeight;
-            });
-        </script>*@
-
-    @*<script type="text/javascript" language="javascript">
-            $(document).ready(function () {
-                setInterval(function () {
-                    $.post("@(Url.Action("UpdateChat", "Chat"))", function (data) {
-                        $("#chatwindow").html(data);
-                    });
-                }, 1000);
-            });
-            //var idleInterval = setInterval("reloadPage()", 2000);
-
-            //function reloadPage() {
-            //    ("#chatwindow").reload();
-
-            //}
-        </script>*@
-
 }

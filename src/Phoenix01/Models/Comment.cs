@@ -9,19 +9,16 @@ namespace Phoenix01.Models
     public class Comment 
     {
        
-       
-        public string content { get; set; }
+        public string Content { get; set; }
 
-        public int id { get; set; }
+        public int Id { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
-        public virtual Story story { get; set; }
-
-        public string ApplicationUserId { get; set; }
+        public virtual Story Story { get; set; }
 
         public int StoryId { get; set; }
         
-        public ApplicationUser applicationUser { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

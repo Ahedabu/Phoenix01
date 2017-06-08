@@ -1,0 +1,43 @@
+﻿@model Phoenix01.Models.Comment
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>Comment</h4>
+
+        <p>By: @Html.DisplayFor(s => s.ApplicationUserId)<p>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="id" />
+
+
+
+            <div class="form-group">
+                <label asp-for="content" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <textarea rows="5" asp-for="content" class="form-control"></textarea>
+                    <span asp-validation-for="content" class="text-danger" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

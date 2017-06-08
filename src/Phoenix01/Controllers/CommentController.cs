@@ -30,24 +30,23 @@ namespace Phoenix01.Controllers
 
         }
 
-       
 
+        // GET: Comments
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
-            Story s = new Story();
             var model = await _context.Comments
-               .Include(a => a.applicationUser)
-               .Where(p => p.StoryId == s.ID)
+               .Include(s => s.ApplicationUser)
                .Select(u =>
-               new StoriesViewModel
+               new StoryCommentsViewModel
                {
-                   ID = u.StoryId,
-                   Title = u.story.Title,
-                   StoryBody = u.story.StoryBody,
-                   ApplicationUser = u.applicationUser,
+                   Id = u.Id,
+                   Content = u.Content,
+                   CreatedDate = u.CreatedDate,
+                   ApplicationUser = u.ApplicationUser,
                    LoggedInUser = user,
-                   Comments = _context.Comments.Where(z => z.StoryId == s.ID).ToList()
+                   comment = _context.Comments.Where(z => z.StoryId == u.Story.ID && z.ApplicationUser == user).ToList()
+
                }).ToListAsync();
 
             return View(model);
@@ -61,7 +60,7 @@ namespace Phoenix01.Controllers
                 return NotFound();
             }
 
-            Comment comment = _context.Comments.FirstOrDefault(m => m.id == id);
+            Comment comment = _context.Comments.FirstOrDefault(m => m.Id == id);
             if (comment == null)
             {
                 return NotFound();
@@ -87,10 +86,8 @@ namespace Phoenix01.Controllers
                     .Include(p => p.ApplicationUser)
                     .Where(p => p.ID == newComment.StoryId)
                     .FirstOrDefault();
-
-                newComment.CreatedDate = DateTime.Now;
-                newComment.ApplicationUserId = user.Id;
-                _context.Comments.Add(newComment);
+                var appUserComments = new Comment {  StoryId= newComment.StoryId, CreatedDate = DateTime.Now,ApplicationUser = user,Content = newComment.Content};
+                _context.Comments.Add(appUserComments);
                 await _context.SaveChangesAsync();
 
             }
@@ -118,7 +115,7 @@ namespace Phoenix01.Controllers
                 return NotFound();
             }
 
-            Comment comment = _context.Comments.Single(m => m.id == id);
+            Comment comment = _context.Comments.Single(m => m.Id == id);
             if (comment == null)
             {
                 return NotFound();
@@ -127,33 +124,17 @@ namespace Phoenix01.Controllers
             return View(comment);
         }
 
-        // GET: Comment/Reply/5
-        public IActionResult Reply(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            IEnumerable<Comment> context = _context.Comments.ToList().Where(m => m.StoryId == id);
-
-            if (context.Count() <= 0)
-            {
-                return NotFound();
-            }
-
-            return View(context);
-        }
+    
 
         // GET: Comment/Edit/5
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Comment comment = _context.Comments.Single(m => m.id == id);
+            Comment comment = await _context.Comments.FirstOrDefaultAsync(m => m.Id == id);
             if (comment == null)
             {
                 return NotFound();
@@ -164,27 +145,60 @@ namespace Phoenix01.Controllers
         // POST: Comment/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("id,content,Storyid")]Comment comment)
         {
+
+            if (id != comment.Id)
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
-                _context.Update(comment);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
+
+                try
+                {
+                    var story = _context.Stories.Where(x => x.ID == comment.StoryId).FirstOrDefault();
+                    if(comment.StoryId == id )
+                    _context.Update(comment);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CommentExists(comment.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+
+                    }
+                }
+
+                return RedirectToAction("index", "Stories");
             }
-            return View(comment);
+
+
+                return View(comment);
         }
 
+
+       public bool CommentExists(int id)
+        {
+
+            return _context.Comments.Any(e=>e.Id == id);
+
+        }
         // GET: Comment/Delete/5
         [ActionName("Delete")]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            Comment comment = _context.Comments.Single(m => m.id == id);
+            Comment comment = await _context.Comments.SingleOrDefaultAsync(m => m.Id == id);
             if (comment == null)
             {
                 return NotFound();
@@ -196,11 +210,12 @@ namespace Phoenix01.Controllers
         // POST: Comment/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Comment comment = _context.Comments.Single(m => m.id == id);
+            
+            Comment comment = await _context.Comments.SingleOrDefaultAsync(m => m.Id == id);
             _context.Comments.Remove(comment);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

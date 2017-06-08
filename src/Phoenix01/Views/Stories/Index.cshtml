@@ -31,22 +31,48 @@
             </tr>
 
             <tr>
-               
                 <div class="message_form">
-                  
-                     
-                     <div style="display: block;">
+            
+                    <div style="display: block;">
                         @if (item.Comments != null)
-                        {  <h3>@item.Comments.Where(i => i.StoryId == item.ID).Count() Commentaires</h3>
-                        @foreach (var comment in item.Comments)
                         {
-                            @Html.DisplayFor(modelItem => comment.content)
-                            <time aria-hidden="true" style="font-size:smaller"> @Html.DisplayFor(modelItem => comment.CreatedDate) </time>
-                            @Html.DisplayFor(modelItem => item.LoggedInUser.UserName)
-                            <br>
-                        }
+
+                            <h3>@item.Comments.Where(i => i.StoryId == item.ID).Count() Commentaires</h3>
+                            @foreach (var comment in item.Comments)
+                            {
+                                <div class="panel panel-default panel-body">
+
+
+                                        <div class="col-sm-1">
+                                            <img src="@(item.ApplicationUser.UserImage)" alt="Sample Image" style="max-width:30px;height:auto;" />
+
+
+                                        </div>
+                                        <div class="panel-heading text-right">
+
+                                            <strong> @Html.DisplayFor(Modelitem => item.ApplicationUser.UserName)</strong>
+
+                                            <time aria-hidden="true" style="font-size:smaller"><small><i> Posted on @Html.DisplayFor(modelItem => comment.CreatedDate) </i></small></time>
+
+                                        </div>
+                                   
+                                    <p style="word-wrap: break-word;">@Html.DisplayFor(modelItem => comment.Content)</p>
+
+                                    <br>
+                                    @if (comment.ApplicationUser == item.LoggedInUser)
+                                    {
+                                        <a asp-action="Edit" asp-controller="Comment" asp-route-id="@comment.Id">Edit</a>
+                                        <a asp-action="Delete" asp-controller="Comment" asp-route-id="@comment.Id">Delete</a>
+                                    }
+                                </div>
+
+
+
+                            }
                         }
                     </div>
+
+
 
     @using (Html.BeginForm("Create", "Comment", FormMethod.Post))
     {
@@ -56,12 +82,13 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
 
-        Comment newComment = new Comment() { StoryId = item.ID, ApplicationUserId = item.ApplicationUserId };
-        @Html.HiddenFor(model => newComment.ApplicationUserId)
+        Comment newComment = new Comment() { StoryId = item.ID,ApplicationUser = item.LoggedInUser};
+      
         @Html.HiddenFor(model => newComment.StoryId)
-        @Html.HiddenFor(model => newComment.id)
-        @Html.TextAreaFor(model => newComment.content, new { @class = "form-control", @placeholder = "Your comment", @rows = "5" })
-        @Html.ValidationMessageFor(model => newComment.content)
+        @Html.HiddenFor(model => newComment.Id)
+        @Html.HiddenFor(model => newComment.ApplicationUser)
+        @Html.TextAreaFor(model => newComment.Content, new { @class = "form-control", @placeholder = "Your comment", @rows = "5" })
+        @Html.ValidationMessageFor(model => newComment.Content)
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>

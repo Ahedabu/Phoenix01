@@ -39,8 +39,10 @@ namespace Phoenix01.Controllers
                     Title = u.Title,
                     StoryBody = u.StoryBody,
                     ApplicationUser = u.ApplicationUser,
+                    ApplicationUserId = u.ApplicationUser.Id,
                     LoggedInUser = user,
-                    Comments = _context.Comments.Where(z => z.StoryId == u.ID).ToList()
+                    Comments = _context.Comments.Where(z => z.StoryId == u.ID && z.ApplicationUser == user).ToList(),
+                   
 
                 }).ToListAsync();
 
@@ -83,7 +85,7 @@ namespace Phoenix01.Controllers
 
             {
 
-                var appUserStories = new Story { ApplicationUserId = user.Id, Category = story.Category, ID = story.ID, StoryBody = story.StoryBody, Title = story.Title };
+                var appUserStories = new Story {Category = story.Category, ID = story.ID, StoryBody = story.StoryBody, Title = story.Title };
                 _context.Add(appUserStories);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");

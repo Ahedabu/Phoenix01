@@ -10,17 +10,13 @@ using Phoenix01.Models;
 using Phoenix01.Models.AccountViewModels;
 using Microsoft.AspNetCore.Identity;
 using Phoenix01.Models.ManageViewModels;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Phoenix01.Controllers
 {
     public class StoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
         private readonly UserManager<ApplicationUser> _userManager;
-
-
 
         public StoriesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
@@ -41,11 +37,14 @@ namespace Phoenix01.Controllers
                     ID = u.ID,
                     Title = u.Title,
                     StoryBody = u.StoryBody,
-                    StoryUser = u.ApplicationUser,
-                    LoggedInUser = user
+                    ApplicationUser = u.ApplicationUser,
+                    ApplicationUserId = u.ApplicationUser.Id,
+                    LoggedInUser = user,
+                    Comments = _context.Comments.Include(c => c.ApplicationUser).Where(z => z.StoryId == u.ID).ToList()
+
                 }).ToListAsync();
 
-            
+
             return View(model);
         }
 
@@ -84,27 +83,24 @@ namespace Phoenix01.Controllers
 
             {
 
-                var appUserStories = new Story { ApplicationUserId = user.Id,Category=story.Category, ID = story.ID,StoryBody=story.StoryBody,Title =story.Title };
+                var appUserStories = new Story {Category = story.Category, ID = story.ID, StoryBody = story.StoryBody, Title = story.Title ,ApplicationUser = user };
                 _context.Add(appUserStories);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
 
             }
 
-            //if (ModelState.IsValid)
-            //{
-            //_context.Add(story);
-            //await _context.SaveChangesAsync();
-
-            //return RedirectToAction("Index");
-            //}
+         
             return View(story);
         }
 
 
 
 
-        
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
+        }
 
 
 
@@ -131,14 +127,6 @@ namespace Phoenix01.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,StoryBody,Title,Category")] Story story)
         {
-            var user = await GetCurrentUserAsync();
-            if (user == null)
-            {
-                return View("Error");
-            }
-            
-            story.ApplicationUser = user;
-
             if (id != story.ID)
             {
                 return NotFound();
@@ -162,8 +150,7 @@ namespace Phoenix01.Controllers
                         throw;
                     }
                 }
-                if (user.Id == story.ApplicationUserId)
-                    return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
             return View(story);
         }
@@ -200,13 +187,5 @@ namespace Phoenix01.Controllers
         {
             return _context.Stories.Any(e => e.ID == id);
         }
-
-
-        #region
-        private Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return _userManager.GetUserAsync(HttpContext.User);
-        }
-        #endregion
     }
 }

@@ -41,8 +41,8 @@ namespace Phoenix01.Data
 
             var stories = new Story[]
             {
-            new Story{ Title="What is a galaxy?",Category="Space", StoryBody="We live on a planet called Earth that is part of our solar system. But where is our solar system? It’s a small part of the Milky Way Galaxy." },
-            new Story{  Title="Tyrannosaur",Category="Science", StoryBody="In the twilight of the Age of Dinosaurs, tyrannosaurs were the apex predators. The bipedal carnivores spanned the globe for 14 million years in the late Cretaceous era," }
+            new Story{Title="What is a galaxy?", StoryBody="We live on a planet called Earth that is part of our solar system. But where is our solar system? It’s a small part of the Milky Way Galaxy." },
+            new Story{Title="Tyrannosaur", StoryBody="In the twilight of the Age of Dinosaurs, tyrannosaurs were the apex predators. The bipedal carnivores spanned the globe for 14 million years in the late Cretaceous era," }
             };
 
             foreach (Story s in stories)

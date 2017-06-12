@@ -47,6 +47,9 @@ namespace Phoenix01
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            //services.UseWebSockets();
+            //services.UseMiddleware<ChatWebSocketMiddleware>();
+
             services.AddMvc();
 
             // Add application services.

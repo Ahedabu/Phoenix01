@@ -1,15 +1,15 @@
 ﻿// fadein function for all pages
-$(function () {
+$(document).ready(function () {
     $('div.hidden').fadeIn(600).removeClass('hidden');
 });
 
 
-$(function () {
+$(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
 
 //choose user language
-$(function () {
+$(document).ready(function () {
     $("#AddUserLanguage").change(function () {
         var lang = $(this).val();
         if (lang !== "") {
@@ -27,7 +27,7 @@ $(function () {
 });
 
 //remove user language
-$(function () {
+$(document).ready(function () {
     $(document).on('click', "input[type='button']", function () {
         var lang = $(this).val();
         $(this).remove();

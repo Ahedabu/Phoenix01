@@ -356,7 +356,7 @@ namespace Phoenix01.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-     
+
 
 
         public async Task<IActionResult> UserProfile(string id = "")
@@ -364,7 +364,7 @@ namespace Phoenix01.Controllers
             ApplicationUser user;
             if (id == "")
             {
-                  user = await GetCurrentUserAsync();
+                user = await GetCurrentUserAsync();
                 if (user == null)
                 {
                     return View("Error");
@@ -373,7 +373,7 @@ namespace Phoenix01.Controllers
 
             else
             {
-                user = _context.ApplicationUser.Where(u => u.Email == id).FirstOrDefault();
+                user = _context.ApplicationUser.Where(u => u.Id == id).FirstOrDefault();
 
             }
             var age = 0;
@@ -404,9 +404,9 @@ namespace Phoenix01.Controllers
                 .Where(h => _context.ApplicationUserHobbies.Any(uh => uh.HobbyId == h.Id && uh.ApplicationUserId == user.Id))
                 .ToList(),
 
-            BirthDate = birthdate,
+                BirthDate = birthdate,
                 UserAge = age
-                  });
+            });
         }
 
 
@@ -550,8 +550,8 @@ namespace Phoenix01.Controllers
             }
 
 
-            if (model.BirthDate!=null && model.BirthDate!="")
-            user.BirthDate = DateTime.Parse(model.BirthDate);
+            if (model.BirthDate != null && model.BirthDate != "")
+                user.BirthDate = DateTime.Parse(model.BirthDate);
 
 
             var result = await _userManager.UpdateAsync(user);
@@ -604,9 +604,9 @@ namespace Phoenix01.Controllers
                                     user.UserImage = "\\images\\" + pictureFile;
                                     await _userManager.UpdateAsync(user);
                                     await file.CopyToAsync(fileStream);
-                                    
+
+                                }
                             }
-                        }
                             return RedirectToAction("EditUserProfile", new { Message = ManageMessageId.PhotoUploadSuccess });
                         }
                         else
@@ -621,12 +621,62 @@ namespace Phoenix01.Controllers
 
         #endregion Upload Photo
 
+        #region Add/Remove Language
+        [HttpPost]
+        public async Task<ActionResult> AddLang(string lang)
+        {
+            var user = await GetCurrentUserAsync();
 
+            if (lang != null)
+            {
+                var language = _context.Languages
+               .Where(la => la.Name == lang)
+               .SingleOrDefault();
 
-      
+                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = language.Id };
+                _context.ApplicationUserLanguages.Add(appUserLang);
 
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _context.SaveChangesAsync();
+                }
 
+                var res = new Dictionary<string, string>();
+                res.Add("Success", "true");
+                return Json(res);
+            }
+            return Json(new { Success = "false" });
+        }
 
+        [HttpPost]
+        public async Task<ActionResult> RemoveLang(string lang)
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (lang != null)
+            {
+                var language = _context.Languages
+                   .Where(la => la.Name == lang)
+                   .SingleOrDefault();
+
+                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = language.Id };
+                _context.ApplicationUserLanguages.Remove(appUserLang);
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await _context.SaveChangesAsync();
+                }
+
+                var res = new Dictionary<string, string>();
+                res.Add("Success", "true");
+                return Json(res);
+            }
+            return Json(new { Success = "false" });
+        }
+
+        #endregion
 
 
         #region Helpers
@@ -657,60 +707,6 @@ namespace Phoenix01.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(HttpContext.User);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> AddLang(string lang)
-        {
-            var user = await GetCurrentUserAsync();
-
-            if (lang != null)
-            {
-                    var language = _context.Languages
-                   .Where(la => la.Name == lang)
-                   .SingleOrDefault();
-
-                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = language.Id };
-                _context.ApplicationUserLanguages.Add(appUserLang);
-
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    await _context.SaveChangesAsync();
-                }
-
-                var res = new Dictionary<string, string>();
-                res.Add("Success", "true");
-                return Json(res);
-            }
-            return Json(new { Success = "false" });
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> RemoveLang(string lang)
-         {
-            var user = await GetCurrentUserAsync();
-
-            if (lang != null)
-            {
-                var language = _context.Languages
-                   .Where(la => la.Name == lang)
-                   .SingleOrDefault();
-
-                var appUserLang = new ApplicationUserLanguage { ApplicationUserId = user.Id, LanguageId = language.Id };
-                _context.ApplicationUserLanguages.Remove(appUserLang);
-
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    await _context.SaveChangesAsync();
-                }
-
-                var res = new Dictionary<string, string>();
-                res.Add("Success", "true");
-                return Json(res);
-            }
-            return Json(new { Success = "false" });
         }
 
         #endregion

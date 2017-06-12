@@ -1,7 +1,20 @@
-﻿@{
+﻿
+
+@{
     ViewData["Title"] = "About";
 }
 <h2>@ViewData["Title"].</h2>
 <h3>@ViewData["Message"]</h3>
 
+<button type="button" onclick="document.getElementById('demo1').innerHTML = Date()">display Date and Time.</button>
+<p id="demo1"></p>
+
+<p id="demo1">JavaScript can change HTML content.</p>
+<button type="button" onclick='document.getElementById("demo1").innerHTML = "Hello JavaScript!" '>Click Me!</button>
+
+<button onclick="document.getElementById('myImage').src='"~/images/First_Gold.png"'>Turn on the light</button>
+<img id="myImage" src="~/images/owl.png" style="width:100px">
+<button onclick="document.getElementById('myImage').src='pic_bulboff.gif'">Turn off the light</button>
+
 <p>Use this area to provide additional information.</p>
+

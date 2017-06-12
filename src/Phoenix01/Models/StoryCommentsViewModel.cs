@@ -23,6 +23,8 @@ namespace Phoenix01.Models
 
         public ApplicationUser ApplicationUser { get; set; }
 
-        public List<Comment> comment { get; set; }
+        public IEnumerable<Comment> comment { get; set; }
+
+        public IEnumerable<StoriesViewModel> StoriesViewModel { get; set; }
     }
 }

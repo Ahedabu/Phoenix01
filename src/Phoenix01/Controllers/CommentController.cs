@@ -32,24 +32,9 @@ namespace Phoenix01.Controllers
 
 
         // GET: Comments
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var user = await GetCurrentUserAsync();
-            var model = await _context.Comments
-               .Include(s => s.ApplicationUser)
-               .Select(u =>
-               new StoryCommentsViewModel
-               {
-                   Id = u.Id,
-                   Content = u.Content,
-                   CreatedDate = u.CreatedDate,
-                   ApplicationUser = u.ApplicationUser,
-                   LoggedInUser = user,
-                   comment = _context.Comments.Where(z => z.StoryId == u.Story.ID && z.ApplicationUser == user).ToList()
-
-               }).ToListAsync();
-
-            return View(model);
+               return View();
         }
 
 
@@ -68,8 +53,6 @@ namespace Phoenix01.Controllers
 
             return View(comment);
         }
-
-
 
 
         [HttpPost]
@@ -102,11 +85,6 @@ namespace Phoenix01.Controllers
            return RedirectToAction("index", "Stories");
         }
 
-
-
-
-
-
         // GET: Comment/Details/5
         public IActionResult Details(int? id)
         {
@@ -121,11 +99,10 @@ namespace Phoenix01.Controllers
                 return NotFound();
             }
 
-            return View(comment);
+            return RedirectToAction("Index", "Stories");
         }
 
     
-
         // GET: Comment/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -134,31 +111,31 @@ namespace Phoenix01.Controllers
                 return NotFound();
             }
 
-            Comment comment = await _context.Comments.FirstOrDefaultAsync(m => m.Id == id);
+            var comment = await _context.Comments.SingleOrDefaultAsync(m => m.Id == id);
             if (comment == null)
             {
                 return NotFound();
             }
+
             return View(comment);
         }
 
         // POST: Comment/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,content,Storyid")]Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Content,StoryId,CreatedDate")] Comment comment)
         {
 
             if (id != comment.Id)
             {
                 return NotFound();
             }
+
             if (ModelState.IsValid)
             {
 
                 try
                 {
-                    var story = _context.Stories.Where(x => x.ID == comment.StoryId).FirstOrDefault();
-                    if(comment.StoryId == id )
                     _context.Update(comment);
                     await _context.SaveChangesAsync();
                 }
@@ -178,12 +155,12 @@ namespace Phoenix01.Controllers
                 return RedirectToAction("index", "Stories");
             }
 
-
-                return View(comment);
+            return View(comment);
+   
         }
 
 
-       public bool CommentExists(int id)
+        public bool CommentExists(int id)
         {
 
             return _context.Comments.Any(e=>e.Id == id);
@@ -216,7 +193,7 @@ namespace Phoenix01.Controllers
             Comment comment = await _context.Comments.SingleOrDefaultAsync(m => m.Id == id);
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index","Stories");
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync()

@@ -1,28 +1,5 @@
-﻿@model  IEnumerable<Phoenix01.Models.Comment>
-
-
-
-
-<table class="table">
-
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-
-                @Html.DisplayFor(modelItem => item.applicationUser.UserName)
-
-                <img src="@(item.applicationUser.UserImage)" alt="Sample Image" style="max-width:30px;height:auto;" />
-            </tr>
-            <tr>
-                <h2>@Html.DisplayFor(modelItem => item.content)</h2>
-                <p><h4> @Html.DisplayFor(modelItem => item.CreatedDate,("ddd, MMM d, yyyy h:m tt"))</h4></p>
-            </tr>
-           
-
-
-        }
-
-        </tbody>
-
-    </table>
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}

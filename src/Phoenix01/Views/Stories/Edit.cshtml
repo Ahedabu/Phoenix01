@@ -11,7 +11,7 @@
     <div class="form-horizontal">
         <h4>Story</h4>
 
-        <p>By: @Html.DisplayFor(s => s.ApplicationUserId)<p>
+        <p>By: @Html.DisplayFor(s => s.ApplicationUser.UserName)<p>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />

@@ -10,10 +10,10 @@
 
     <div class="message_form">
 
-        <form asp-controller="Comment" asp-action="Create" asp-route-id="@Model.id" method="post">
+        <form asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Id" method="post">
 
 
-            <textarea rows="5" cols="70" asp-for="content" class="form-control"></textarea><br>
+            <textarea rows="5" cols="70" asp-for="Content" class="form-control"></textarea><br>
 
             <input class="btn btn-primary btn-sm " type="submit" value="Post a Message">
 

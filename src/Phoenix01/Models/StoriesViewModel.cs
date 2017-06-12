@@ -23,9 +23,8 @@ namespace Phoenix01.Models
 
         public Comment Comment { get; set; }
 
-        public virtual ICollection<Comment> Comments { get; set; }
+        public  IEnumerable<Comment> Comments { get; set; }
 
-        public IEnumerable<StoryCommentsViewModel> StoryCommentsViewModel { get; set; }
 
 
 

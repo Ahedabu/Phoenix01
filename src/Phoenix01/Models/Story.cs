@@ -19,14 +19,12 @@ namespace Phoenix01.Models
 
         public string StoryBody { get; set; }
         public string Category { get; set; }
-        //public virtual ICollection<ApplicationUser> AspNetUsers { get; set; }
-        
-        
+          
         public ApplicationUser ApplicationUser { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
-        public virtual ICollection<Comment> Comments { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
 
         
 

@@ -44,13 +44,14 @@
 
 
                                         <div class="col-sm-1">
-                                            <img src="@(item.ApplicationUser.UserImage)" alt="Sample Image" style="max-width:30px;height:auto;" />
+
+                                            <img src="@Url.Content(comment.ApplicationUser.UserImage)" alt="Sample Image" style="max-width:30px;height:auto;" />
 
 
                                         </div>
                                         <div class="panel-heading text-right">
 
-                                            <strong> @Html.DisplayFor(Modelitem => item.ApplicationUser.UserName)</strong>
+                                            <strong> @Html.DisplayFor(Modelitem => comment.ApplicationUser.UserName)</strong>
 
                                             <time aria-hidden="true" style="font-size:smaller"><small><i> Posted on @Html.DisplayFor(modelItem => comment.CreatedDate) </i></small></time>
 
@@ -86,7 +87,8 @@
       
         @Html.HiddenFor(model => newComment.StoryId)
         @Html.HiddenFor(model => newComment.Id)
-        @Html.HiddenFor(model => newComment.ApplicationUser)
+        @Html.HiddenFor(model => newComment.ApplicationUser.UserImage)
+        @Html.HiddenFor(model => newComment.ApplicationUser.UserName)
         @Html.TextAreaFor(model => newComment.Content, new { @class = "form-control", @placeholder = "Your comment", @rows = "5" })
         @Html.ValidationMessageFor(model => newComment.Content)
         <div class="form-group">

@@ -1,0 +1,19 @@
+﻿@model PrivateChatsViewModel
+
+@if (Model.PrivateChatList != null)
+{
+    @foreach (var item in Model.PrivateChatList)
+    {
+        <div>
+            @Html.DisplayFor(modelItem => item.TimeStamp)
+            
+            @Html.DisplayFor(modelItem => item.UserA.UserName)
+        </div>
+        <br />
+        <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.UserA.Id">
+            <img src="@(item.UserA.UserImage)" alt="User Image" style="max-width:40px;height:auto;border-radius:50%;" />
+        </a>
+        @Html.DisplayFor(modelItem => item.PrivateChatMessage)
+        <hr />
+    }
+}

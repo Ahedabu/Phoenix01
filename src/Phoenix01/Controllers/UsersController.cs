@@ -36,7 +36,7 @@ namespace Phoenix01.Controllers
                     UserImage = u.UserImage,
                     BirthDate = u.BirthDate.ToString(),
                     Email = u.Email,
-                    UserAge = CalculateAge(u),
+                    UserAge = CalculateAge(u)
                     
 
                 }).ToList();
@@ -60,7 +60,7 @@ namespace Phoenix01.Controllers
         {
             Agegroups? ages;
 
-            if (model.FilteredAgeGroup != "--Select--")
+            if (!model.FilteredAgeGroup.Contains("Select"))
                 ages = (Agegroups)Enum.Parse(typeof(Agegroups), model.FilteredAgeGroup);
             else
                 ages = null;

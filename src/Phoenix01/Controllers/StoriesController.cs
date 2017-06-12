@@ -16,7 +16,6 @@ namespace Phoenix01.Controllers
     public class StoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
         private readonly UserManager<ApplicationUser> _userManager;
 
         public StoriesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)

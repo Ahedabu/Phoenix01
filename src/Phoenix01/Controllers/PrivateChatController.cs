@@ -38,7 +38,7 @@ namespace Phoenix01.Controllers
             bool isAuthenticated = User.Identity.IsAuthenticated;
             var userA = await GetCurrentUserAsync();
             if (userA != null)
-            { 
+            {
 
                 var chats = await _context.PrivateChats
             .OrderBy(c => c.TimeStamp)
@@ -52,7 +52,7 @@ namespace Phoenix01.Controllers
                 UserB = c.UserB
             }).ToListAsync();
 
-            model.PrivateChatList = chats;
+                model.PrivateChatList = chats;
 
             }
             return model;
@@ -69,7 +69,7 @@ namespace Phoenix01.Controllers
                 {
                     if (model.PrivateChatMessage != null)
                     {
-                        var privateChatMessage = new PrivateChat { TimeStamp = DateTime.Now, PrivateChatMessage = model.PrivateChatMessage, UserA = userA, UserB = userB};
+                        var privateChatMessage = new PrivateChat { TimeStamp = DateTime.Now, PrivateChatMessage = model.PrivateChatMessage, UserA = userA, UserB = userB };
 
                         _context.Add(privateChatMessage);
                         await _context.SaveChangesAsync();
@@ -77,6 +77,39 @@ namespace Phoenix01.Controllers
                 }
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ListPrivateChats()
+        {
+            var userA = await GetCurrentUserAsync();
+            var users = new List<ApplicationUser>();
+            if (userA != null)
+            {
+                var chats = _context.PrivateChats
+                    .Include(c => c.UserA == userA || c.UserB == userA)
+                    .ToList();
+
+                
+
+                ApplicationUser userFound = null;
+                foreach (PrivateChat chat in chats)
+                {
+                    if (userFound == null || users.Contains(userFound))
+                        if (chat.UserA == userA)
+                        {
+                            userFound = chat.UserB;
+                            users.Add(userFound);
+                        }
+                        else
+                        {
+                            users.Add(chat.UserB);
+                        }
+                }
+
+            }
+
+            return View(users);
         }
 
         [HttpGet]

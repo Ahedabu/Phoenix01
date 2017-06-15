@@ -373,7 +373,7 @@ namespace Phoenix01.Controllers
 
             else
             {
-                user = _context.ApplicationUser.Where(u => u.Id == id).FirstOrDefault();
+                user = _context.ApplicationUser.Where(u => u.UserName == id).FirstOrDefault();
 
             }
             var age = 0;
@@ -389,6 +389,7 @@ namespace Phoenix01.Controllers
             return View(new UserProfileViewModel
             {
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
+                UserName = user.UserName,
                 FirstName = user.FirstName,
                 MiddleName = user.MiddleName,
                 LastName = user.LastName,
@@ -469,6 +470,7 @@ namespace Phoenix01.Controllers
             {
                 Id = user.Id,
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
+                UserName = user.UserName,
                 FirstName = user.FirstName,
                 MiddleName = user.MiddleName,
                 LastName = user.LastName,

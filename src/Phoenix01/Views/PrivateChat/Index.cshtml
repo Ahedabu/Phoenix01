@@ -23,7 +23,6 @@
             <button type="submit" class="btn btn-default">Post / Reload</button>
         </div>
     </form>
-
 </div>
 
 
@@ -35,8 +34,10 @@
         $(document).ready(function () {
             $("#chatwindow").scrollTop($("#chatwindow")[0].scrollHeight); // scroll to the bottom of the chat window
             setInterval(function () {
-                $("#chatwindow").load('@(Url.Action("UpdateChat", "PrivateChat", null))'); // update chat window after 1s
+
+                $("#chatwindow").load("@(Url.Action("UpdateChat", "PrivateChat"))?id=@Model.UserB.UserName");
             }, 1500);
+
         });
     </script>
 }

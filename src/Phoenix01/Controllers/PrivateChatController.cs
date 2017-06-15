@@ -34,8 +34,7 @@ namespace Phoenix01.Controllers
         {
             var model = new PrivateChatsViewModel();
 
-            var userB = await _context.ApplicationUser.Where(u => u.Id == id).FirstOrDefaultAsync();
-            bool isAuthenticated = User.Identity.IsAuthenticated;
+            var userB = await _context.ApplicationUser.Where(u => u.UserName == id).FirstOrDefaultAsync();
             var userA = await GetCurrentUserAsync();
             if (userA != null)
             {
@@ -53,6 +52,8 @@ namespace Phoenix01.Controllers
             }).ToListAsync();
 
                 model.PrivateChatList = chats;
+                model.UserA = userA;
+                model.UserB = userB;
 
             }
             return model;
@@ -64,7 +65,7 @@ namespace Phoenix01.Controllers
             if (ModelState.IsValid)
             {
                 var userA = await GetCurrentUserAsync();
-                var userB = await _context.ApplicationUser.Where(u => u.Id == id).FirstOrDefaultAsync();
+                var userB = await _context.ApplicationUser.Where(u => u.UserName == id).FirstOrDefaultAsync();
                 if (userA != null)
                 {
                     if (model.PrivateChatMessage != null)
@@ -83,36 +84,21 @@ namespace Phoenix01.Controllers
         public async Task<IActionResult> ListPrivateChats()
         {
             var userA = await GetCurrentUserAsync();
-            var users = new List<ApplicationUser>();
-            if (userA != null)
+
+            if (userA == null)
             {
-                var chats = _context.PrivateChats
-                    .Include(c => c.UserA == userA || c.UserB == userA)
-                    .ToList();
-
-                
-
-                ApplicationUser userFound = null;
-                foreach (PrivateChat chat in chats)
-                {
-                    if (userFound == null || users.Contains(userFound))
-                        if (chat.UserA == userA)
-                        {
-                            userFound = chat.UserB;
-                            users.Add(userFound);
-                        }
-                        else
-                        {
-                            users.Add(chat.UserB);
-                        }
-                }
-
+                return View("Error");
             }
-
+            var users = _context.PrivateChats
+                .OrderByDescending(c => c.TimeStamp)
+                .Where(c => c.UserA == userA || c.UserB == userA)
+                .Select(c => c.UserA == userA ? c.UserB : c.UserA)
+                .Distinct()
+                .ToList();
             return View(users);
         }
 
-        [HttpGet]
+        
         public async Task<ActionResult> UpdateChat(string id)
         {
             var model = await GetIndexFullAndPartial(id);

@@ -43,7 +43,9 @@ namespace Phoenix01.Models.ManageViewModels
 
         [Display(Name = "UserImage")]
         public string UserImage { get; set; }
-        
+
+        public string UserName { get; set; }
+
         public string RemoveUserLanguage { get; set; }
 
         public string AddUserLanguage { get; set; }

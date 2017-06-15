@@ -7,21 +7,32 @@ using Phoenix01.Models.ManageViewModels;
 using Phoenix01.Data.Managers;
 using static Phoenix01.Data.Managers.UserManager;
 using static Phoenix01.Data.Managers.HobbyManagers;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace Phoenix01.Controllers
 {
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UsersController(ApplicationDbContext context)
+
+        public UsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Users
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return View("Error");
+            }
+
             var users = _context.ApplicationUser
             .OrderBy(u => u.UserName)
             
@@ -29,6 +40,7 @@ namespace Phoenix01.Controllers
             .Select(u => 
                 new UserProfileViewModel
                 {
+                    UserName = u.UserName,
                     FirstName = u.FirstName,
                     MiddleName = u.MiddleName,
                     LastName = u.LastName,
@@ -109,20 +121,14 @@ namespace Phoenix01.Controllers
                 age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
                 if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
             }
-
-
-
             return age;
-
         }
 
-
-
-
-
-
-
-
-
+        #region
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
+        }
+        #endregion
     }
 }

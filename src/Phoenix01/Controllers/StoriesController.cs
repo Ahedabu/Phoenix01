@@ -1,16 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Phoenix01.Data;
 using Phoenix01.Models;
-using Phoenix01.Models.AccountViewModels;
 using Microsoft.AspNetCore.Identity;
-using Phoenix01.Models.ManageViewModels;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Phoenix01.Controllers
 {

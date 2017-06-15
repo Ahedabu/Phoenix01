@@ -25,6 +25,12 @@ namespace Phoenix01.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return View("Error");
+            }
+
             var model = await GetIndexFullAndPartial();
             return View(model);
         }

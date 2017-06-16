@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Phoenix01.Models;
 
 namespace Phoenix01.Controllers
 {
+    [Authorize]
     public class ChatController : Controller
     {
         private readonly ApplicationDbContext _context;

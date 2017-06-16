@@ -9,9 +9,11 @@ using static Phoenix01.Data.Managers.UserManager;
 using static Phoenix01.Data.Managers.HobbyManagers;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Phoenix01.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Phoenix01.Data;
 using Phoenix01.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Phoenix01.Controllers
 {
+    [Authorize]
     public class StoriesController : Controller
     {
         private readonly ApplicationDbContext _context;

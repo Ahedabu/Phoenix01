@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Phoenix01.Data.Managers;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Phoenix01.Controllers
 {
+    [Authorize]
     public class HobbyController : Controller
     {
         private readonly ApplicationDbContext _context;

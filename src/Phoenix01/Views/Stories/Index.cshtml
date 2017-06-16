@@ -40,8 +40,8 @@
                     @Html.DisplayFor(modelItem => item.ApplicationUser.LastName)
                 </td>
                 <td>
-                    <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.ApplicationUser.Email">
-                        <img src="@(item.ApplicationUser.UserImage)" alt="Sample Image" style="max-width:50px;height:auto;" />
+                    <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.ApplicationUser.UserName">
+                        <img src="@(item.ApplicationUser.UserImage)" alt="Sample Image" style="max-width:40px;height:auto;border-radius:50%;" />
                     </a>
                 </td>
                

@@ -359,23 +359,21 @@ namespace Phoenix01.Controllers
 
 
 
-        public async Task<IActionResult> UserProfile(string id = "")
+        public async Task<IActionResult> UserProfile(string id)
         {
-            ApplicationUser user;
-            if (id == "")
+            bool isChosenUserLoggedIn = false;
+            var user = await GetCurrentUserAsync();
+            if (user == null)
             {
-                user = await GetCurrentUserAsync();
-                if (user == null)
-                {
-                    return View("Error");
-                }
+                return View("Error");
             }
+            isChosenUserLoggedIn = user.UserName == id ? true : false;
 
-            else
+            if (!isChosenUserLoggedIn)
             {
                 user = _context.ApplicationUser.Where(u => u.UserName == id).FirstOrDefault();
-
             }
+
             var age = 0;
             var birthdate = "";
             if (user.BirthDate != null)
@@ -406,7 +404,8 @@ namespace Phoenix01.Controllers
                 .ToList(),
 
                 BirthDate = birthdate,
-                UserAge = age
+                UserAge = age,
+                IsChosenUserLoggedIn = isChosenUserLoggedIn
             });
         }
 

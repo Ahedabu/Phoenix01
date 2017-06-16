@@ -62,6 +62,8 @@ namespace Phoenix01.Models.ManageViewModels
 
         public IEnumerable<SelectListItem> AgeGroupDropDown { get; set; }
 
+        public bool IsChosenUserLoggedIn { get; set; }
+
         public string AddedLanguage { get; set; }
     }
 }

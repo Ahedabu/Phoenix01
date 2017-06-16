@@ -10,7 +10,7 @@
             @Html.DisplayFor(modelItem => item.UserA.UserName)
         </div>
         <br />
-        <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.UserA.Id">
+        <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.UserA.UserName">
             <img src="@(item.UserA.UserImage)" alt="User Image" style="max-width:40px;height:auto;border-radius:50%;" />
         </a>
         @Html.DisplayFor(modelItem => item.PrivateChatMessage)

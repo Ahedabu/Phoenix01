@@ -4,7 +4,7 @@
     ViewData["Title"] = "User Profile";
 }
 
-<h2>@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</h2>
+<h2>@Html.DisplayFor(model => model.UserName)</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
 
 <div>
@@ -15,7 +15,7 @@
             margin: auto;
             border-radius: 100px;
             padding: 3px;
-            box-shadow: 0px 0px 10px #888;" />
+            box-shadow: 0px 0px 8px #888;" />
 </div>
 
 <div>
@@ -87,7 +87,6 @@
         </dt>
         @foreach (var lang in Model.ChosenLanguages)
         {
-            
             <dd>
                 @lang.Name
             </dd>
@@ -95,18 +94,24 @@
         <dt>
             @Html.DisplayNameFor(model => model.ChosenHobbies)
         </dt>
-        @foreach(var hobby in Model.ChosenHobbies)
+        @foreach (var hobby in Model.ChosenHobbies)
         {
             <dd>
                 @hobby.Name
             </dd>
-
         }
-        
     </dl>
 </div>
-<br/>
+<br />
 <div>
-    <a asp-action="EditUserProfile">Edit</a> | 
-    <a asp-controller="Home" asp-action="Index">Home</a>
+    @if (Model.IsChosenUserLoggedIn)
+    {
+        <p>
+            <a asp-action="EditUserProfile">Edit</a>
+        </p>
+
+    }
+    <p>
+        <a asp-controller="Home" asp-action="Index">Home</a>
+    </p>
 </div>

@@ -9,7 +9,7 @@
 
         <a asp-controller="PrivateChat" asp-action="Index" asp-route-id="@item.ApplicationUser.UserName" data-toggle="tooltip" title="Click to chat privately">@Html.DisplayFor(modelItem => item.ApplicationUser.UserName)</a>
         <br />
-        <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.ApplicationUser.Id">
+        <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.ApplicationUser.UserName">
             <img src="@(item.ApplicationUser.UserImage)" alt="User Image" style="max-width:40px;height:auto;border-radius:50%;" />
         </a>
         @Html.DisplayFor(modelItem => item.ChatMessage)

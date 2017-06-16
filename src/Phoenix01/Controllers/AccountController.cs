@@ -148,7 +148,7 @@ namespace Phoenix01.Controllers
             if (ModelState.IsValid)
             {
                 
-                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, RegistrationDate = DateTime.Now };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, RegistrationDate = DateTime.Now, UserImage = "\\images\\NoPhoto.png" };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

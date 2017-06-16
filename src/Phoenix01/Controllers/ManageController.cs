@@ -570,6 +570,7 @@ namespace Phoenix01.Controllers
         public async Task<string> UploadPhoto()
         {
             var user = await GetCurrentUserAsync();
+
             return (user.UserImage);
         }
 
@@ -579,7 +580,6 @@ namespace Phoenix01.Controllers
         {
             var user = await GetCurrentUserAsync();
             var username = user.UserName;
-            var fnm = username + ".png";
 
             if (User.Identity.IsAuthenticated)
             {
@@ -593,12 +593,12 @@ namespace Phoenix01.Controllers
                               .Parse(file.ContentDisposition)
                               .FileName
                               .Trim('"');// FileName returns "fileName.ext"(with double quotes) in beta 3
-
+                        
                         if (fileName.ToLower().EndsWith(".png") || fileName.ToLower().EndsWith(".jpg") || fileName.ToLower().EndsWith(".gif"))// Important for security if saving in webroot
                         {
                             if (file.Length > 0)
                             {
-                                var pictureFile = file.FileName + User.Identity.Name + ".png";
+                                var pictureFile = (fileName + username).GetHashCode() + ".png";
 
                                 using (var fileStream = new FileStream(Path.Combine(uploads, pictureFile), FileMode.Create))
                                 {

@@ -35,7 +35,7 @@
             $("#chatwindow").scrollTop($("#chatwindow")[0].scrollHeight); // scroll to the bottom of the chat window
             setInterval(function () {
 
-                $("#chatwindow").load("@(Url.Action("UpdateChat", "PrivateChat"))?id=@Model.UserB.UserName");
+                $("#chatwindow").load("@(Url.Action("UpdateChat", "PrivateChat", new { id = @Model.UserB.UserName }))");
             }, 1500);
 
         });

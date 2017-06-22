@@ -9,7 +9,7 @@ namespace Phoenix01.Models.AccountViewModels
     public class RegisterViewModel
     {
         [Required]
-        [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [StringLength(20, MinimumLength = 6)]
         [Display(Name = "Username")]
         public string UserName { get; set; }
 
@@ -28,10 +28,5 @@ namespace Phoenix01.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
-        public byte[] UserImage { get; set; }
-
-
-
     }
 }

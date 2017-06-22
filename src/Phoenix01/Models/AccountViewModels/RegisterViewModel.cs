@@ -10,6 +10,7 @@ namespace Phoenix01.Models.AccountViewModels
     {
         [Required]
         [StringLength(20, MinimumLength = 6)]
+        [RegularExpression(@"^[a-zA-Z0-9]*$", ErrorMessage = "The {0} is invalid, can only contain letters or digits.")]
         [Display(Name = "Username")]
         public string UserName { get; set; }
 

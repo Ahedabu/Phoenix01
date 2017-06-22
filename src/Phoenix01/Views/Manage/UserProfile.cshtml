@@ -104,14 +104,18 @@
 </div>
 <br />
 <div>
-    @if (Model.IsChosenUserLoggedIn)
+    @if (Model.IsCurrentUser)
     {
         <p>
             <a asp-action="EditUserProfile">Edit</a>
+             | 
+            <a asp-controller="Home" asp-action="Index">Home</a>
         </p>
-
     }
+    else
+    { 
     <p>
         <a asp-controller="Home" asp-action="Index">Home</a>
     </p>
+    }
 </div>

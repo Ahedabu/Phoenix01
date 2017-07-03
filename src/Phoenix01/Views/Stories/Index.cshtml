@@ -17,27 +17,44 @@
         @foreach (var item in Model)
         {
             <tr>
+                <th>
 
-                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                    @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
 
-                <img src="@(item.ApplicationUser.UserImageLink)" alt="Sample Image" style="max-width:30px;height:auto;" />
+                    <img src="@(item.ApplicationUser.UserImageLink)" alt="Sample Image" style="max-width:30px;height:auto;" />
+                </th>
             </tr>
             <tr>
-                <h2>@Html.DisplayFor(modelItem => item.Title)</h2>
-                <p><h4> @Html.DisplayFor(modelItem => item.StoryBody)</h4></p>
-            </tr>
-
+                <th>
+                    <h2>@Html.DisplayFor(modelItem => item.Title)</h2>
+                    <p> @Html.DisplayFor(modelItem => item.StoryBody)</p>
+                </th>
+                </tr>
             <tr>
-                <div class="message_form">
+                <td>
+
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a>|
+                    @if (item.LoggedInUser == item.ApplicationUser)
+                {
+                        <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    }
+                </td>
+            </tr>
             
-                    <div style="display: block;">
-                        @if (item.Comments != null)
-                        {
 
-                            <h3>@item.Comments.Where(i => i.StoryId == item.ID).Count() Commentaires</h3>
-                            @foreach (var comment in item.Comments)
+            <tr>
+                <td>
+                    <div class="message_form">
+
+                        <div style="display: block;">
+                            @if (item.Comments != null)
                             {
-                                <div class="panel panel-default panel-body">
+
+                                <h3>@item.Comments.Where(i => i.StoryId == item.ID).Count() Comments</h3>
+                                @foreach (var comment in item.Comments)
+                                {
+                                    <div class="panel panel-default panel-body">
 
 
                                         <div class="col-sm-1">
@@ -53,70 +70,60 @@
                                             <time aria-hidden="true" style="font-size:smaller"><small><i> Posted on @Html.DisplayFor(modelItem => comment.CreatedDate) </i></small></time>
 
                                         </div>
-                                   
-                                    <p style="word-wrap: break-word;">@Html.DisplayFor(modelItem => comment.Content)</p>
 
-                                    <br>
-                                    @if (comment.ApplicationUser == item.LoggedInUser)
-                                    {
-                                        <a asp-action="Edit" asp-controller="Comment" asp-route-id="@comment.Id">Edit</a>
-                                        <a asp-action="Delete" asp-controller="Comment" asp-route-id="@comment.Id">Delete</a>
-                                    }
-                                </div>
+                                        <p style="word-wrap: break-word;">@Html.DisplayFor(modelItem => comment.Content)</p>
+
+                                        <br>
+                                        @if (comment.ApplicationUser == item.LoggedInUser)
+                                        {
+                                            <a asp-action="Edit" asp-controller="Comment" asp-route-id="@comment.Id">Edit</a>
+                                            <a asp-action="Delete" asp-controller="Comment" asp-route-id="@comment.Id">Delete</a>
+                                        }
+                                    </div>
 
 
 
+                                }
                             }
+                        </div>
+
+
+
+                        @using (Html.BeginForm("Create", "Comment", FormMethod.Post))
+                        {
+
+
+
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+
+                            Comment newComment = new Comment() { StoryId = item.ID, ApplicationUser = item.LoggedInUser };
+
+                            @Html.HiddenFor(model => newComment.StoryId)
+                            @Html.HiddenFor(model => newComment.Id)
+                            @Html.HiddenFor(model => newComment.ApplicationUser.UserImageLink)
+                            @Html.HiddenFor(model => newComment.ApplicationUser.UserName)
+                            @Html.TextAreaFor(model => newComment.Content, new { @class = "form-control", @placeholder = "Your comment", @rows = "5" })
+                            @Html.ValidationMessageFor(model => newComment.Content)
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+
+                            string csshasErrorComment = (ViewData.ModelState.Keys.Contains("newComment.Content") && ViewData.ModelState["newComment.Content"].Errors.Count() > 0 ? " has-error" : "");
+
                         }
+
+
                     </div>
-
-
-
-    @using (Html.BeginForm("Create", "Comment", FormMethod.Post))
-    {
-
-
-
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
-
-        Comment newComment = new Comment() { StoryId = item.ID,ApplicationUser = item.LoggedInUser};
-      
-        @Html.HiddenFor(model => newComment.StoryId)
-        @Html.HiddenFor(model => newComment.Id)
-        @Html.HiddenFor(model => newComment.ApplicationUser.UserImageLink)
-        @Html.HiddenFor(model => newComment.ApplicationUser.UserName)
-        @Html.TextAreaFor(model => newComment.Content, new { @class = "form-control", @placeholder = "Your comment", @rows = "5" })
-        @Html.ValidationMessageFor(model => newComment.Content)
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-
-        string csshasErrorComment = (ViewData.ModelState.Keys.Contains("newComment.Content") && ViewData.ModelState["newComment.Content"].Errors.Count() > 0 ? " has-error" : "");
-
-    }
-
-
-</div>
-
+                </td>
             </tr>
-            <tr>
-                ******************************************
-               
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a>|
-                @if (item.LoggedInUser == item.ApplicationUser)
-                {
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> 
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                }
-            </tr>
+
             
-            <br>
-            <br>
-            <br>
+
         }
     </tbody>
-
+    
 </table>
 <br />
 

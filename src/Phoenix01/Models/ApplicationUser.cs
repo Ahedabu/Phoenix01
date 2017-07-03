@@ -38,32 +38,26 @@ namespace Phoenix01.Models
         public DateTime BirthDate { get; set; }
 
         [StringLength(25, MinimumLength = 2)]
-        [Display(Name = "Last Name")]
+        [Display(Name = "Zip")]
         public string Zip { get; set; }
 
         [StringLength(100, MinimumLength = 2)]
-        [Display(Name = "Last Name")]
+        [Display(Name = "Street")]
         public string StreetName { get; set; }
 
         [StringLength(25, MinimumLength = 2)]
-        [Display(Name = "Last Name")]
+        [Display(Name = "State")]
         public string State { get; set; }
 
         [StringLength(25, MinimumLength = 2)]
-        [Display(Name = "Last Name")]
+        [Display(Name = "City")]
         public string City { get; set; }
 
         [StringLength(25, MinimumLength = 2)]
-        [Display(Name = "Last Name")]
+        [Display(Name = "Country")]
         public string Country { get; set; }
 
-        [StringLength(25, MinimumLength = 2)]
-        [Display(Name = "Last Name")]
-        public string UserImage { get; set; }
-
-        [StringLength(25, MinimumLength = 2)]
-        [Display(Name = "Last Name")]
-        public string Image { get; set; }
+        public string UserImageLink { get; set; }
 
         // nav. prop.
         public List<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }

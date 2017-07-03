@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Phoenix01.Data;
 using Phoenix01.Models;
 using Microsoft.AspNetCore.Identity;
+using Phoenix01.Models.ManageViewModels;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Phoenix01.Controllers
@@ -26,10 +27,6 @@ namespace Phoenix01.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
-            if (user == null)
-            {
-                return View("Error");
-            }
 
             var model = await _context.Stories
                 .Include(s => s.ApplicationUser)
@@ -40,7 +37,10 @@ namespace Phoenix01.Controllers
                     Title = u.Title,
                     StoryBody = u.StoryBody,
                     ApplicationUser = u.ApplicationUser,
-                    LoggedInUser = user
+                    ApplicationUserId = u.ApplicationUser.Id,
+                    LoggedInUser = user,
+                    Comments = _context.Comments.Include(c => c.ApplicationUser).Where(z => z.StoryId == u.ID).ToList()
+
                 }).ToListAsync();
 
 
@@ -77,34 +77,31 @@ namespace Phoenix01.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,StoryBody,ApplicationUserId,Title")] Story story)
+        public async Task<IActionResult> Create([Bind("ID,StoryBody,Title,Category")] Story story)
         {
             var user = await GetCurrentUserAsync();
             if (User.Identity.IsAuthenticated)
 
             {
 
-                var appUserStories = new Story { ApplicationUserId = user.Id, ID = story.ID, StoryBody = story.StoryBody, Title = story.Title };
+                var appUserStories = new Story {Category = story.Category, ID = story.ID, StoryBody = story.StoryBody, Title = story.Title ,ApplicationUser = user };
                 _context.Add(appUserStories);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
 
             }
 
-            //if (ModelState.IsValid)
-            //{
-            //_context.Add(story);
-            //await _context.SaveChangesAsync();
-
-            //return RedirectToAction("Index");
-            //}
+         
             return View(story);
         }
 
 
 
 
-        
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
+        }
 
 
 
@@ -129,16 +126,8 @@ namespace Phoenix01.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,StoryBody,Title,ApplicationUserId")] Story story)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,StoryBody,Title,Category")] Story story)
         {
-            var user = await GetCurrentUserAsync();
-            if (user == null)
-            {
-                return View("Error");
-            }
-            
-            story.ApplicationUser = user;
-
             if (id != story.ID)
             {
                 return NotFound();
@@ -162,8 +151,7 @@ namespace Phoenix01.Controllers
                         throw;
                     }
                 }
-                if (user.Id == story.ApplicationUserId)
-                    return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
             return View(story);
         }
@@ -200,13 +188,5 @@ namespace Phoenix01.Controllers
         {
             return _context.Stories.Any(e => e.ID == id);
         }
-
-
-        #region
-        private Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return _userManager.GetUserAsync(HttpContext.User);
-        }
-        #endregion
     }
 }

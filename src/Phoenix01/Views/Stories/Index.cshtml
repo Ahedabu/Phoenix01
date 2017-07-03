@@ -1,4 +1,5 @@
 @model IEnumerable<StoriesViewModel>
+@using Phoenix01.Models;
 
 @{
     ViewData["Title"] = "Stories";
@@ -11,52 +12,116 @@
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.StoryBody)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationUser.UserName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
+
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StoryBody)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ApplicationUser.FirstName)
-                    @Html.DisplayFor(modelItem => item.ApplicationUser.LastName)
-                </td>
-                <td>
-                    <a asp-controller="Manage" asp-action="UserProfile" asp-route-id="@item.ApplicationUser.UserName">
-                        <img src="@(item.ApplicationUser.UserImageLink)" alt="Sample Image" style="max-width:40px;height:auto;border-radius:50%;" />
-                    </a>
-                </td>
-               
-                    <td>
-                        
-                       @if (item.ApplicationUser == item.LoggedInUser)
-                         {
-                            <div>
-                                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
-                                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                            </div>
-                         }
-                        <a asp-action="Details" asp-route-id="@item.ID">Details</a>
-                    </td>
+
+                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+
+                <img src="@(item.ApplicationUser.UserImageLink)" alt="Sample Image" style="max-width:30px;height:auto;" />
             </tr>
+            <tr>
+                <h2>@Html.DisplayFor(modelItem => item.Title)</h2>
+                <p><h4> @Html.DisplayFor(modelItem => item.StoryBody)</h4></p>
+            </tr>
+
+            <tr>
+                <div class="message_form">
+            
+                    <div style="display: block;">
+                        @if (item.Comments != null)
+                        {
+
+                            <h3>@item.Comments.Where(i => i.StoryId == item.ID).Count() Commentaires</h3>
+                            @foreach (var comment in item.Comments)
+                            {
+                                <div class="panel panel-default panel-body">
+
+
+                                        <div class="col-sm-1">
+
+                                            <img src="@Url.Content(comment.ApplicationUser.UserImageLink)" alt="Sample Image" style="max-width:30px;height:auto;" />
+
+
+                                        </div>
+                                        <div class="panel-heading text-right">
+
+                                            <strong> @Html.DisplayFor(Modelitem => comment.ApplicationUser.UserName)</strong>
+
+                                            <time aria-hidden="true" style="font-size:smaller"><small><i> Posted on @Html.DisplayFor(modelItem => comment.CreatedDate) </i></small></time>
+
+                                        </div>
+                                   
+                                    <p style="word-wrap: break-word;">@Html.DisplayFor(modelItem => comment.Content)</p>
+
+                                    <br>
+                                    @if (comment.ApplicationUser == item.LoggedInUser)
+                                    {
+                                        <a asp-action="Edit" asp-controller="Comment" asp-route-id="@comment.Id">Edit</a>
+                                        <a asp-action="Delete" asp-controller="Comment" asp-route-id="@comment.Id">Delete</a>
+                                    }
+                                </div>
+
+
+
+                            }
+                        }
+                    </div>
+
+
+
+    @using (Html.BeginForm("Create", "Comment", FormMethod.Post))
+    {
+
+
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        Comment newComment = new Comment() { StoryId = item.ID,ApplicationUser = item.LoggedInUser};
+      
+        @Html.HiddenFor(model => newComment.StoryId)
+        @Html.HiddenFor(model => newComment.Id)
+        @Html.HiddenFor(model => newComment.ApplicationUser.UserImageLink)
+        @Html.HiddenFor(model => newComment.ApplicationUser.UserName)
+        @Html.TextAreaFor(model => newComment.Content, new { @class = "form-control", @placeholder = "Your comment", @rows = "5" })
+        @Html.ValidationMessageFor(model => newComment.Content)
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+
+        string csshasErrorComment = (ViewData.ModelState.Keys.Contains("newComment.Content") && ViewData.ModelState["newComment.Content"].Errors.Count() > 0 ? " has-error" : "");
+
+    }
+
+
+</div>
+
+            </tr>
+            <tr>
+                ******************************************
+               
+                <a asp-action="Details" asp-route-id="@item.ID">Details</a>|
+                @if (item.LoggedInUser == item.ApplicationUser)
+                {
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> 
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                }
+            </tr>
+            
+            <br>
+            <br>
+            <br>
         }
     </tbody>
+
 </table>
+<br />
+
+
+
+
+
+

@@ -1,7 +1,7 @@
-@model Phoenix01.Models.Story
+﻿@model Phoenix01.Models.Comment
 
 @{
-    ViewData["Title"] = "Edit Story";
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,26 +9,20 @@
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>Story</h4>
+        <h4>Comment</h4>
 
         <p>By: @Html.DisplayFor(s => s.ApplicationUser.UserName)<p>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="StoryId" />
+            <input type="hidden" asp-for="CreatedDate" value="@DateTime.Now"/>
 
             <div class="form-group">
-                <label asp-for="Title" class="col-md-2 control-label"></label>
-                <div class="col-md-10 ">
-                    <input type="text" asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title" class="text-danger" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="StoryBody" class="col-md-2 control-label"></label>
+                <label asp-for="Content" class="col-md-2 control-label"></label>
                 <div class="col-md-10">
-                    <textarea rows="5" asp-for="StoryBody" class="form-control"></textarea>
-                    <span asp-validation-for="StoryBody" class="text-danger" />
+                    <textarea rows="5" asp-for="Content" class="form-control"></textarea>
+                    <span asp-validation-for="Content" class="text-danger" />
                 </div>
             </div>
 

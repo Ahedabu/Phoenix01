@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phoenix01.Models.AccountViewModels
 {
-    public class LoginViewModel
+    public class LoginViewModel : BaseEntity
     {
         [Required]
         [Display(Name = "Username/Email")]

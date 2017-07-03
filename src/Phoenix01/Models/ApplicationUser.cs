@@ -17,28 +17,57 @@ namespace Phoenix01.Models
         }
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Registration Date")]
         public DateTime RegistrationDate { get; set; }
 
-        [StringLength(100, MinimumLength = 2)]
-        public string FirstName { get; set; } 
+        [StringLength(25, MinimumLength = 2)]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [StringLength(25, MinimumLength = 2)]
+        [Display(Name = "Middle Name")]
         public string MiddleName { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        [StringLength(25, MinimumLength = 2)]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Birthdate")]
+        public DateTime BirthDate { get; set; }
+
+        [StringLength(25, MinimumLength = 2)]
+        [Display(Name = "Last Name")]
         public string Zip { get; set; }
+
+        [StringLength(100, MinimumLength = 2)]
+        [Display(Name = "Last Name")]
         public string StreetName { get; set; }
+
+        [StringLength(25, MinimumLength = 2)]
+        [Display(Name = "Last Name")]
         public string State { get; set; }
+
+        [StringLength(25, MinimumLength = 2)]
+        [Display(Name = "Last Name")]
         public string City { get; set; }
+
+        [StringLength(25, MinimumLength = 2)]
+        [Display(Name = "Last Name")]
         public string Country { get; set; }
+
+        [StringLength(25, MinimumLength = 2)]
+        [Display(Name = "Last Name")]
         public string UserImage { get; set; }
+
+        [StringLength(25, MinimumLength = 2)]
+        [Display(Name = "Last Name")]
+        public string Image { get; set; }
 
         // nav. prop.
         public List<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
         public List<ApplicationUserHobby> ApplicationUserHobbies { get; set; }
-
-        public string Image { get; set; }
-        public string Story { get; set; }
-
         public List<Story> Stories  { get; set; }
         
     }

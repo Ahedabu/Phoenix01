@@ -240,3 +240,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/src/Phoenix01/wwwroot/images

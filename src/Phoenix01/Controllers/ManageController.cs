@@ -358,18 +358,18 @@ namespace Phoenix01.Controllers
 
 
 
-
+        [HttpGet]
         public async Task<IActionResult> UserProfile(string id)
         {
-            bool isChosenUserLoggedIn = false;
+            bool isCurrentUser = false;
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
                 return View("Error");
             }
-            isChosenUserLoggedIn = user.UserName == id ? true : false;
+            isCurrentUser = user.UserName == id ? true : false;
 
-            if (!isChosenUserLoggedIn)
+            if (!isCurrentUser)
             {
                 user = _context.ApplicationUser.Where(u => u.UserName == id).FirstOrDefault();
             }
@@ -405,7 +405,7 @@ namespace Phoenix01.Controllers
 
                 BirthDate = birthdate,
                 UserAge = age,
-                IsChosenUserLoggedIn = isChosenUserLoggedIn
+                IsCurrentUser = isCurrentUser
             });
         }
 
@@ -598,7 +598,7 @@ namespace Phoenix01.Controllers
                         {
                             if (file.Length > 0)
                             {
-                                var pictureFile = (fileName + username).GetHashCode() + ".png";
+                                var pictureFile = (fileName.GetHashCode() ^ username.GetHashCode()) + ".png";
 
                                 using (var fileStream = new FileStream(Path.Combine(uploads, pictureFile), FileMode.Create))
                                 {

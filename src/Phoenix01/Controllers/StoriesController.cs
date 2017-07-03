@@ -22,6 +22,7 @@ namespace Phoenix01.Controllers
         }
 
         // GET: Stories
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
@@ -47,6 +48,7 @@ namespace Phoenix01.Controllers
         }
 
         // GET: Stories/Details/5
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -64,6 +66,7 @@ namespace Phoenix01.Controllers
         }
 
         // GET: Stories/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();

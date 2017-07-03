@@ -56,7 +56,7 @@ namespace Phoenix01.Models.ManageViewModels
         public string  Email { get; set; }
 
         [Display(Name = "User Image")]
-        public string UserImage { get; set; }
+        public string UserImageLink { get; set; }
 
         [Display(Name = "Username")]
         public string UserName { get; set; }

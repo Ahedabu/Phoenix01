@@ -47,7 +47,7 @@ namespace Phoenix01.Controllers
                     MiddleName = u.MiddleName,
                     LastName = u.LastName,
                     Country = u.Country,
-                    UserImage = u.UserImage,
+                    UserImageLink = u.UserImageLink,
                     BirthDate = u.BirthDate.ToString(),
                     Email = u.Email,
                     UserAge = CalculateAge(u)
@@ -94,7 +94,7 @@ namespace Phoenix01.Controllers
                     MiddleName = u.MiddleName,
                     LastName = u.LastName,
                     Country = u.Country,
-                    UserImage = u.UserImage,
+                    UserImageLink = u.UserImageLink,
                     BirthDate = u.BirthDate.ToString(),
                     Email = u.Email,
                     UserAge = CalculateAge(u),

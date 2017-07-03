@@ -396,7 +396,7 @@ namespace Phoenix01.Controllers
                 State = user.State,
                 City = user.City,
                 Country = user.Country,
-                UserImage = user.UserImage,
+                UserImageLink = user.UserImageLink,
                 ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
                 LanguagesDropDown = _context.Languages.ToSelectLanguageListItems(_context.ApplicationUserLanguages, user),
                 ChosenHobbies = _context.Hobbies
@@ -478,7 +478,7 @@ namespace Phoenix01.Controllers
                 State = user.State,
                 City = user.City,
                 Country = user.Country,
-                UserImage = user.UserImage,
+                UserImageLink = user.UserImageLink,
                 LanguagesDropDown = _context.Languages.ToLanguageListItems(),
                 ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
                 ChosenHobbies = hobbyList,
@@ -571,7 +571,7 @@ namespace Phoenix01.Controllers
         {
             var user = await GetCurrentUserAsync();
 
-            return (user.UserImage);
+            return (user.UserImageLink);
         }
 
 
@@ -602,7 +602,7 @@ namespace Phoenix01.Controllers
 
                                 using (var fileStream = new FileStream(Path.Combine(uploads, pictureFile), FileMode.Create))
                                 {
-                                    user.UserImage = "\\images\\" + pictureFile;
+                                    user.UserImageLink = "\\images\\" + pictureFile;
                                     await _userManager.UpdateAsync(user);
                                     await file.CopyToAsync(fileStream);
 

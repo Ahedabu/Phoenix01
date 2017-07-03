@@ -9,7 +9,7 @@
 <div class="well">
     @foreach (var item in Model)
     {
-        <img src="@(item.UserImage)" alt="User Image" style="max-width:40px;height:auto;border-radius:50%;" />
+        <img src="@(item.UserImageLink)" alt="User Image" style="max-width:40px;height:auto;border-radius:50%;" />
         <a asp-controller="PrivateChat" asp-action="Index" asp-route-id="@item.UserName">@Html.DisplayFor(modelItem => item.UserName)</a>
         <br />
         <br />

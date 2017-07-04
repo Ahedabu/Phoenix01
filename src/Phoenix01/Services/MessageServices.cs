@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace Phoenix01.Services
 {
@@ -10,10 +10,31 @@ namespace Phoenix01.Services
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
-        public Task SendEmailAsync(string email, string subject, string message)
+        public AuthMessageSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
         {
+            Options = optionsAccessor.Value;
+        }
+        public AuthMessageSenderOptions Options { get; } //set only via Secret Manager
+
+        public Task SendEmailAsync(string email, string subject, string message)
+        {   
             // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            return Execute(Options.SendGridKey, subject, message, email);
+            //return Task.FromResult(0);
+        }
+
+        public Task Execute(string apiKey, string subject, string message, string email)
+        {
+            var client = new SendGridClient(apiKey);
+            var msg = new SendGridMessage()
+            {
+                From = new EmailAddress("admin@integrifysweden.com", "Mr. Schmidt"),
+                Subject = subject,
+                PlainTextContent = message,
+                HtmlContent = message
+            };
+            msg.AddTo(new EmailAddress(email));
+            return client.SendEmailAsync(msg);
         }
 
         public Task SendSmsAsync(string number, string message)

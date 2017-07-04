@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,11 +13,13 @@ using Microsoft.Extensions.Logging;
 using Phoenix01.Data;
 using Phoenix01.Models;
 using Phoenix01.Services;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace Phoenix01
 {
     public class Startup
     {
+        //string _testSecret = null;
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -39,6 +42,14 @@ namespace Phoenix01
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new RequireHttpsAttribute());
+            });
+
+            // access user secrets
+            //_testSecret = Configuration["MySecret"];
+
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -46,6 +57,7 @@ namespace Phoenix01
             services.AddIdentity<ApplicationUser, IdentityRole>(options => {
                 options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
                 options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedEmail = true;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -53,11 +65,14 @@ namespace Phoenix01
             //services.UseWebSockets();
             //services.UseMiddleware<ChatWebSocketMiddleware>();
 
+
             services.AddMvc();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            services.Configure<AuthMessageSenderOptions>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +80,10 @@ namespace Phoenix01
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            var options = new RewriteOptions().AddRedirectToHttps();
+
+            app.UseRewriter(options);
 
             if (env.IsDevelopment())
             {

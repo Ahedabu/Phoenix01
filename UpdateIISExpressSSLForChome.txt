@@ -1,0 +1,63 @@
+#UpdateIISExpressSSLForChome.ps1
+# Create a new self signed HTTPS Certificate for IIS Express
+# Crafted with all organic, GMO, gluten free ingreditations 
+# with an artisinal SAN to make Chrome 58 onwards happy.
+#
+# See https://bugs.chromium.org/p/chromium/issues/detail?id=308330
+#
+# Run this at an administrative PowerShell prompt.
+#
+# You will be prompted to trust a new certificate via a windows dialog.
+# Click yes otherwise Visual Studio will not be able to determine your
+# process ID when you launch your web application/
+#
+# SCRIPT PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED.
+
+$certificate = New-SelfSignedCertificate `
+    -Subject localhost `
+    -DnsName localhost `
+    -KeyAlgorithm RSA `
+    -KeyLength 2048 `
+    -NotBefore (Get-Date) `
+    -NotAfter (Get-Date).AddYears(5) `
+    -CertStoreLocation "cert:CurrentUser\My" `
+    -FriendlyName "IIS Express Development Certificate" `
+    -HashAlgorithm SHA256 `
+    -KeyUsage DigitalSignature, KeyEncipherment, DataEncipherment `
+    -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.1") 
+$certificatePath = 'Cert:\CurrentUser\My\' + ($certificate.ThumbPrint)    
+
+# Now export the certificate to a pfx
+$pfxPassword = ConvertTo-SecureString ([Guid]::NewGuid().ToString()) -Force -AsPlainText
+$pfxFilePath =  [system.io.path]::GetTempFileName()
+$cerFilePath = [system.io.path]::GetTempFileName()
+
+Export-PfxCertificate -Cert $certificatePath -FilePath $pfxFilePath -Password $pfxPassword
+Export-Certificate -Cert $certificatePath -FilePath $cerFilePath
+
+# Delete the cert we created from the user store now we've exported it
+Remove-Item $certificatePath
+
+# Now pull in the PFX to the two places it needs to be.
+# First to the machine personal store, so netsh can bind
+Import-PfxCertificate -FilePath $pfxFilePath Cert:\LocalMachine\My -Password $pfxPassword -Exportable
+
+# Now to the user root store so trust is enabled
+# This will cause Windows to throw up a dialog, so click yes, otherwise VS is going to be very unhappy and unable to determine your app process ID.
+Import-Certificate -FilePath $cerFilePath -CertStoreLocation Cert:\CurrentUser\Root
+
+# Now bind using netsh. The app ID is the IIS Express app ID.
+for ($port = 44300; $port -lt 44400; $port++)
+{
+    $command = "http delete sslcert ipport=0.0.0.0:$port"
+    Write-Output $command
+    $command | netsh
+    
+    $command = "http add sslcert ipport=0.0.0.0:$port certhash="+$($certificate.Thumbprint)+" appid={214124cd-d05b-4309-9af9-9caa44b2b74a}"
+    Write-Output $command
+    $command | netsh
+}
+
+# Clean up the temporary PFX
+Remove-Item $pfxFilePath
+Remove-Item $cerFilePath

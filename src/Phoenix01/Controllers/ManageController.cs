@@ -374,17 +374,7 @@ namespace Phoenix01.Controllers
                 user = _context.ApplicationUser.Where(u => u.UserName == id).FirstOrDefault();
             }
 
-            var age = 0;
-            var birthdate = "";
-            if (user.BirthDate != null)
-            {
-                birthdate = ((DateTime)user.BirthDate).ToString("yyyy-MM-dd");
-                age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
-                if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
-            }
-
-
-            return View(new UserProfileViewModel
+            var model = new UserProfileViewModel
             {
                 RegistrationDate = user.RegistrationDate.ToString("yyyy-MM-dd"),
                 UserName = user.UserName,
@@ -402,11 +392,19 @@ namespace Phoenix01.Controllers
                 ChosenHobbies = _context.Hobbies
                 .Where(h => _context.ApplicationUserHobbies.Any(uh => uh.HobbyId == h.Id && uh.ApplicationUserId == user.Id))
                 .ToList(),
-
-                BirthDate = birthdate,
-                UserAge = age,
+                BirthDate = user.BirthDate,
                 IsCurrentUser = isCurrentUser
-            });
+            };
+
+            if (user.BirthDate.HasValue)
+            {
+                var age = 0;
+                age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
+                if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
+                model.UserAge = age;
+            }
+
+            return View(model);
         }
 
 
@@ -454,16 +452,6 @@ namespace Phoenix01.Controllers
                 .OrderBy(ho => ho.Name)
                 .Where(ho => _context.ApplicationUserHobbies.Any(ah => ah.HobbyId == ho.Id && ah.ApplicationUserId == user.Id)).AsNoTracking().ToList();
 
-
-            var age = 0;
-            var birthdate = "";
-            if (user.BirthDate != null)
-            {
-                birthdate = ((DateTime)user.BirthDate).ToString("yyyy-MM-dd");
-                age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
-                if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
-            }
-
             var model = new UserProfileViewModel
 
             {
@@ -482,9 +470,16 @@ namespace Phoenix01.Controllers
                 LanguagesDropDown = _context.Languages.ToLanguageListItems(),
                 ChosenLanguages = _context.Languages.ToPresentLanguageListItems(_context.ApplicationUserLanguages, user),
                 ChosenHobbies = hobbyList,
-                BirthDate = birthdate,
-                UserAge = age
+                BirthDate = user.BirthDate,
             };
+
+            if (user.BirthDate.HasValue)
+            {
+                int age = 0;
+                age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
+                if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
+                model.UserAge = age;
+            }
 
             var allHobbies = _context.Hobbies.OrderBy(h => h.Name).ToList();
             var userHobbies = _context.Hobbies
@@ -537,6 +532,7 @@ namespace Phoenix01.Controllers
                 user.City = model.City;
                 user.State = model.State;
                 user.Country = model.Country;
+                user.BirthDate = model.BirthDate;
             }
 
             var selectedHobbies = model.SelectedHobbies.Where(x => x.IsChecked).Select(x => x.Id).ToList();
@@ -549,10 +545,8 @@ namespace Phoenix01.Controllers
                 var hobby = _context.Hobbies.FirstOrDefault(h => h.Id == hobbyId);
                 _context.ApplicationUserHobbies.Add(new ApplicationUserHobby { ApplicationUserId = user.Id, HobbyId = hobby.Id });
             }
-
-
-            if (model.BirthDate != null && model.BirthDate != "")
-                user.BirthDate = DateTime.Parse(model.BirthDate);
+            //if (model.BirthDate != null && model.BirthDate != "")
+            //    user.BirthDate = DateTime.Parse(model.BirthDate);
 
 
             var result = await _userManager.UpdateAsync(user);

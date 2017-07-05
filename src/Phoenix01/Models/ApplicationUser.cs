@@ -35,7 +35,7 @@ namespace Phoenix01.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Birthdate")]
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         [StringLength(25, MinimumLength = 2)]
         [Display(Name = "Zip")]

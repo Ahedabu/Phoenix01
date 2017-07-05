@@ -24,14 +24,16 @@ namespace Phoenix01.Data.Managers
             {
                 userList = users
                    .OrderBy(user => user.LastName)
-                   .Where(user => user.BirthDate.AddYears(ageGroup) >= DateTime.Now && user.BirthDate.AddYears(ageGroup - 10) < DateTime.Now);
+                   .Where(user => user.BirthDate.HasValue)
+                   .Where(user => user.BirthDate.Value.AddYears(ageGroup) >= DateTime.Now && user.BirthDate.Value.AddYears(ageGroup - 10) < DateTime.Now);
             }
 
             if(group == Agegroups.SeventysixAndUp)
             {
                 userList = users
                        .OrderBy(user => user.LastName)
-                       .Where(user => user.BirthDate.AddYears(ageGroup) > DateTime.Now);
+                       .Where(user => user.BirthDate.HasValue)
+                       .Where(user => user.BirthDate.Value.AddYears(ageGroup) > DateTime.Now);
             }
 
             if (lang != null)

@@ -32,7 +32,7 @@ namespace Phoenix01.Models.ManageViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Birthdate")]
-        public string BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         [Display(Name = "Age")]
         public int UserAge { get; set; }

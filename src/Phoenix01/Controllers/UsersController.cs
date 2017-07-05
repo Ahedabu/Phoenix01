@@ -48,7 +48,7 @@ namespace Phoenix01.Controllers
                     LastName = u.LastName,
                     Country = u.Country,
                     UserImageLink = u.UserImageLink,
-                    BirthDate = u.BirthDate.ToString(),
+                    BirthDate = u.BirthDate,
                     Email = u.Email,
                     UserAge = CalculateAge(u)
                     
@@ -61,8 +61,6 @@ namespace Phoenix01.Controllers
                 LanguagesDropDown = _context.Languages.ToLanguageListItems(),
                 HobbyDropDown = _context.Hobbies.ToHobbyDropDown(),
                 AgeGroupDropDown = ToAgeGroupDropDown()
-
-
             };
 
             return View(model);
@@ -95,8 +93,8 @@ namespace Phoenix01.Controllers
                     LastName = u.LastName,
                     Country = u.Country,
                     UserImageLink = u.UserImageLink,
-                    BirthDate = u.BirthDate.ToString(),
-                    Email = u.Email,
+                    BirthDate = u.BirthDate,
+                    UserName = u.UserName,
                     UserAge = CalculateAge(u),
 
 

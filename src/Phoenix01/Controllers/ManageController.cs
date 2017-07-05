@@ -396,13 +396,14 @@ namespace Phoenix01.Controllers
                 IsCurrentUser = isCurrentUser
             };
 
+            int? age = null;
             if (user.BirthDate.HasValue)
             {
-                var age = 0;
+                
                 age = DateTime.Today.Year - user.BirthDate.Value.Year;
-                if (DateTime.Today < user.BirthDate.Value.AddYears(age)) age--;
-                model.UserAge = age;
+                if (DateTime.Today < user.BirthDate.Value.AddYears((int)age)) age--;
             }
+            model.UserAge = age;
 
             return View(model);
         }
@@ -473,13 +474,13 @@ namespace Phoenix01.Controllers
                 BirthDate = user.BirthDate,
             };
 
+            int? age = null;
             if (user.BirthDate.HasValue)
             {
-                int age = 0;
                 age = DateTime.Today.Year - user.BirthDate.Value.Year;
-                if (DateTime.Today < user.BirthDate.Value.AddYears(age)) age--;
-                model.UserAge = age;
+                if (DateTime.Today < user.BirthDate.Value.AddYears((int)age)) age--;
             }
+            model.UserAge = age;
 
             var allHobbies = _context.Hobbies.OrderBy(h => h.Name).ToList();
             var userHobbies = _context.Hobbies

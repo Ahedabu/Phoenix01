@@ -35,7 +35,7 @@ namespace Phoenix01.Models.ManageViewModels
         public DateTime? BirthDate { get; set; }
 
         [Display(Name = "Age")]
-        public int UserAge { get; set; }
+        public int? UserAge { get; set; }
 
         [Display(Name = "Zip")]
         public string Zip { get; set; }

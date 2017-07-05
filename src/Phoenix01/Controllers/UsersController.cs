@@ -105,14 +105,14 @@ namespace Phoenix01.Controllers
 
 
 
-        public int CalculateAge(ApplicationUser user)
+        public int? CalculateAge(ApplicationUser user)
         {
 
-            var age = 0;
+            int? age = null;
             if (user.BirthDate.HasValue)
             {
                 age = DateTime.Today.Year - user.BirthDate.Value.Year;
-                if (DateTime.Today < user.BirthDate.Value.AddYears(age)) age--;
+                if (DateTime.Today < user.BirthDate.Value.AddYears((int)age)) age--;
             }
             return age;
         }

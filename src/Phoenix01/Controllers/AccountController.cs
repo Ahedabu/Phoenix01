@@ -45,7 +45,7 @@ namespace Phoenix01.Controllers
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
         {
-            RedirectToAction("Index");
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 

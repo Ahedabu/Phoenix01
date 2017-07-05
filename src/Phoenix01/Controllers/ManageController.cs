@@ -399,8 +399,8 @@ namespace Phoenix01.Controllers
             if (user.BirthDate.HasValue)
             {
                 var age = 0;
-                age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
-                if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
+                age = DateTime.Today.Year - user.BirthDate.Value.Year;
+                if (DateTime.Today < user.BirthDate.Value.AddYears(age)) age--;
                 model.UserAge = age;
             }
 
@@ -476,8 +476,8 @@ namespace Phoenix01.Controllers
             if (user.BirthDate.HasValue)
             {
                 int age = 0;
-                age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
-                if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
+                age = DateTime.Today.Year - user.BirthDate.Value.Year;
+                if (DateTime.Today < user.BirthDate.Value.AddYears(age)) age--;
                 model.UserAge = age;
             }
 
@@ -545,9 +545,6 @@ namespace Phoenix01.Controllers
                 var hobby = _context.Hobbies.FirstOrDefault(h => h.Id == hobbyId);
                 _context.ApplicationUserHobbies.Add(new ApplicationUserHobby { ApplicationUserId = user.Id, HobbyId = hobby.Id });
             }
-            //if (model.BirthDate != null && model.BirthDate != "")
-            //    user.BirthDate = DateTime.Parse(model.BirthDate);
-
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)

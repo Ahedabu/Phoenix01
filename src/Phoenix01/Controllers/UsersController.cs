@@ -37,8 +37,6 @@ namespace Phoenix01.Controllers
 
             var users = _context.ApplicationUser
             .OrderBy(u => u.UserName)
-            
-
             .Select(u => 
                 new UserProfileViewModel
                 {
@@ -51,8 +49,6 @@ namespace Phoenix01.Controllers
                     BirthDate = u.BirthDate,
                     Email = u.Email,
                     UserAge = CalculateAge(u)
-                    
-
                 }).ToList();
 
             UserListViewModel model = new UserListViewModel
@@ -62,7 +58,6 @@ namespace Phoenix01.Controllers
                 HobbyDropDown = _context.Hobbies.ToHobbyDropDown(),
                 AgeGroupDropDown = ToAgeGroupDropDown()
             };
-
             return View(model);
         }
 
@@ -114,12 +109,10 @@ namespace Phoenix01.Controllers
         {
 
             var age = 0;
-            var birthdate = "";
-            if (user.BirthDate != null)
+            if (user.BirthDate.HasValue)
             {
-                birthdate = ((DateTime)user.BirthDate).ToString("yyyy-MM-dd");
-                age = DateTime.Today.Year - ((DateTime)user.BirthDate).Year;
-                if (DateTime.Today < ((DateTime)user.BirthDate).AddYears(age)) age--;
+                age = DateTime.Today.Year - user.BirthDate.Value.Year;
+                if (DateTime.Today < user.BirthDate.Value.AddYears(age)) age--;
             }
             return age;
         }
